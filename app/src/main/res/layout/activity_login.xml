@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/loginbggrey"
+    android:weightSum="10"
+    tools:context=".LoginActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4">
+
+<!--        <ImageView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/globeTest"-->
+<!--           -->
+<!--            android:layout_marginLeft="50dp"-->
+<!--            android:layout_alignParentRight="true"/>-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:textColor="#ffffff"
+            android:textSize="28dp"
+            android:layout_alignParentBottom="true"
+            android:textStyle="bold"
+            android:layout_marginLeft="40dp"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6">
+
+        <EditText
+            android:id="@+id/etUsername"
+            android:layout_width="220dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/textfieldbg"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="Username"
+            android:layout_centerHorizontal="true"/>
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="220dp"
+            android:layout_below="@+id/etUsername"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/textfieldbg"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="Password"
+            android:layout_centerHorizontal="true"/>
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="150dp"
+            android:layout_height="35dp"
+            android:text="Login"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:background="@drawable/buttonbg"
+            android:layout_below="@id/etPassword"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="60dp"/>
+
+
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

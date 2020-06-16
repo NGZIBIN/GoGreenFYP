@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/homebg"
+    android:weightSum="10"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/smallerglobe"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"/>
+
+        <TextView
+            android:id="@+id/tvBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:text="Balance"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="55dp"/>
+
+        <TextView
+            android:id="@+id/SGD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24dp"
+            android:text="SGD"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:layout_below="@+id/tvBalance"
+            android:layout_marginLeft="150dp"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/tvSgdBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvBalance"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:text="360.00"
+            android:layout_marginLeft="200dp"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="ETH"
+            android:textColor="#ffffff"
+            android:layout_below="@+id/SGD"
+            android:layout_marginLeft="90dp"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/tvEthBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:text="188.231231231"
+            android:layout_marginLeft="130dp"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/tvSgdBalance"/>
+
+
+
+
+
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--            <View-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="1dp"-->
+            <!--                android:background="@color/colourDivider"-->
+            <!--                app:layout_constraintBottom_toBottomOf="@+id/tabLayout"-->
+            <!--                android:layout_below="@+id/tabLayout"/>-->
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabIndicatorHeight="3dp"
+                app:tabMode="fixed"
+                android:paddingBottom="8dp" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPagerFrag"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tabLayout"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+    </RelativeLayout>
+
+
+
+
+
+
+</LinearLayout>

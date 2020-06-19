@@ -7,20 +7,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TransactionFragment extends Fragment {
-ExpandableListView expandableListView;
+public class YourRewardFragment extends Fragment {
 
-    public TransactionFragment() {
+    public YourRewardFragment() {
         // Required empty public constructor
     }
 
@@ -28,12 +22,7 @@ ExpandableListView expandableListView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_transaction, container, false);
-//        expandableListView = view.findViewById(R.id.expandable_transactions);
-
         // Inflate the layout for this fragment
-        return view;
+        return inflater.inflate(R.layout.fragment_your_reward, container, false);
     }
-
-
 }

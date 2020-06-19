@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvTransTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Transaction No."
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="120dp"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/tvTransNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12312322323"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/tvPointsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bonus Points"
+            android:layout_below="@id/tvTransTitle"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="137dp"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/tvPointsEarn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvTransNum"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="11dp"
+            android:layout_marginRight="75dp"
+            android:text="250"
+            android:textColor="#1BCF22" />
+
+
+
+
+
+
+
+    </RelativeLayout>
+
+</LinearLayout>

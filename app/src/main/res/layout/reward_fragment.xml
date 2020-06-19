@@ -1,11 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="10">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Reward"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
+
+        <TextView
+            android:id="@+id/tvYouhave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You Have"
+            android:layout_centerInParent="true"
+            android:textSize="24dp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/currentPoints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2500"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_marginLeft="150dp"
+            android:layout_below="@+id/tvYouhave"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvYouhave"
+            android:layout_marginLeft="210dp"
+            android:text="Points"
+            android:textSize="24dp"
+            android:textColor="#000000"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabIndicatorHeight="3dp"
+            app:tabMode="fixed"
+            android:paddingBottom="8dp" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPagerFragRewards"
+            android:layout_width="match_parent"
+            android:layout_height="550dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_below="@id/tabLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/tabLayout2"/>
+
+
+
+    </RelativeLayout>
+
+
 
 </LinearLayout>

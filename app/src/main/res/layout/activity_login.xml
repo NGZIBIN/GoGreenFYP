@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#272727"
     android:orientation="vertical"
-    android:background="@drawable/loginbggrey"
+
     android:weightSum="10"
     tools:context=".LoginActivity">
 
@@ -14,23 +15,22 @@
         android:layout_height="0dp"
         android:layout_weight="4">
 
-<!--        <ImageView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/globeTest"-->
-<!--           -->
-<!--            android:layout_marginLeft="50dp"-->
-<!--            android:layout_alignParentRight="true"/>-->
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="560dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="100dp"
+            android:src="@drawable/globe" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="40dp"
             android:text="Login"
             android:textColor="#ffffff"
             android:textSize="28dp"
-            android:layout_alignParentBottom="true"
-            android:textStyle="bold"
-            android:layout_marginLeft="40dp"/>
+            android:textStyle="bold" />
 
 
     </RelativeLayout>
@@ -43,36 +43,73 @@
         <EditText
             android:id="@+id/etUsername"
             android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="40dp"
             android:background="@drawable/textfieldbg"
-            android:layout_height="wrap_content"
             android:gravity="center"
-            android:hint="Username"
-            android:layout_centerHorizontal="true"/>
+            android:hint="Username" />
 
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="220dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/etUsername"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
             android:background="@drawable/textfieldbg"
-            android:layout_height="wrap_content"
+            android:inputType="textPassword"
             android:gravity="center"
-            android:hint="Password"
-            android:layout_centerHorizontal="true"/>
+            android:hint="Password" />
 
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="150dp"
             android:layout_height="35dp"
-            android:text="Login"
-            android:textStyle="bold"
-            android:textColor="#ffffff"
-            android:background="@drawable/buttonbg"
             android:layout_below="@id/etPassword"
             android:layout_centerInParent="true"
-            android:layout_marginTop="60dp"/>
+            android:layout_marginTop="60dp"
+            android:background="@drawable/buttonbg"
+            android:text="Login"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_below="@id/btnLogin"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Forget Password?"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="40dp"
+                android:onClick="goForgetPass"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Register an account"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="95dp"
+                android:onClick="goRegisterNow"/>
+
+
+
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/pb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btnLogin"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="120dp"
+            android:visibility="invisible"/>
 
 
 

@@ -66,7 +66,7 @@
             android:layout_centerHorizontal="true"/>
 
         <Button
-            android:id="@+id/btnLogin"
+            android:id="@+id/btnRegister"
             android:layout_width="150dp"
             android:layout_height="35dp"
             android:text="Create"
@@ -76,6 +76,15 @@
             android:layout_below="@id/etPassword"
             android:layout_centerInParent="true"
             android:layout_marginTop="60dp"/>
+
+        <ProgressBar
+            android:id="@+id/pb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btnRegister"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:visibility="invisible"/>
 
 
 

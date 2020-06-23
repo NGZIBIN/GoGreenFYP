@@ -39,7 +39,7 @@ public class AllRewardsFragment extends Fragment {
         listReward.add(new Rewards("$5 GongCha Voucher", 2500,R.drawable.rookiebadge));
         listReward.add(new Rewards("$5 GongCha Voucher", 2500,R.drawable.rookiebadge));
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycleView);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycleViewAllReward);
         RewardRecyclerViewAdapter myAdapter = new RewardRecyclerViewAdapter(getContext(),listReward);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         recyclerView.setAdapter(myAdapter);

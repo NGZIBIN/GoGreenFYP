@@ -1,9 +1,12 @@
 package com.example.gogreenfyp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,36 +40,48 @@ public class AllRewardRedeem extends AppCompatActivity {
         tvQuantity = (TextView) findViewById(R.id.counter);
         btnRedeem = findViewById(R.id.btnRedeem);
 
+//        btnRedeem.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                new SweetAlertDialog(AllRewardRedeem.this, SweetAlertDialog.WARNING_TYPE)
+//                        .setTitleText("Are you sure?")
+//                        .setContentText("You will be spending your points!")
+//                        .setConfirmText("Redeem")
+//                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+//                            @Override
+//                            public void onClick(SweetAlertDialog sDialog) {
+//                                final TextView tvQuantityTitle = new TextView(AllRewardRedeem.this);
+//                                final TextView tvQuantityCount = new TextView(AllRewardRedeem.this);
+//                                tvQuantityTitle.setText("Quantity");
+//                                tvQuantityCount.setText(tvQuantity.getText().toString());
+//                                new SweetAlertDialog(AllRewardRedeem.this, SweetAlertDialog.NORMAL_TYPE)
+//                                        .setTitleText("Custom view")
+//                                        .setConfirmText("Ok")
+//                                        .setCustomView(tvQuantityTitle)
+//                                        .setCustomView(tvQuantityCount)
+//                                        .show();
+//                                sDialog.dismissWithAnimation();
+//                            }
+//                        })
+//                        .setCancelButton("Cancel", new SweetAlertDialog.OnSweetClickListener() {
+//                            @Override
+//                            public void onClick(SweetAlertDialog sDialog) {
+//                                sDialog.dismissWithAnimation();
+//                            }
+//                        })
+//                        .show();
+//            }
+//        });
+
         btnRedeem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new SweetAlertDialog(AllRewardRedeem.this, SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText("Are you sure?")
-                        .setContentText("You will be spending your points!")
-                        .setConfirmText("Redeem")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-                                final TextView tvQuantityTitle = new TextView(AllRewardRedeem.this);
-                                final TextView tvQuantityCount = new TextView(AllRewardRedeem.this);
-                                tvQuantityTitle.setText("Quantity");
-                                tvQuantityCount.setText(tvQuantity.getText().toString());
-                                new SweetAlertDialog(AllRewardRedeem.this, SweetAlertDialog.NORMAL_TYPE)
-                                        .setTitleText("Custom view")
-                                        .setConfirmText("Ok")
-                                        .setCustomView(tvQuantityTitle)
-                                        .setCustomView(tvQuantityCount)
-                                        .show();
-                                sDialog.dismissWithAnimation();
-                            }
-                        })
-                        .setCancelButton("Cancel", new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-                                sDialog.dismissWithAnimation();
-                            }
-                        })
-                        .show();
+                LayoutInflater inflater = (LayoutInflater)getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View viewDialog = inflater.inflate(R.layout.dialog_confirm_redemption, null);
+
+                final AlertDialog myBuilder = new AlertDialog.Builder(AllRewardRedeem.this)
+                        .setView(viewDialog).show();
+
             }
         });
 

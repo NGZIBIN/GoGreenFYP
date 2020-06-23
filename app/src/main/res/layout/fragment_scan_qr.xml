@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ScanQRFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BRYAN"
+            android:textStyle="bold"
+            android:textColor="#6CAADB"
+            android:textSize="25dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"/>
+
+        <TextView
+            android:id="@+id/titleShowQR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show this QR Code"
+            android:layout_below="@id/tvUsername"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:textColor="#000000"/>
+
+        <ImageView
+            android:id="@+id/QRCode"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/titleShowQR"
+            android:layout_marginTop="60dp"/>
+
+        <TextView
+            android:id="@+id/tvWalletAddress"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="0123cdwsad2321dqweqw94rqwrsadweg"
+            android:textSize="18dp"
+            android:layout_below="@id/QRCode"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="40dp"/>
+
+
+
+
+    </RelativeLayout>
+
+
+</FrameLayout>

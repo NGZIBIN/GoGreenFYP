@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class YourRewardFragment extends Fragment {
+public class WalletAddressFragment extends Fragment {
 
-    public YourRewardFragment() {
+    public WalletAddressFragment() {
         // Required empty public constructor
     }
 
@@ -23,9 +23,6 @@ public class YourRewardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_your_reward, container, false);
-
-
-        return view;
+        return inflater.inflate(R.layout.fragment_wallet_address, container, false);
     }
 }

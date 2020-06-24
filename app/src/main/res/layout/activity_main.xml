@@ -12,21 +12,21 @@
         android:id="@+id/fragmentContainer"/>
 
 
-<!--    <com.google.android.material.navigation.NavigationView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:menu="@menu/menu"/>-->
+    <!--    <com.google.android.material.navigation.NavigationView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:menu="@menu/menu"/>-->
 
-   <com.google.android.material.bottomnavigation.BottomNavigationView
-       android:id="@+id/bottomNav"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       app:menu="@menu/menu"
-       android:background="#6CAADB"
-       app:itemTextColor="@drawable/selector"
-       app:itemIconTint="@drawable/selector"
-       android:layout_alignParentBottom="true"/>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/menu"
+        android:background="#6CAADB"
+        app:itemTextColor="@drawable/selector"
+        app:itemIconTint="@drawable/selector"
+        android:layout_alignParentBottom="true"/>
 
 
 
-    </RelativeLayout>
+</RelativeLayout>

@@ -3,21 +3,21 @@
 
     <item
         android:id="@+id/home"
-        android:title="Home"
+        android:title=""
         android:icon="@drawable/home"/>
 
     <item
         android:id="@+id/payment"
-        android:title="QR Code"
+        android:title=""
         android:icon="@drawable/payment" />
     <item
         android:id="@+id/rewards"
-        android:title="Rewards"
+        android:title=""
         android:icon="@drawable/rewardicon"/>
 
     <item
         android:id="@+id/profile"
-        android:title="Profile"
+        android:title=""
         android:icon="@drawable/profile"/>
 
 </menu>

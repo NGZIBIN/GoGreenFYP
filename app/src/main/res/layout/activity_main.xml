@@ -9,7 +9,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/fragmentContainer"/>
+        android:id="@+id/container"
+        android:layout_above="@id/bottomNav"/>
 
 
     <!--    <com.google.android.material.navigation.NavigationView-->
@@ -23,6 +24,8 @@
         android:layout_height="wrap_content"
         app:menu="@menu/menu"
         android:background="#6CAADB"
+        app:itemBackground="?selectableItemBackgroundBorderless"
+        app:itemHorizontalTranslationEnabled="true"
         app:itemTextColor="@drawable/selector"
         app:itemIconTint="@drawable/selector"
         android:layout_alignParentBottom="true"/>

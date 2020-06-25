@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ScanQRFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -11,53 +12,37 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.budiyev.android.codescanner.CodeScannerView
+            android:id="@+id/scanner_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:autoFocusButtonColor="@android:color/white"
+            app:autoFocusButtonVisible="false"
+            app:flashButtonColor="@android:color/white"
+            app:flashButtonVisible="false"
+            app:frameColor="@android:color/white"
+            app:frameCornersSize="50dp"
+            app:frameCornersRadius="0dp"
+            app:frameAspectRatioWidth="1"
+            app:frameAspectRatioHeight="1"
+            app:frameSize="0.75"
+            app:frameThickness="2dp"
+            app:maskColor="#77000000"/>
 
         <TextView
-            android:id="@+id/tvUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="BRYAN"
-            android:textStyle="bold"
-            android:textColor="#6CAADB"
-            android:textSize="25dp"
+            android:text="Place QR Code within the scanning frame"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"/>
-
-        <TextView
-            android:id="@+id/titleShowQR"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Show this QR Code"
-            android:layout_below="@id/tvUsername"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:textColor="#000000"/>
-
-        <ImageView
-            android:id="@+id/QRCode"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/titleShowQR"
-            android:layout_marginTop="60dp"/>
-
-        <TextView
-            android:id="@+id/tvWalletAddress"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:text="0123cdwsad2321dqweqw94rqwrsadweg"
-            android:textSize="18dp"
-            android:layout_below="@id/QRCode"
-            android:layout_centerHorizontal="true"
-            android:textAlignment="center"
-            android:textColor="#000000"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="40dp"/>
-
-
-
+            android:layout_marginBottom="80dp"
+            android:textSize="20dp"
+            android:textColor="#fff"/>
 
     </RelativeLayout>
+
+
+
 
 
 </FrameLayout>

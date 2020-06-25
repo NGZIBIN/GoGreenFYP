@@ -24,7 +24,7 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout2"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="55dp"
             android:background="@android:color/transparent"
             app:layout_constraintTop_toTopOf="parent"
             app:tabIndicatorHeight="3dp"
@@ -43,7 +43,7 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPagerFragPayment"
             android:layout_width="match_parent"
-            android:layout_height="700dp"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
 

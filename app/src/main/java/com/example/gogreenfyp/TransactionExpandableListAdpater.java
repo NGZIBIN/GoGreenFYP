@@ -7,24 +7,20 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.HashMap;
 import java.util.List;
 
 public class TransactionExpandableListAdpater extends BaseExpandableListAdapter {
 
     private Context context;
-    private List<String> listTitle;
-    private HashMap<String, TransactionHistory> expandableListData;
+    private List<TransactionHeader> listTitle;
+    private HashMap<String, TransactionDetails> expandableListData;
 
-    public TransactionExpandableListAdpater(Context context, List<String> listTitle, HashMap<String,TransactionHistory> expandableListData) {
+    public TransactionExpandableListAdpater(Context context, List<TransactionHeader> listTitle, HashMap<String, TransactionDetails> expandableListData) {
         this.context = context;
         this.listTitle = listTitle;
         this.expandableListData = expandableListData;
     }
-
-
 
     @Override
     public int getGroupCount() {
@@ -43,7 +39,7 @@ public class TransactionExpandableListAdpater extends BaseExpandableListAdapter 
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return expandableListData.get(listTitle.get(groupPosition));
+        return expandableListData.get(listTitle.get(groupPosition).getItem());
     }
 
     @Override
@@ -63,7 +59,9 @@ public class TransactionExpandableListAdpater extends BaseExpandableListAdapter 
 
     @Override
     public View getGroupView(int groupPosition, boolean b, View view, ViewGroup viewGroup) {
-        String headerTitle = (String) getGroup(groupPosition);
+
+        TransactionHeader transactionHeader =  (TransactionHeader) getGroup(groupPosition);
+
         if (view == null){
             LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.row_transaction_group, null);
@@ -72,13 +70,19 @@ public class TransactionExpandableListAdpater extends BaseExpandableListAdapter 
         TextView tvPrice = (TextView)view.findViewById(R.id.tvPrice);
         TextView tvLocation = (TextView) view.findViewById(R.id.tvLocationName);
 
+        String roundUpTo2Decimals = "$"+String.format("%.2f", transactionHeader.getAmount());
+
+        tvFoodName.setText(transactionHeader.getItem());
+        tvPrice.setText(roundUpTo2Decimals);
+        tvLocation.setText(transactionHeader.getPlace());
+
         return view;
 
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean b, View view, ViewGroup viewGroup) {
-        final TransactionHistory trans = (TransactionHistory) getChild(groupPosition,childPosition);
+        final TransactionDetails trans = (TransactionDetails) getChild(groupPosition, childPosition);
 
         if(view == null){
             LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -88,9 +92,11 @@ public class TransactionExpandableListAdpater extends BaseExpandableListAdapter 
         TextView tvTransNum = view.findViewById(R.id.tvTransNum);
         TextView tvPoints = view.findViewById(R.id.tvPointsEarn);
 
+        String points = trans.getPoints()+"";
+        String transNo = trans.getTransactionNo();
 
-
-
+        tvTransNum.setText(transNo);
+        tvPoints.setText(points);
 
         return view;
     }

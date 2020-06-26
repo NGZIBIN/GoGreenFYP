@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "619281341565",
+    "firebase_url": "https://gogreenfyp.firebaseio.com",
+    "project_id": "gogreenfyp",
+    "storage_bucket": "gogreenfyp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:619281341565:android:ad18dabba4a5ad5217a514",
+        "android_client_info": {
+          "package_name": "com.example.gogreenfyp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "619281341565-b8vv6scb35vp2h67hhs8fj8gpi3qm7fv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gogreenfyp",
+            "certificate_hash": "86e660c7f94b2052a64475b365eeabde52d965fe"
+          }
+        },
+        {
+          "client_id": "619281341565-8samocri6ksrdd0rhi9jbh7h7lbl25b7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6Vlt6FV3hk37rgGVcDD6W7goM1qxEWeM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "619281341565-8samocri6ksrdd0rhi9jbh7h7lbl25b7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -45,6 +45,8 @@ TransactionExpandableListAdpater expandableListAdpater;
            expandableListAdpater = new TransactionExpandableListAdpater(getContext(), transactions, transactionHashMap);
        }
        expandableListView.setAdapter(expandableListAdpater);
+       expandableListView.setGroupIndicator(null);
+       //expandableListView.setChildDivider(getResources().getDrawable(R.color.transparent));
        expandableListAdpater.notifyDataSetChanged();
         // Inflate the layout for this fragment
         return view;

@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,7 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class register extends AppCompatActivity {
+public class Register extends AppCompatActivity {
     EditText etUsername, etPassword, etEmail;
     Button btnRegister;
     FirebaseAuth fAuth;
@@ -86,7 +85,7 @@ public class register extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(register.this, "Account Created", Toast.LENGTH_LONG).show();
+                            Toast.makeText(Register.this, "Account Created", Toast.LENGTH_LONG).show();
                             userID = fAuth.getCurrentUser().getUid();
                             DocumentReference documentReference = fStore.collection("users").document(userID);
                             Map<String, Object> user = new HashMap<>();
@@ -100,7 +99,7 @@ public class register extends AppCompatActivity {
                             });
                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                         }else {
-                            Toast.makeText(register.this, "Error, please try again! " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(Register.this, "Error, please try again! " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             pb.setVisibility(View.GONE);
 
                         }

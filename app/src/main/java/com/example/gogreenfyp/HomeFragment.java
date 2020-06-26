@@ -28,7 +28,7 @@ public class HomeFragment extends Fragment {
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 switch (position){
                     case 0:{
-                        tab.setText("TransactionHeader");
+                        tab.setText("Transaction");
                         break;
                     }
                     case 1:{

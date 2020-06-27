@@ -24,6 +24,7 @@
             android:text="Chicken Rice stall @ Republic Poly"
             android:layout_below="@+id/tvFoodName"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="12dp"
             android:layout_marginLeft="15dp"/>
 
         <TextView

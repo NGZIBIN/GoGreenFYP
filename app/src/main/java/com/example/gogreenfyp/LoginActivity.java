@@ -38,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                setUpAlertDialog();
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
 
@@ -63,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Successfully Login!", Toast.LENGTH_LONG).show();
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }else {
-                            Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "You are not registered ye", Toast.LENGTH_LONG).show();
                             pb.setVisibility(View.GONE);
 
                         }
@@ -73,8 +74,13 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void setUpAlertDialog() {
+        WalletErrorDialog walletErrorDialog = new WalletErrorDialog(LoginActivity.this);
+        walletErrorDialog.show();
+    }
+
     public void goRegisterNow(View view){
-        Intent i = new Intent(this, register.class);
+        Intent i = new Intent(this, Register.class);
         startActivity(i);
     }
 

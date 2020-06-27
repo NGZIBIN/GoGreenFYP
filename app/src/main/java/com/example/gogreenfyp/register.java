@@ -19,19 +19,25 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class register extends AppCompatActivity {
     EditText etUsername, etPassword, etEmail;
     Button btnRegister;
-    FirebaseAuth fAuth;
+
     ProgressBar pb;
-    FirebaseFirestore fStore;
+    FirebaseAuth fAuth;
     String userID;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference userRef = db.collection("Users");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +50,7 @@ public class register extends AppCompatActivity {
         btnRegister = findViewById(R.id.btnRegister);
         pb = findViewById(R.id.pb);
         fAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
 
 //        if(fAuth.getCurrentUser() != null){
 //            startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -58,6 +64,15 @@ public class register extends AppCompatActivity {
                 final String username = etUsername.getText().toString();
                 final String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
+                final int walletBalance = 0;
+                final int pointsBalance = 0;
+                final int badgeProgress = 0;
+                final int walletAddress = 0;
+                String badges = "Rookie, Elite, Prestige ";
+                String[] badgesArray = badges.split("\\s*,\\s*");
+                final List<String> badgesTag = Arrays.asList(badgesArray);
+
+
 
                 if(TextUtils.isEmpty(email)){
                     etEmail.setError("Email is Required");
@@ -88,16 +103,8 @@ public class register extends AppCompatActivity {
                         if(task.isSuccessful()){
                             Toast.makeText(register.this, "Account Created", Toast.LENGTH_LONG).show();
                             userID = fAuth.getCurrentUser().getUid();
-                            DocumentReference documentReference = fStore.collection("users").document(userID);
-                            Map<String, Object> user = new HashMap<>();
-                            user.put("Username", username);
-                            user.put("Email", email);
-                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d("Succes", "user ID is " + userID );
-                                }
-                            });
+                            User user = new User(username, email,walletBalance, pointsBalance, badgeProgress, walletAddress,badgesTag);
+                            userRef.add(user);
                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                         }else {
                             Toast.makeText(register.this, "Error, please try again! " + task.getException().getMessage(), Toast.LENGTH_LONG).show();

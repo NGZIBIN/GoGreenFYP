@@ -3,8 +3,6 @@ package com.example.gogreenfyp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -40,63 +38,43 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String email = etEmail.getText().toString();
+                String password = etPassword.getText().toString();
 
-                    setUpAlertDialog();
+                if(TextUtils.isEmpty(email)){
+                    etEmail.setError("Email is Required");
+                    return;
+                }
+                if(TextUtils.isEmpty(password)){
+                    etPassword.setError("Password is required");
+                    return;
+                }
+                if(password.length() < 8){
+                    etPassword.setError("Password must have at least 8 characters");
+                    return;
+                }
+                    pb.setVisibility(View.VISIBLE);
 
-//                String email = etEmail.getText().toString();
-//                String password = etPassword.getText().toString();
-//
-//                if(TextUtils.isEmpty(email)){
-//                    etEmail.setError("Email is Required");
-//                    return;
-//                }
-//                if(TextUtils.isEmpty(password)){
-//                    etPassword.setError("Password is required");
-//                    return;
-//                }
-//                if(password.length() < 8){
-//                    etPassword.setError("Password must have at least 8 characters");
-//                    return;
-//                }
-//                    pb.setVisibility(View.VISIBLE);
-//
-//
-//                fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if(task.isSuccessful()){
-//                            Toast.makeText(LoginActivity.this, "Successfully Login!", Toast.LENGTH_LONG).show();
-//                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-//                        }else {
-//                            Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-//                            pb.setVisibility(View.GONE);
-//
-//                        }
-//                    }
-//                });
+
+                fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(LoginActivity.this, "Successfully Login!", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        }else {
+                            Toast.makeText(LoginActivity.this, "You are not registered ye", Toast.LENGTH_LONG).show();
+                            pb.setVisibility(View.GONE);
+
+                        }
+                    }
+                });
             }
         });
     }
 
-    private void setUpAlertDialog(){
-            WalletErrorDialog walletErrorDialog = new WalletErrorDialog(LoginActivity.this);
-            walletErrorDialog.show();
-//        AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity.this).create();
-//        alertDialog.setTitle("Invalid input");
-//        alertDialog.setMessage("Please try again.");
-//        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-//                new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//        alertDialog.show();
-
-
-    }
-
     public void goRegisterNow(View view){
-        Intent i = new Intent(this, Register.class);
+        Intent i = new Intent(this, register.class);
         startActivity(i);
     }
 

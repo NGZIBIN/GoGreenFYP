@@ -3,7 +3,7 @@
     package="com.example.gogreenfyp">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -12,9 +12,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".infoActivity"
+            android:theme="@style/AppTheme.PopMe">
+
+        </activity>
         <activity android:name=".AllRewardRedeem" />
         <activity android:name=".forgetPassword" />
-        <activity android:name=".register" />
+        <activity android:name=".Register" />
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>

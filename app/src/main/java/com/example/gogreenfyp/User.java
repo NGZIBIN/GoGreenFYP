@@ -4,6 +4,7 @@ import com.google.firebase.firestore.Exclude;
 import java.util.List;
 
 public class User {
+    private String userID;
     private String username;
     private String email;
     private int walletBalance;
@@ -11,19 +12,32 @@ public class User {
     private int badgeProgress;
     private int walletAddress;
     List<String> userBadges;
+    List<String> userRewards;
+    List<String> userRedeemedRewards;
 
     public User(){
 
     }
 
-    public User(String username, String email, int walletBalance, int pointsBalance, int badgeProgress, int walletAddress, List<String> userBadges) {
+    public User(String userID, String username, String email, int walletBalance, int pointsBalance, int badgeProgress, int walletAddress, List<String> userBadges,  List<String> userRewards, List<String> userRedeemedRewards  ) {
         this.username = username;
+        this.userID = userID;
         this.email = email;
         this.walletBalance = walletBalance;
         this.pointsBalance = pointsBalance;
         this.badgeProgress = badgeProgress;
         this.walletAddress = walletAddress;
         this.userBadges = userBadges;
+        this.userRewards = userRewards;
+        this.userRedeemedRewards = userRedeemedRewards;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public String getUsername() {
@@ -80,5 +94,21 @@ public class User {
 
     public void setUserBadges(List<String> tags) {
         this.userBadges = tags;
+    }
+
+    public List<String> getUserRewards() {
+        return userRewards;
+    }
+
+    public void setUserRewards(List<String> userRewards) {
+        this.userRewards = userRewards;
+    }
+
+    public List<String> getUserRedeemedRewards() {
+        return userRedeemedRewards;
+    }
+
+    public void setUserRedeemedRewards(List<String> userRedeemedRewards) {
+        this.userRedeemedRewards = userRedeemedRewards;
     }
 }

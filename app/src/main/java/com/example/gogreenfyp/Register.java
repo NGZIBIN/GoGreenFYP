@@ -30,13 +30,15 @@ import java.util.Map;
 public class Register extends AppCompatActivity {
     EditText etUsername, etPassword, etEmail;
     Button btnRegister;
-
+    String userID;
     ProgressBar pb;
     FirebaseAuth fAuth;
-    String userID;
+
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference userRef = db.collection("Users");
+    DocumentReference userDoc = db.document("Users/" + userID);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,14 @@ public class Register extends AppCompatActivity {
                 String[] badgesArray = badges.split("\\s*,\\s*");
                 final List<String> badgesTag = Arrays.asList(badgesArray);
 
+                String userRewards = "GongCha, Koi";
+                String[] userRewardsArray = userRewards.split("\\s*,\\s*");
+                final List<String> userRewardsTag = Arrays.asList(userRewardsArray);
+
+                String userRedeemedRewards = "GongCha, Koi";
+                String[] userRedeemedRewardsArray = userRedeemedRewards.split("\\s*,\\s*");
+                final List<String> userRedeemedRewardsTag = Arrays.asList(userRedeemedRewardsArray);
+
 
 
                 if(TextUtils.isEmpty(email)){
@@ -102,7 +112,7 @@ public class Register extends AppCompatActivity {
                         if(task.isSuccessful()){
                             Toast.makeText(Register.this, "Account Created", Toast.LENGTH_LONG).show();
                             userID = fAuth.getCurrentUser().getUid();
-                            User user = new User(username, email,walletBalance, pointsBalance, badgeProgress, walletAddress,badgesTag);
+                            User user = new User(userID, username, email,walletBalance, pointsBalance, badgeProgress, walletAddress,badgesTag, userRewardsTag, userRedeemedRewardsTag);
                             userRef.add(user);
                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                         }else {

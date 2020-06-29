@@ -39,37 +39,37 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 setUpAlertDialog();
-                String email = etEmail.getText().toString();
-                String password = etPassword.getText().toString();
-
-                if(TextUtils.isEmpty(email)){
-                    etEmail.setError("Email is Required");
-                    return;
-                }
-                if(TextUtils.isEmpty(password)){
-                    etPassword.setError("Password is required");
-                    return;
-                }
-                if(password.length() < 8){
-                    etPassword.setError("Password must have at least 8 characters");
-                    return;
-                }
-                    pb.setVisibility(View.VISIBLE);
-
-
-                fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(LoginActivity.this, "Successfully Login!", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        }else {
-                            Toast.makeText(LoginActivity.this, "You are not registered ye", Toast.LENGTH_LONG).show();
-                            pb.setVisibility(View.GONE);
-
-                        }
-                    }
-                });
+//                String email = etEmail.getText().toString();
+//                String password = etPassword.getText().toString();
+//
+//                if(TextUtils.isEmpty(email)){
+//                    etEmail.setError("Email is Required");
+//                    return;
+//                }
+//                if(TextUtils.isEmpty(password)){
+//                    etPassword.setError("Password is required");
+//                    return;
+//                }
+//                if(password.length() < 8){
+//                    etPassword.setError("Password must have at least 8 characters");
+//                    return;
+//                }
+//                    pb.setVisibility(View.VISIBLE);
+//
+//
+//                fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if(task.isSuccessful()){
+//                            Toast.makeText(LoginActivity.this, "Successfully Login!", Toast.LENGTH_LONG).show();
+//                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+//                        }else {
+//                            Toast.makeText(LoginActivity.this, "You are not registered ye", Toast.LENGTH_LONG).show();
+//                            pb.setVisibility(View.GONE);
+//
+//                        }
+//                    }
+//                });
             }
         });
     }

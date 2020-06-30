@@ -19,6 +19,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class TransactionFragment extends Fragment {
+
 ExpandableListView expandableListView;
 TransactionExpandableListAdpater expandableListAdpater;
 
@@ -32,7 +33,7 @@ TransactionExpandableListAdpater expandableListAdpater;
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_transaction, container, false);
         expandableListView = view.findViewById(R.id.expandable_transactions);
-        HashMap<String, TransactionDetails> transactionHashMap = TransactionListData.getTransactionData();
+        HashMap<String, TransactionDetails> transactionHashMap = TransactionListData.getTransactionDetails();
 
        List<TransactionHeader> transactions = new ArrayList<TransactionHeader>();
 

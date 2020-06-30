@@ -1,10 +1,18 @@
 package com.example.gogreenfyp;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TransactionListData {
 
-    public static HashMap<String, TransactionDetails> getTransactionData(){
+    private FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
+    private CollectionReference collection = fireStore.collection("Users");
+
+    public static HashMap<String, TransactionDetails> getTransactionDetails(){
 
         HashMap<String, TransactionDetails> transactionData = new HashMap<String, TransactionDetails>();
 
@@ -17,6 +25,14 @@ public class TransactionListData {
         transactionData.put("Wanton Mee TX*3290", new TransactionDetails("5541321393290",  200));
 
         return transactionData;
+    }
+
+    public static ArrayList<TransactionHeader> getTransactionHeaders(){
+
+        ArrayList<TransactionHeader> transactionHeaders = new ArrayList<TransactionHeader>();
+
+
+        return transactionHeaders;
     }
 
 

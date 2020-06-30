@@ -87,10 +87,16 @@ public class AllRewardRedeem extends AppCompatActivity {
 
         Intent i = getIntent();
         String title = i.getStringExtra("RewardTitle");
-        int image = i.getExtras().getInt("RewardImg");
+        String instructions = i.getStringExtra("RewardInstructions");
+        String terms = i.getStringExtra("RewardTerms");
+        int points = i.getIntExtra("RewardPoints", 0);
+        int quantity = i.getIntExtra("RewardQuantity", 0);
+        int quantityLeft = i.getIntExtra("RewardQuantityLeft", 0);
+
+        //int image = i.getExtras().getInt("RewardImg");
 
         tvrewardTitle.setText(title);
-        rewardImg.setImageResource(image);
+        //rewardImg.setImageResource(image);
 
         initCounter();
         addBtn(new View(this));

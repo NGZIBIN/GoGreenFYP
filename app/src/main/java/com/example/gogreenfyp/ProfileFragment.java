@@ -82,16 +82,16 @@ public class ProfileFragment extends Fragment {
                             totalTimeUsed.setText(_PROGRESS + "");
 
                             if(progressCount < 10){
-                                badgeImage.setImageResource(R.drawable.smallrookiebadge);
+                              //  badgeImage.setImageResource(R.drawable.smallrookiebadge);
                                 nextUnlock.setText("10");
                                 pb.setMax(10);
                             }
                             else if(progressCount < 25){
-                                badgeImage.setImageResource(R.drawable.smallelitebadge);
+                              //  badgeImage.setImageResource(R.drawable.smallelitebadge);
                                 nextUnlock.setText("25");
                                 pb.setMax(25);
                             }else{
-                                badgeImage.setImageResource(R.drawable.smallprestigebadge);
+                              //  badgeImage.setImageResource(R.drawable.smallprestigebadge);
                                 nextUnlock.setText("50");
                                 pb.setMax(100);
                             }

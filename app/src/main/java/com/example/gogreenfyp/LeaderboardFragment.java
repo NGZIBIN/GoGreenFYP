@@ -54,27 +54,45 @@ public class LeaderboardFragment extends Fragment {
         collection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                int currentCount = 0;
+                for(QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     User user = documentSnapshot.toObject(User.class);
                     LeaderBoard leaderBoard = new LeaderBoard(user.getUsername(), user.getBadgeProgress());
                     al.add(leaderBoard);
                 }
 
-                Toast.makeText(getContext(), "Success!", Toast.LENGTH_SHORT).show();
+                if(getContext() != null) {
+                    ArrayList<LeaderBoard> sortedRankings = sortLeaderBoardRanking(al);
+                    aa = new LeaderBoardAdapter(getContext(), R.layout.row_leaderboard, sortedRankings);
+                    listviewLeaderboard.setAdapter(aa);
+                }
+                //Toast.makeText(getContext(), "Success! "+al.size(), Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(getContext(), "Failed!", Toast.LENGTH_SHORT).show();
-                Log.d("User", firebaseAuth.getCurrentUser()+"");
+                if(firebaseAuth.getCurrentUser() != null) {
+                    Log.d("User", firebaseAuth.getCurrentUser().getUid());
+                }
                 e.printStackTrace();
             }
         });
 
-        if(getContext() != null) {
-            aa = new LeaderBoardAdapter(getContext(), R.layout.row_leaderboard, al);
-            listviewLeaderboard.setAdapter(aa);
-        }
         return view;
+    }
+    private ArrayList<LeaderBoard> sortLeaderBoardRanking(ArrayList<LeaderBoard> leaderBoards){
+        int currentCount = 0;
+        ArrayList<LeaderBoard> sortedRankings = new ArrayList<LeaderBoard>();
+        for(int i = 0; i < leaderBoards.size(); i++){
+            if(leaderBoards.get(i).getCount() > currentCount) {
+                currentCount = leaderBoards.get(i).getCount();
+                sortedRankings.add(0, leaderBoards.get(i));
+            }
+            else{
+                sortedRankings.add(leaderBoards.get(i));
+            }
+        }
+        return sortedRankings;
     }
 }

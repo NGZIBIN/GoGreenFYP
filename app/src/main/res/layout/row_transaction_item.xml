@@ -20,7 +20,7 @@
             android:id="@+id/tvTransNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="12312322323"
+            android:text="0x82cbfc"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"/>

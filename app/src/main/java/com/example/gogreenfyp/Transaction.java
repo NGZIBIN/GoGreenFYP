@@ -18,31 +18,15 @@ public class Transaction {
         return receiverAddress;
     }
 
-    public void setReceiverAddress(String receiverAddress) {
-        this.receiverAddress = receiverAddress;
-    }
-
     public String getSenderAddress() {
         return senderAddress;
-    }
-
-    public void setSenderAddress(String senderAddress) {
-        this.senderAddress = senderAddress;
     }
 
     public TransactionHeader getTransactionHeader() {
         return transactionHeader;
     }
 
-    public void setTransactionHeader(TransactionHeader transactionHeader) {
-        this.transactionHeader = transactionHeader;
-    }
-
     public TransactionDetails getTransactionDetails() {
         return transactionDetails;
-    }
-
-    public void setTransactionDetails(TransactionDetails transactionDetails) {
-        this.transactionDetails = transactionDetails;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.gogreenfyp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,14 +27,12 @@ import java.util.HashMap;
 import java.util.List;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class TransactionFragment extends Fragment {
 
 ExpandableListView expandableListView;
 TransactionExpandableListAdpater expandableListAdpater;
 private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+private String walletAddress = "";
 private FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
 private CollectionReference collection = fireStore.collection("Transactions");
 
@@ -47,9 +46,15 @@ private CollectionReference collection = fireStore.collection("Transactions");
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_transaction, container, false);
         expandableListView = view.findViewById(R.id.expandable_transactions);
+
+        if(getActivity() != null) {
+            Intent intent = getActivity().getIntent();
+            walletAddress = intent.getStringExtra("walletAddress");
+        }
+
         expandableListAdpater = getExpandListAdapter();
         expandableListView.setAdapter(expandableListAdpater);
-
+       // Toast.makeText(getContext(), walletAddress, Toast.LENGTH_SHORT).show();
         expandableListView.setGroupIndicator(null);
         expandableListView.setChildDivider(getResources().getDrawable(R.color.transparent));
         // Inflate the layout for this fragment
@@ -62,7 +67,9 @@ private CollectionReference collection = fireStore.collection("Transactions");
         final ArrayList<TransactionHeader> transactions = new ArrayList<TransactionHeader>();
         final TransactionExpandableListAdpater expandableListAdpater = new TransactionExpandableListAdpater(getContext(), transactions, transactionHashMap);
 
-            collection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            String address = this.walletAddress;
+
+            collection.whereEqualTo("walletAddress", address).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
@@ -83,27 +90,14 @@ private CollectionReference collection = fireStore.collection("Transactions");
                         transactions.add(transactionHeader);
                         transactionHashMap.put(transactionTitle, details);
                     }
-
+                    //Toast.makeText(getContext(), transactionHashMap.size()+"", Toast.LENGTH_SHORT).show();
                     expandableListAdpater.setListTitle(transactions);
                     expandableListAdpater.setExpandableListData(transactionHashMap);
                     expandableListAdpater.notifyDataSetChanged();
-                    Toast.makeText(getContext(), transactionHashMap.size()+"", Toast.LENGTH_SHORT).show();
                 }
             });
             return expandableListAdpater;
     }
-
-//    private ArrayList<String> getTransactionItemTitles(){
-//
-//        ArrayList<String> transactionTitles = new ArrayList<String>();
-//        ArrayList<TransactionHeader> transactionHeaders = getTransactionHeaders();
-//
-//        for (int i = 0; i < transactionHeaders.size(); i++){
-//            transactionTitles.add(transactionHeaders.get(i).getItem());
-//        }
-//
-//        return transactionTitles;
-//    }
 
 
 }

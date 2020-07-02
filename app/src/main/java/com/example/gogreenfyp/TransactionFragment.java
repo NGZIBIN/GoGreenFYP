@@ -47,44 +47,50 @@ private CollectionReference collection = fireStore.collection("Transactions");
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_transaction, container, false);
         expandableListView = view.findViewById(R.id.expandable_transactions);
-        HashMap<String, TransactionDetails> transactionHashMap = getTransactionDetails();
+        expandableListAdpater = getExpandListAdapter();
+        expandableListView.setAdapter(expandableListAdpater);
 
-       List<TransactionHeader> transactions = getTransactionHeaders();
-
-
-       if(getContext() != null) {
-           expandableListAdpater = new TransactionExpandableListAdpater(getContext(), transactions, transactionHashMap);
-       }
-       expandableListView.setAdapter(expandableListAdpater);
-
-       expandableListView.setGroupIndicator(null);
-       expandableListView.setChildDivider(getResources().getDrawable(R.color.transparent));
-       expandableListAdpater.notifyDataSetChanged();
-      // Toast.makeText(getContext(), ""+transactionHashMap.size(), Toast.LENGTH_SHORT).show();
+        expandableListView.setGroupIndicator(null);
+        expandableListView.setChildDivider(getResources().getDrawable(R.color.transparent));
         // Inflate the layout for this fragment
         return view;
     }
 
-    private HashMap<String, TransactionDetails> getTransactionDetails(){
+    private TransactionExpandableListAdpater getExpandListAdapter(){
 
-        final HashMap<String, TransactionDetails> transactionDetails = new HashMap<String, TransactionDetails>();
-        //final ArrayList<String> transactionTitles = getTransactionItemTitles();
+        final HashMap<String, TransactionDetails> transactionHashMap = new HashMap<String, TransactionDetails>();
+        final ArrayList<TransactionHeader> transactions = new ArrayList<TransactionHeader>();
+        final TransactionExpandableListAdpater expandableListAdpater = new TransactionExpandableListAdpater(getContext(), transactions, transactionHashMap);
 
-        collection.document().collection("TransactionDetails").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                    String id = documentSnapshot.getId();
-                    String lastFourChars = id.substring(id.length()-3);
-                    String transactionTitle = "TX*"+lastFourChars;
-                    TransactionDetails transaction = documentSnapshot.toObject(TransactionDetails.class);
-                    transactionDetails.put(transactionTitle, transaction);
-                    Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+            collection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+
+                        Transaction transaction = documentSnapshot.toObject(Transaction.class);
+                        TransactionDetails details = new TransactionDetails(transaction.getTransactionNo(), transaction.getPoints());
+                        TransactionHeader transactionHeader = new TransactionHeader(transaction.getItem(), transaction.getPlace(), transaction.getAmount());
+
+                        String transNo = details.getTransactionNo();
+                        String lastFourChars = transNo.substring(transNo.length() - 4);
+                        String lastEightChars = transNo.substring(transNo.length() - 12);
+                        String transactionTitle = transactionHeader.getItem()+" TX*" + lastFourChars;
+
+                        details.setTransactionNo(lastEightChars);
+                        transactionHeader.setItem(transactionTitle);
+
+                        transactions.add(transactionHeader);
+                        transactionHashMap.put(transactionTitle, details);
+                    }
+
+                    expandableListAdpater.setListTitle(transactions);
+                    expandableListAdpater.setExpandableListData(transactionHashMap);
+                    expandableListAdpater.notifyDataSetChanged();
+                    Toast.makeText(getContext(), transactionHashMap.size()+"", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
-
-        return transactionDetails;
+            });
+            return expandableListAdpater;
     }
 
 //    private ArrayList<String> getTransactionItemTitles(){
@@ -98,24 +104,6 @@ private CollectionReference collection = fireStore.collection("Transactions");
 //
 //        return transactionTitles;
 //    }
-
-    private ArrayList<TransactionHeader> getTransactionHeaders(){
-
-        final ArrayList<TransactionHeader> transactionHeaders = new ArrayList<TransactionHeader>();
-
-        collection.document().collection("TransactionHeader").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                    TransactionHeader transactionHeader = documentSnapshot.toObject(TransactionHeader.class);
-                    transactionHeaders.add(transactionHeader);
-                    Toast.makeText(getContext(), transactionHeader.toString(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        return transactionHeaders;
-    }
 
 
 }

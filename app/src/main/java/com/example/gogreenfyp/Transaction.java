@@ -2,31 +2,43 @@ package com.example.gogreenfyp;
 
 public class Transaction {
 
-    private String receiverAddress;
-    private String senderAddress;
-    private TransactionHeader transactionHeader;
-    private TransactionDetails transactionDetails;
+    private double amount;
+    private String place;
+    private String item;
+    private String transactionNo;
+    private int points;
 
-    public Transaction(String receiverAddress, String senderAddress, TransactionHeader transactionHeader, TransactionDetails transactionDetails) {
-        this.receiverAddress = receiverAddress;
-        this.senderAddress = senderAddress;
-        this.transactionHeader = transactionHeader;
-        this.transactionDetails = transactionDetails;
+    public Transaction(){
+
     }
 
-    public String getReceiverAddress() {
-        return receiverAddress;
+    public Transaction(double amount, String place, String item, String transactionNo, int points) {
+        this.amount = amount;
+        this.place = place;
+        this.item = item;
+        this.transactionNo = transactionNo;
+        this.points = points;
     }
 
-    public String getSenderAddress() {
-        return senderAddress;
+    public double getAmount() {
+        return amount;
     }
 
-    public TransactionHeader getTransactionHeader() {
-        return transactionHeader;
+    public String getPlace() {
+        return place;
     }
 
-    public TransactionDetails getTransactionDetails() {
-        return transactionDetails;
+    public String getItem() {
+        return item;
     }
+
+    public String getTransactionNo() {
+        return transactionNo;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+
 }

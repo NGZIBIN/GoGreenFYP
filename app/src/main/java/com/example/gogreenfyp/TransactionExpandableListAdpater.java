@@ -22,6 +22,14 @@ public class TransactionExpandableListAdpater extends BaseExpandableListAdapter 
         this.expandableListData = expandableListData;
     }
 
+    public void setListTitle(List<TransactionHeader> transactionHeaders){
+        this.listTitle = transactionHeaders;
+    }
+
+    public void setExpandableListData(HashMap<String, TransactionDetails> transactionDetailsHashMap){
+        this.expandableListData = transactionDetailsHashMap;
+    }
+
     @Override
     public int getGroupCount() {
         return listTitle.size();

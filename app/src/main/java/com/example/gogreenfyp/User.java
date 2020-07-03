@@ -19,7 +19,9 @@ public class User {
 
     }
 
+
     public User(String userID, String username, String email, int walletBalance, int pointsBalance, int badgeProgress, String walletAddress, List<String> userBadges,  List<String> userRewards, List<String> userRedeemedRewards  ) {
+
         this.username = username;
         this.userID = userID;
         this.email = email;

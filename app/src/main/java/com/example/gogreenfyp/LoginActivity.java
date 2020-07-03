@@ -124,13 +124,13 @@ public class LoginActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
 
                     String userIDAuth = "";
-                    int walletAdd = 0;
+                    String walletAdd = "";
                     for(DocumentSnapshot documentSnapshots: task.getResult()){
                         User user = documentSnapshots.toObject(User.class);
                         userIDAuth = user.getUserID();
                         walletAdd = user.getWalletAddress();
                         if(userIDAuth.equals(userID)){
-                            if(walletAdd == 0){
+                            if(walletAdd.equals("0")){
                                 WalletErrorDialog walletErrorDialog = new WalletErrorDialog(LoginActivity.this);
                                 walletErrorDialog.show();
                             }else {

@@ -42,7 +42,7 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
 
         holder.tvRewardTitle.setText(Data.get(position).getName());
         holder.tvRewardPointsNeeded.setText(String.valueOf(Data.get(position).getPointsToRedeem()));
-        //holder.RewardImg.setImageResource(Data.get(position).get());
+//        holder.RewardImg.setImageResource(Data.get(position).get());
         holder.AllRewardCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

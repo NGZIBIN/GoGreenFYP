@@ -2,46 +2,52 @@ package com.example.gogreenfyp.pojo;
 
 public class Badge {
     private String name;
-    private String instructions;
-    private String termsAndCond;
-    private int pointsToRedeem;
-    private int quantity;
-    private int quantityLeft;
+    private String badgeImage;
+    private int usagePoints;
+    private int bonusPoints;
+
+
 
     public Badge(){
         // empty constructor needed
     }
 
-    public Badge(String name, String instructions, String termsAndCond, int pointsToRedeem, int quantity, int quantityLeft) {
+    public Badge(String name, String badgeImage, int usagePoints, int bonusPoints) {
         this.name = name;
-        this.instructions = instructions;
-        this.termsAndCond = termsAndCond;
-        this.pointsToRedeem = pointsToRedeem;
-        this.quantity = quantity;
-        this.quantityLeft = quantityLeft;
+        this.badgeImage = badgeImage;
+        this.usagePoints = usagePoints;
+        this.bonusPoints = bonusPoints;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getInstructions() {
-        return instructions;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getTermsAndCond() {
-        return termsAndCond;
+    public String getBadgeImage() {
+        return badgeImage;
     }
 
-    public int getPointsToRedeem() {
-        return pointsToRedeem;
+    public void setBadgeImage(String badgeImage) {
+        this.badgeImage = badgeImage;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getUsagePoints() {
+        return usagePoints;
     }
 
-    public int getQuantityLeft() {
-        return quantityLeft;
+    public void setUsagePoints(int usagePoints) {
+        this.usagePoints = usagePoints;
+    }
+
+    public int getBonusPoints() {
+        return bonusPoints;
+    }
+
+    public void setBonusPoints(int bonusPoints) {
+        this.bonusPoints = bonusPoints;
     }
 }

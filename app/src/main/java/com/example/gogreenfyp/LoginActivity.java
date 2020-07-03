@@ -125,6 +125,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     String userIDAuth = "";
                     String walletAdd = "";
+
                     for(DocumentSnapshot documentSnapshots: task.getResult()){
                         User user = documentSnapshots.toObject(User.class);
                         userIDAuth = user.getUserID();
@@ -135,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
                                 walletErrorDialog.show();
                             }else {
                                 Toast.makeText(LoginActivity.this, "Successfully Login!", Toast.LENGTH_LONG).show();
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class).putExtra("walletAddress", walletAdd));
                             }
                             Log.d("TAG", "SUCCESS " + userIDAuth + " Wallet address " + walletAdd);
                         }

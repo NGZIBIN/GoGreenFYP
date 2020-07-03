@@ -124,7 +124,8 @@ public class LoginActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
 
                     String userIDAuth = "";
-                    String walletAdd = "0";
+                    String walletAdd = "";
+
                     for(DocumentSnapshot documentSnapshots: task.getResult()){
                         User user = documentSnapshots.toObject(User.class);
                         userIDAuth = user.getUserID();

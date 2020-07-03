@@ -40,15 +40,20 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
-        holder.tvRewardTitle.setText(Data.get(position).getRewardName());
-        holder.RewardImg.setImageResource(Data.get(position).getRewardImage());
-//        holder.tvRewardPointsNeeded.setText(Data.get(position).getPoints());
+        holder.tvRewardTitle.setText(Data.get(position).getName());
+        holder.tvRewardPointsNeeded.setText(String.valueOf(Data.get(position).getPointsToRedeem()));
+//        holder.RewardImg.setImageResource(Data.get(position).get());
         holder.AllRewardCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(context, AllRewardRedeem.class);
-                i.putExtra("RewardTitle", Data.get(position).getRewardName());
-                i.putExtra("RewardImg", Data.get(position).getRewardImage());
+                i.putExtra("RewardTitle", Data.get(position).getName());
+                i.putExtra("RewardInstructions", Data.get(position).getInstructions());
+                i.putExtra("RewardPoints", Data.get(position).getPointsToRedeem());
+                i.putExtra("RewardQuantity", Data.get(position).getQuantity());
+                i.putExtra("RewardQuantityLeft", Data.get(position).getQuantityLeft());
+                i.putExtra("RewardTerms", Data.get(position).getTermsAndCondition());
+//                i.putExtra("RewardImg", Data.get(position).getRewardImage());
                 context.startActivity(i);
             }
         });
@@ -68,7 +73,6 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
         ImageView RewardImg;
         CardView AllRewardCardView;
 
-
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -76,8 +80,6 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
             tvRewardPointsNeeded = (TextView) itemView.findViewById(R.id.rewardPointsToClaim);
             RewardImg = (ImageView) itemView.findViewById(R.id.rewardImg);
             AllRewardCardView = (CardView) itemView.findViewById(R.id.AllRewardCardView);
-
-
         }
     }
 }

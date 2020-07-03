@@ -1,38 +1,48 @@
 package com.example.gogreenfyp;
 
-public class Rewards  {
+public class Rewards{
 
-    private String RewardName;
-    private int Points;
-    private int RewardImage;
+   private String instructions;
+   private String name;
+   private String termsAndCondition;
+   private int pointsToRedeem;
+   private int quantity;
+   private int quantityLeft;
 
-    public Rewards(String rewardName, int points, int rewardImage) {
-        RewardName = rewardName;
-        Points = points;
-        RewardImage = rewardImage;
+   public Rewards() {
+
     }
 
-    public String getRewardName() {
-        return RewardName;
+    public Rewards(String instructions, String name, String termsAndCondition, int pointsToRedeem, int quantity, int quantityLeft) {
+        this.instructions = instructions;
+        this.name = name;
+        this.termsAndCondition = termsAndCondition;
+        this.pointsToRedeem = pointsToRedeem;
+        this.quantity = quantity;
+        this.quantityLeft = quantityLeft;
     }
 
-    public void setRewardName(String rewardName) {
-        RewardName = rewardName;
+    public String getInstructions() {
+        return instructions;
     }
 
-    public int getPoints() {
-        return Points;
+    public String getName() {
+        return name;
     }
 
-    public void setPoints(int points) {
-        Points = points;
+    public String getTermsAndCondition() {
+        return termsAndCondition;
     }
 
-    public int getRewardImage() {
-        return RewardImage;
+    public int getPointsToRedeem() {
+        return pointsToRedeem;
     }
 
-    public void setRewardImage(int rewardImage) {
-        RewardImage = rewardImage;
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public int getQuantityLeft() {
+        return quantityLeft;
     }
 }

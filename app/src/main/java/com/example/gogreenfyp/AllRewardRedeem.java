@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class AllRewardRedeem extends AppCompatActivity {
@@ -90,6 +92,7 @@ public class AllRewardRedeem extends AppCompatActivity {
         Intent i = getIntent();
         String title = i.getStringExtra("RewardTitle");
         String instructions = i.getStringExtra("RewardInstructions");
+        String imageURL = i.getStringExtra("RewardImg");
         String terms = i.getStringExtra("RewardTerms");
         int points = i.getIntExtra("RewardPoints", 0);
         int quantity = i.getIntExtra("RewardQuantity", 0);
@@ -101,7 +104,13 @@ public class AllRewardRedeem extends AppCompatActivity {
         tvrewardTitle.setText(title);
         tvrewardPointsNeeded.setText(points + " points");
         tvTerms.setText(terms);
-        //rewardImg.setImageResource(image);
+//        rewardImg.setImageResource(imageURL);
+
+        // Image
+        Glide.with(getApplicationContext())
+                .load(imageURL)
+                .into(rewardImg);
+
 
         initCounter();
         addBtn(new View(this));

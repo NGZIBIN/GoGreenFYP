@@ -4,7 +4,7 @@ public class Rewards{
 
    private String instructions;
    private String name;
-   private String termsAndCondition;
+   private String termsAndConditions;
    private String imageURL;
    private int pointsToRedeem;
    private int quantity;
@@ -14,10 +14,10 @@ public class Rewards{
 
     }
 
-    public Rewards(String instructions, String name, String termsAndCondition, int pointsToRedeem, int quantity, int quantityLeft, String imageURL) {
+    public Rewards(String instructions, String name, String termsAndConditions, int pointsToRedeem, int quantity, int quantityLeft, String imageURL) {
         this.instructions = instructions;
         this.name = name;
-        this.termsAndCondition = termsAndCondition;
+        this.termsAndConditions = termsAndConditions;
         this.pointsToRedeem = pointsToRedeem;
         this.quantity = quantity;
         this.quantityLeft = quantityLeft;
@@ -32,8 +32,8 @@ public class Rewards{
         return name;
     }
 
-    public String getTermsAndCondition() {
-        return termsAndCondition;
+    public String getTermsAndConditions() {
+        return termsAndConditions;
     }
 
     public int getPointsToRedeem() {

@@ -53,8 +53,10 @@ public class AllRewardsFragment extends Fragment {
                 if(task.isSuccessful()){
                     for(QueryDocumentSnapshot document: task.getResult()){
                         Rewards rewards = document.toObject(Rewards.class);
-                        listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndCondition(),
+                        listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
                                 rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL()));
+
+                        Log.d("IMAGE", rewards.getImageURL());
                     }
                     RewardRecyclerViewAdapter myAdapter = new RewardRecyclerViewAdapter(getContext(),listReward);
                     recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));

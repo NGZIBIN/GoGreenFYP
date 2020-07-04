@@ -107,15 +107,15 @@ public class ProfileFragment extends Fragment {
                             totalTimeUsed.setText(_PROGRESS + "");
 
                             if (progressCount < 10) {
-                                badgeImage.setImageResource(R.drawable.smallrookiebadge);
+                                //badgeImage.setImageResource(R.drawable.smallrookiebadge);
                                 nextUnlock.setText("10");
                                 pb.setMax(10);
                             } else if (progressCount < 25) {
-                                badgeImage.setImageResource(R.drawable.smallelitebadge);
+                                //badgeImage.setImageResource(R.drawable.smallelitebadge);
                                 nextUnlock.setText("25");
                                 pb.setMax(25);
                             } else {
-                                badgeImage.setImageResource(R.drawable.smallprestigebadge);
+                                //badgeImage.setImageResource(R.drawable.smallprestigebadge);
                                 nextUnlock.setText("50");
                                 pb.setMax(100);
                             }
@@ -124,7 +124,6 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
-
 
         //Setting Fragment into FrameLayout
 
@@ -148,18 +147,14 @@ public class ProfileFragment extends Fragment {
                         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                     }
                     else {
-
                         choseImage();
-
                     }
-                }else{
+                }
+                else{
                     choseImage();
                 }
             }
         });
-
-
-
 
         return view;
     }
@@ -170,7 +165,27 @@ public class ProfileFragment extends Fragment {
                 .setAspectRatio(1, 1)
                 .start(requireActivity());
 
+        if(getActivity() != null) {
+            getActivity().setResult(RESULT_OK);
+        }
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if(resultCode == RESULT_OK && result != null){
+                imageUri = result.getUri();
+                profileImg.setImageURI(imageUri);
+                Toast.makeText(getContext(), "Successfully set", Toast.LENGTH_SHORT).show();
+                Log.d("PASS TAG", "PASS");
+            }else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE && result != null){
+                Exception error = result.getError();
+                Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
+                Log.d("FAIL TAG",  "FAIL "+ error.getMessage());
+            }
+        }
     }
 
 //    private void Fileuploader(){
@@ -209,23 +224,6 @@ public class ProfileFragment extends Fragment {
 //        };
 //    }
     //
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if(resultCode == RESULT_OK){
-                imageUri = result.getUri();
-                profileImg.setImageURI(imageUri);
-                Log.d("PASS TAG", "PASSSSSSSSSSSSSSSSSP PASSSSSSSSSSSSSS PASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
-            }else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
-                Exception error = result.getError();
-                Log.d("TAG",  "FAIL FIAL FIAL FAIL");
-            }
-        }
-    }
-
-
     //    @Override
 //    public void onClick(View view) {
 //        if(view.getId() == R.id.infoImg){

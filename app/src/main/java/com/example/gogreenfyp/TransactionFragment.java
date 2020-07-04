@@ -81,10 +81,10 @@ private CollectionReference collection = fireStore.collection("Transactions");
 
                         String transNo = details.getTransactionNo();
                         String lastFourChars = transNo.substring(transNo.length() - 4);
-                        String lastEightChars = transNo.substring(transNo.length() - 12);
+                        String lastTwelveChars = transNo.substring(transNo.length() - 12);
                         String transactionTitle = transactionHeader.getItem()+" TX*" + lastFourChars;
 
-                        details.setTransactionNo(lastEightChars);
+                        details.setTransactionNo(lastTwelveChars);
                         transactionHeader.setItem(transactionTitle);
 
                         transactions.add(transactionHeader);

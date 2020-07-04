@@ -68,7 +68,7 @@ public class Register extends AppCompatActivity {
                 final int walletBalance = 0;
                 final int pointsBalance = 0;
                 final int badgeProgress = 0;
-                final int walletAddress = 0;
+                final String walletAddress = "0";
                 String badges = "Rookie, Elite, Prestige ";
                 String[] badgesArray = badges.split("\\s*,\\s*");
                 final List<String> badgesTag = Arrays.asList(badgesArray);
@@ -112,7 +112,10 @@ public class Register extends AppCompatActivity {
                         if(task.isSuccessful()){
                             Toast.makeText(Register.this, "Account Created", Toast.LENGTH_LONG).show();
                             userID = fAuth.getCurrentUser().getUid();
-                            User user = new User(userID, username, email,walletBalance, pointsBalance, badgeProgress, walletAddress,badgesTag, userRewardsTag, userRedeemedRewardsTag);
+
+                            User user = new User(userID, username, email, walletBalance, pointsBalance, badgeProgress, walletAddress,badgesTag, userRewardsTag, userRedeemedRewardsTag);
+
+
                             userRef.add(user);
                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                         }else {

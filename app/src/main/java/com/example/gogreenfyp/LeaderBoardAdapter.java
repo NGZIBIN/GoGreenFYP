@@ -47,12 +47,13 @@ public class LeaderBoardAdapter extends ArrayAdapter<LeaderBoard> {
         if(position == 0){
             ivCrown.setImageResource(R.drawable.crownfirst);
         }
-        if(position == 1){
+        else if(position == 1){
             ivCrown.setImageResource(R.drawable.crownsecond);
         }
-        if(position == 2){
+        else if(position == 2){
             ivCrown.setImageResource(R.drawable.crownthird);
         }
+
 
         tvName.setText(currentType.getName());
         tvCount.setText(currentType.getCount() + "");

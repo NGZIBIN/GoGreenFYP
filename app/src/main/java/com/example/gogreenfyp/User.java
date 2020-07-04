@@ -10,7 +10,7 @@ public class User {
     private int walletBalance;
     private int pointsBalance;
     private int badgeProgress;
-    private int walletAddress;
+    private String walletAddress;
     List<String> userBadges;
     List<String> userRewards;
     List<String> userRedeemedRewards;
@@ -19,7 +19,9 @@ public class User {
 
     }
 
-    public User(String userID, String username, String email, int walletBalance, int pointsBalance, int badgeProgress, int walletAddress, List<String> userBadges,  List<String> userRewards, List<String> userRedeemedRewards  ) {
+
+    public User(String userID, String username, String email, int walletBalance, int pointsBalance, int badgeProgress, String walletAddress, List<String> userBadges,  List<String> userRewards, List<String> userRedeemedRewards  ) {
+
         this.username = username;
         this.userID = userID;
         this.email = email;
@@ -80,11 +82,11 @@ public class User {
         this.badgeProgress = badgeProgress;
     }
 
-    public int getWalletAddress() {
+    public String getWalletAddress() {
         return walletAddress;
     }
 
-    public void setWalletAddress(int walletAddress) {
+    public void setWalletAddress(String walletAddress) {
         this.walletAddress = walletAddress;
     }
 

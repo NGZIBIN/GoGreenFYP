@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "619281341565-14p23p2l1ldl80kmvruvl5t2p780s7k2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gogreenfyp",
+            "certificate_hash": "e20784297b6cc680ecbcfeefff72535b1f48e5fe"
+          }
+        },
+        {
           "client_id": "619281341565-b8vv6scb35vp2h67hhs8fj8gpi3qm7fv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

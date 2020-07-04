@@ -33,7 +33,7 @@ public class AllRewardsFragment extends Fragment {
     List<Rewards> listReward;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference rewardsCollectionRef = db.collection("Badges");
+    private CollectionReference rewardsCollectionRef = db.collection("Rewards");
 
     public AllRewardsFragment() {
         // Required empty public constructor

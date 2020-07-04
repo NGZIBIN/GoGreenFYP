@@ -17,7 +17,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class AllRewardRedeem extends AppCompatActivity {
 
-    private TextView tvrewardTitle, tvrewardPointsNeeded, tvcurrentPoints, tvQuantity;
+    private TextView tvrewardTitle, tvrewardPointsNeeded, tvcurrentPoints, tvQuantity, tvTerms;
     private ImageView rewardImg;
     private Button btnRedeem;
     int counter;
@@ -36,6 +36,8 @@ public class AllRewardRedeem extends AppCompatActivity {
         setContentView(R.layout.activity_all_reward_redeem);
 
         tvrewardTitle = (TextView) findViewById(R.id.rewardTitle);
+        tvrewardPointsNeeded = (TextView) findViewById(R.id.pointsNeeded);
+        tvTerms = findViewById(R.id.tvTerms);
         rewardImg = (ImageView) findViewById(R.id.RewardImg);
         tvQuantity = (TextView) findViewById(R.id.counter);
         btnRedeem = findViewById(R.id.btnRedeem);
@@ -95,7 +97,10 @@ public class AllRewardRedeem extends AppCompatActivity {
 
         //int image = i.getExtras().getInt("RewardImg");
 
+        // Set reward information
         tvrewardTitle.setText(title);
+        tvrewardPointsNeeded.setText(points + " points");
+        tvTerms.setText(terms);
         //rewardImg.setImageResource(image);
 
         initCounter();

@@ -29,12 +29,12 @@ import java.util.List;
 
 public class TransactionFragment extends Fragment {
 
-ExpandableListView expandableListView;
-TransactionExpandableListAdpater expandableListAdpater;
-private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-private String walletAddress = "";
-private FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
-private CollectionReference collection = fireStore.collection("Transactions");
+    ExpandableListView expandableListView;
+    TransactionExpandableListAdpater expandableListAdpater;
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private String walletAddress = "";
+    private FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
+    private CollectionReference collection = fireStore.collection("Transactions");
 
     public TransactionFragment() {
         // Required empty public constructor

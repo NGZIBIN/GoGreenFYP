@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="300dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/successicon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/titleConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="REDEMPTION SUCCESS"
+            android:textSize="20dp"
+            android:textColor="#000000"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="90dp"
+            android:textStyle="bold"/>
+        
+        <TextView
+            android:id="@+id/titleEnjoy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enjoy your reward"
+            android:layout_below="@id/titleConfirm"
+            android:layout_centerHorizontal="true"
+            android:textSize="18dp"
+            android:layout_marginTop="20dp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/titleTransNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Transaction No."
+            android:layout_below="@id/titleEnjoy"
+            android:textSize="18dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="70dp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/tvTransNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="47687368232"
+            android:layout_below="@id/titleEnjoy"
+            android:textSize="18dp"
+            android:layout_marginTop="22dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="70dp"
+            android:textColor="#000000"/>
+
+        <Button
+            android:id="@+id/btnFinish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Finish"
+            android:textSize="18dp"
+            android:textColor="#fff"
+            android:background="#6CAADB"/>
+
+
+
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -13,11 +13,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class AllRewardRedeem extends AppCompatActivity {
 
-    private TextView tvrewardTitle, tvrewardPointsNeeded, tvcurrentPoints, tvQuantity;
+    private TextView tvrewardTitle, tvrewardPointsNeeded, tvcurrentPoints, tvQuantity, tvTerms;
     private ImageView rewardImg;
     private Button btnRedeem;
     int counter;
@@ -36,6 +38,8 @@ public class AllRewardRedeem extends AppCompatActivity {
         setContentView(R.layout.activity_all_reward_redeem);
 
         tvrewardTitle = (TextView) findViewById(R.id.rewardTitle);
+        tvrewardPointsNeeded = (TextView) findViewById(R.id.pointsNeeded);
+        tvTerms = findViewById(R.id.tvTerms);
         rewardImg = (ImageView) findViewById(R.id.RewardImg);
         tvQuantity = (TextView) findViewById(R.id.counter);
         btnRedeem = findViewById(R.id.btnRedeem);
@@ -88,6 +92,7 @@ public class AllRewardRedeem extends AppCompatActivity {
         Intent i = getIntent();
         String title = i.getStringExtra("RewardTitle");
         String instructions = i.getStringExtra("RewardInstructions");
+        String imageURL = i.getStringExtra("RewardImg");
         String terms = i.getStringExtra("RewardTerms");
         int points = i.getIntExtra("RewardPoints", 0);
         int quantity = i.getIntExtra("RewardQuantity", 0);
@@ -95,8 +100,17 @@ public class AllRewardRedeem extends AppCompatActivity {
 
         //int image = i.getExtras().getInt("RewardImg");
 
+        // Set reward information
         tvrewardTitle.setText(title);
-        //rewardImg.setImageResource(image);
+        tvrewardPointsNeeded.setText(points + " points");
+        tvTerms.setText(terms);
+//        rewardImg.setImageResource(imageURL);
+
+        // Image
+        Glide.with(getApplicationContext())
+                .load(imageURL)
+                .into(rewardImg);
+
 
         initCounter();
         addBtn(new View(this));

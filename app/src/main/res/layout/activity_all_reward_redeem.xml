@@ -147,12 +147,15 @@
                     android:textColor="#000000"/>
 
                 <TextView
+                    android:id="@+id/tvTerms"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/titleTnC"
-                    android:layout_marginTop="10dp"
-                    android:layout_margin="20dp"
-                    android:text="Please read these Terms carefully. Access to, and use of Usabilla products (“Products”), Usabilla services (“Services”), and the Usabilla website https://app.usabilla.com/ (“Website”), including any of its content, is conditional on your agreement to these Terms. You must read, agree with, and accept all of the terms and conditions contained in these Terms. By creating an account, or by using or visiting our Website, you are bound to these Terms and you indicate your continued acceptance of these Terms."/>
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:text="Please read these Terms carefully. Access to, and use of Usabilla products (“Products”), Usabilla services (“Services”), and the Usabilla website https://app.usabilla.com/ (“Website”), including any of its content, is conditional on your agreement to these Terms. You must read, agree with, and accept all of the terms and conditions contained in these Terms. By creating an account, or by using or visiting our Website, you are bound to these Terms and you indicate your continued acceptance of these Terms." />
 
 
                 <Button

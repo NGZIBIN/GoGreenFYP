@@ -162,6 +162,7 @@
                     android:layout_marginTop="10dp"
                     android:background="#6CAADB"
                     android:layout_alignParentBottom="true"
+                    android:textSize="18dp"
                     android:text="Redeem" />
             </RelativeLayout>
 

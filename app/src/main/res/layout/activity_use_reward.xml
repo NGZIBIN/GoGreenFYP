@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".use_reward">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/rewardImg"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="40dp"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/rewardTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/rewardImg"
+            android:layout_centerHorizontal="true"
+            android:text="Reward Title"
+            android:textSize="18dp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/titleExpiry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Expires on:"
+            android:layout_marginTop="10dp"
+            android:textSize="18dp"
+            android:layout_below="@id/rewardTitle"
+            android:layout_marginLeft="80dp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/tvExpiryDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2 Feb 2020"
+            android:layout_marginTop="10dp"
+            android:textSize="18dp"
+            android:layout_below="@id/rewardTitle"
+            android:layout_marginRight="80dp"
+            android:layout_alignParentRight="true"
+            android:textColor="#000000"/>
+
+
+        <View
+            android:id="@+id/horizontalLine"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#AAAAAA"
+            android:layout_below="@id/titleExpiry"
+            android:layout_marginTop="30dp" />
+        
+
+
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/titleTnc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reward Terms &amp; Condition"
+            android:layout_marginTop="30dp"
+            android:textSize="20dp"
+            android:layout_marginLeft="20dp"
+            android:textColor="#000000"/>
+        
+        <TextView
+            android:id="@+id/tvTnc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="- Press “Use Reward” only at the counter.
+- Once activated, there will be a 5 minutes countdown before the reward closes.
+- Reward is valid for all outlets in Singapore.
+- Management reserves the right to amend the terms.
+- Reward is valid until the expiry date stated above.
+"
+            android:gravity="center"
+            android:layout_below="@id/titleTnc"
+            android:layout_margin="20dp"/>
+
+        <Button
+            android:id="@+id/btnUseReward"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="#6CAADB"
+            android:layout_alignParentBottom="true"
+            android:textSize="18dp"
+            android:text="Use Reward"/>
+
+
+
+
+
+
+    </RelativeLayout>
+
+</LinearLayout>

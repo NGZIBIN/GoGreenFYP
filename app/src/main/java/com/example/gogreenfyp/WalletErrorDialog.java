@@ -35,7 +35,7 @@ public class WalletErrorDialog extends AlertDialog implements android.view.View.
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btnCreateWallet:
-                    dismiss();
+
                     break;
                 case R.id.btnImportWallet:
                     Intent intent = new Intent(this.activity, ImportWalletActivity.class);

@@ -107,7 +107,6 @@ public class LoginActivity extends AppCompatActivity {
                         }else {
                             Toast.makeText(LoginActivity.this, "You are not registered yet!", Toast.LENGTH_LONG).show();
                             pb.setVisibility(View.GONE);
-
                         }
                     }
                 });

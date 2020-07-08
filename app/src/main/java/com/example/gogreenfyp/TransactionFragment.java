@@ -99,5 +99,4 @@ public class TransactionFragment extends Fragment {
             return expandableListAdpater;
     }
 
-
 }

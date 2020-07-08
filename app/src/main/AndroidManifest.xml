@@ -23,6 +23,7 @@
         <activity android:name=".forgetPassword" />
         <activity android:name=".Register" />
         <activity android:name=".MainActivity" />
+        <activity android:name=".ImportWalletActivity"/>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

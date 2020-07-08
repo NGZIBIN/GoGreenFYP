@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.gogreenfyp.pojo.Badge;
 
 import java.util.List;
@@ -42,6 +43,10 @@ public class BadgesRecyclerViewAdapter extends RecyclerView.Adapter<BadgesRecycl
         holder.amtUsage.setText(String.valueOf(Data.get(position).getUsagePoints()));
         holder.bonusPoints.setText(String.valueOf(Data.get(position).getBonusPoints()));
 //        holder.badgeImg.setImageResource(Data.get(position).getBadgeImage());
+        // Image
+        Glide.with(context)
+                .load(Data.get(position).getImageURL())
+                .into(holder.badgeImg);
 
     }
 

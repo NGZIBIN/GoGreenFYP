@@ -1,6 +1,8 @@
 package com.example.gogreenfyp;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -54,7 +56,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
     TextView totalTimeUsed, nextUnlock, tvUsername;
-    ImageView badgeImage;
+    ImageView badgeImage, infoImg;
     ImageView profileImg;
     ProgressBar pb;
     FirebaseAuth fAuth;
@@ -78,6 +80,7 @@ public class ProfileFragment extends Fragment {
         profileImg = view.findViewById(R.id.profileImg);
         tvUsername = view.findViewById(R.id.tvUsername);
         badgeImage = view.findViewById(R.id.badgeImage);
+        infoImg = view.findViewById(R.id.infoImg);
         fStore = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
 
@@ -125,6 +128,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+
         //Setting Fragment into FrameLayout
 
         FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -147,14 +151,28 @@ public class ProfileFragment extends Fragment {
                         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                     }
                     else {
+
                         choseImage();
+
                     }
-                }
-                else{
+                }else{
                     choseImage();
                 }
             }
         });
+
+        //Getting info of how to gain points
+        infoImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder myBuilder = new AlertDialog.Builder(getContext());
+                myBuilder.setMessage("You can earn points by using GoGreen wallet and earn bonus points by using reusable cointainers!");
+                myBuilder.setCancelable(true);
+                AlertDialog myDialog = myBuilder.create();
+                myDialog.show();
+            }
+        });
+
 
         return view;
     }
@@ -165,27 +183,7 @@ public class ProfileFragment extends Fragment {
                 .setAspectRatio(1, 1)
                 .start(requireActivity());
 
-        if(getActivity() != null) {
-            getActivity().setResult(RESULT_OK);
-        }
-    }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if(resultCode == RESULT_OK && result != null){
-                imageUri = result.getUri();
-                profileImg.setImageURI(imageUri);
-                Toast.makeText(getContext(), "Successfully set", Toast.LENGTH_SHORT).show();
-                Log.d("PASS TAG", "PASS");
-            }else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE && result != null){
-                Exception error = result.getError();
-                Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
-                Log.d("FAIL TAG",  "FAIL "+ error.getMessage());
-            }
-        }
     }
 
 //    private void Fileuploader(){
@@ -224,6 +222,23 @@ public class ProfileFragment extends Fragment {
 //        };
 //    }
     //
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if(resultCode == RESULT_OK){
+                imageUri = result.getUri();
+                profileImg.setImageURI(imageUri);
+                Log.d("PASS TAG", "PASSSSSSSSSSSSSSSSSP PASSSSSSSSSSSSSS PASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
+            }else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
+                Exception error = result.getError();
+                Log.d("TAG",  "FAIL FIAL FIAL FAIL");
+            }
+        }
+    }
+
+
     //    @Override
 //    public void onClick(View view) {
 //        if(view.getId() == R.id.infoImg){
@@ -251,6 +266,9 @@ public class ProfileFragment extends Fragment {
 ////
 ////        StorageReference re
 ////    }
+
+
+
 
 }
 

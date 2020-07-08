@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class use_reward extends AppCompatActivity {
+public class Use_reward extends AppCompatActivity {
 
     Button btnUseReward;
     TextView tvRewardTitle, tvExpiryDate;
@@ -28,7 +28,7 @@ public class use_reward extends AppCompatActivity {
         btnUseReward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Dialog dialog = new Dialog(use_reward.this);
+                final Dialog dialog = new Dialog(Use_reward.this);
                 dialog.setContentView(R.layout.dialog_use_reward);
                 dialog.setCancelable(false);
                 dialog.show();

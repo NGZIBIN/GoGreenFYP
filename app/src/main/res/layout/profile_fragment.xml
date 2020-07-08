@@ -124,6 +124,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="Popup"
+            android:clickable="true"
             android:src="@drawable/ic_info_outline_black_24dp"
             android:layout_below="@id/tvNextCheckpoint"
             android:layout_alignParentRight="true"

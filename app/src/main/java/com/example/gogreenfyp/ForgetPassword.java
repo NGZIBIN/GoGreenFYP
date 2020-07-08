@@ -13,7 +13,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class forgetPassword extends AppCompatActivity {
+public class ForgetPassword extends AppCompatActivity {
 
     EditText etEmail;
     Button btnSendEmail;
@@ -35,13 +35,13 @@ public class forgetPassword extends AppCompatActivity {
                 fAuth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(forgetPassword.this, "Reset Link Sent", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ForgetPassword.this, "Reset Link Sent", Toast.LENGTH_SHORT).show();
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(forgetPassword.this, "Reset Link not Sent\n"  + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ForgetPassword.this, "Reset Link not Sent\n"  + e.getMessage(), Toast.LENGTH_SHORT).show();
 
                     }
                 });

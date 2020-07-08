@@ -80,6 +80,9 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
     implementation 'id.zelory:compressor:2.1.0'
 
+    //SharedPreferences
+    implementation 'androidx.preference:preference:1.1.1'
+
     //web3j
     implementation 'org.web3j:core:4.5.5'
 }

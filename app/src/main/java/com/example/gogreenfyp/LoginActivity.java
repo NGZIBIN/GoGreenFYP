@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                         walletAdd = user.getWalletAddress();
                         if(userIDAuth.equals(userID)){
                             if(walletAdd.equals("0")){
-                                WalletErrorDialog walletErrorDialog = new WalletErrorDialog(LoginActivity.this);
+                                WalletErrorDialog walletErrorDialog = new WalletErrorDialog(LoginActivity.this, fAuth);
                                 walletErrorDialog.show();
                             }else {
                                 Toast.makeText(LoginActivity.this, "Successfully Login!", Toast.LENGTH_LONG).show();

@@ -1,153 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="450dp"
+    android:layout_height="390dp"
    
     android:layout_margin="20dp">
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="390dp">
 
-        <RelativeLayout
+
+        <TextView
+            android:id="@+id/titleConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="CONFIRM REDEMPTION?"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/rewardImg"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_below="@id/titleConfirm"
+            android:layout_margin="30dp"
+            android:src="@drawable/rookiebadge" />
+
+        <TextView
+            android:id="@+id/rewardTitle"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/titleConfirm"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="55dp"
+            android:text="$5 Banana Centre eVoucher"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/titleQty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rewardImg"
+            android:layout_marginLeft="40dp"
+            android:text="Quantity"
+            android:textColor="#000000"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/tvQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rewardImg"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="70dp"
+            android:text="0"
+            android:textColor="#000000"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/titlePointsRequired"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/titleQty"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="20dp"
+            android:text="Points Required"
+            android:textColor="#000000"
+            android:textSize="15dp" />
+
+
+        <TextView
+            android:id="@+id/tvPointsRequired"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvQuantity"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="50dp"
+            android:text="2500"
+            android:textColor="#000000"
+            android:textSize="15dp" />
+
+
+        <TextView
+            android:id="@+id/titleBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/titlePointsRequired"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="20dp"
+            android:text="Current Balance"
+            android:textColor="#000000"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/tvCurrentBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvPointsRequired"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="50dp"
+            android:text="5000"
+            android:textColor="#000000"
+            android:textSize="15dp" />
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="430dp">
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-
-            <TextView
-                android:id="@+id/titleConfirm"
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/btnNo"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="CONFIRM REDEMPTION?"
-                android:textSize="20dp"
-                android:textColor="#000000"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:textStyle="bold"/>
-
-            <ImageView
-                android:id="@+id/rewardImg"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_below="@id/titleConfirm"
-                android:layout_margin="30dp"
-                android:src="@drawable/rookiebadge"/>
-
-            <TextView
-                android:id="@+id/rewardTitle"
-                android:layout_width="180dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/titleConfirm"
-                android:textAlignment="center"
-                android:text="$5 Banana Centre eVoucher"
-                android:textSize="18dp"
-                android:textColor="#000000"
-                android:gravity="center_horizontal"
-                android:textStyle="bold"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="55dp"
-                android:layout_marginRight="25dp"/>
-
-            <TextView
-                android:id="@+id/titleQty"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Quantity"
-                android:layout_below="@id/rewardImg"
-                android:textSize="18dp"
-                android:layout_marginLeft="40dp"
-                android:textColor="#000000"/>
-
-            <TextView
-                android:id="@+id/tvQuantity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1"
-                android:layout_below="@id/rewardImg"
-                android:textSize="18dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="90dp"
-                android:textColor="#000000"/>
-
-            <TextView
-                android:id="@+id/titlePointsRequired"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Points Required"
-                android:layout_below="@id/titleQty"
-                android:textSize="18dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="20dp"
-                android:textColor="#000000"/>
-
-
-            <TextView
-                android:id="@+id/tvPointsRequired"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2500"
-                android:layout_below="@id/tvQuantity"
-                android:textSize="18dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="70dp"
-                android:textColor="#000000"/>
-
-
-            <TextView
-                android:id="@+id/titleBalance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Current Balance"
-                android:layout_below="@id/titlePointsRequired"
-                android:textSize="18dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="20dp"
-                android:textColor="#000000"/>
-
-            <TextView
-                android:id="@+id/tvCurrentBalance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="5000"
-                android:layout_below="@id/tvPointsRequired"
-                android:textSize="18dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="70dp"
-                android:textColor="#000000"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:orientation="horizontal"
                 android:layout_alignParentBottom="true"
-                android:weightSum="2">
+                android:layout_weight="1"
+                android:background="#EDEDED"
+                android:text="No"
+                android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/btnNo"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_alignParentBottom="true"
-                    android:text="No"
-                    android:textStyle="bold"
-                    android:background="#EDEDED"/>
+            <Button
+                android:id="@+id/btnYes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#6CAADB"
+                android:text="Yes"
+                android:textColor="#fff"
+                android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/btnYes"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Yes"
-                    android:background="#6CAADB"
-                    android:textColor="#fff"
-                    android:textStyle="bold"/>
-
-            </LinearLayout>
+        </LinearLayout>
 
 
-
-        </RelativeLayout>
-    </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>
 
 
 

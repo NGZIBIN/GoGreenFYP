@@ -1,42 +1,49 @@
 package com.example.gogreenfyp;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AllRewardRedeem extends AppCompatActivity {
 
-    private TextView tvrewardTitle, tvrewardPointsNeeded, tvcurrentPoints, tvQuantity, tvTerms;
+    private TextView tvrewardTitle, tvrewardPointsNeeded, tvcurrentPointsMain, tvQuantity, tvTerms;
     private ImageView rewardImg;
     private Button btnRedeem;
     int counter;
+    int currentPoints = 0;
+    private static final String KEY_POINTS = "pointsBalance";
+    private static final String KEY_QUANTITY = "quantityLeft";
 
-//    private View.OnClickListener clickListener = new View.OnClickListener() {
-//        @Override
-//        public void onClick(View view) {
-//            switch (view.getId()){
-//                case R.id.bt
-//            }
-//        }
-//    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_reward_redeem);
-
+        tvcurrentPointsMain = findViewById(R.id.currentPoints);
         tvrewardTitle = (TextView) findViewById(R.id.rewardTitle);
         tvrewardPointsNeeded = (TextView) findViewById(R.id.pointsNeeded);
         tvTerms = findViewById(R.id.tvTerms);
@@ -44,58 +51,22 @@ public class AllRewardRedeem extends AppCompatActivity {
         tvQuantity = (TextView) findViewById(R.id.counter);
         btnRedeem = findViewById(R.id.btnRedeem);
 
-//        btnRedeem.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                new SweetAlertDialog(AllRewardRedeem.this, SweetAlertDialog.WARNING_TYPE)
-//                        .setTitleText("Are you sure?")
-//                        .setContentText("You will be spending your points!")
-//                        .setConfirmText("Redeem")
-//                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-//                            @Override
-//                            public void onClick(SweetAlertDialog sDialog) {
-//                                final TextView tvQuantityTitle = new TextView(AllRewardRedeem.this);
-//                                final TextView tvQuantityCount = new TextView(AllRewardRedeem.this);
-//                                tvQuantityTitle.setText("Quantity");
-//                                tvQuantityCount.setText(tvQuantity.getText().toString());
-//                                new SweetAlertDialog(AllRewardRedeem.this, SweetAlertDialog.NORMAL_TYPE)
-//                                        .setTitleText("Custom view")
-//                                        .setConfirmText("Ok")
-//                                        .setCustomView(tvQuantityTitle)
-//                                        .setCustomView(tvQuantityCount)
-//                                        .show();
-//                                sDialog.dismissWithAnimation();
-//                            }
-//                        })
-//                        .setCancelButton("Cancel", new SweetAlertDialog.OnSweetClickListener() {
-//                            @Override
-//                            public void onClick(SweetAlertDialog sDialog) {
-//                                sDialog.dismissWithAnimation();
-//                            }
-//                        })
-//                        .show();
-//            }
-//        });
 
-        btnRedeem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LayoutInflater inflater = (LayoutInflater)getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View viewDialog = inflater.inflate(R.layout.dialog_confirm_redemption, null);
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
+        final String userID;
+        userID = fAuth.getCurrentUser().getUid();
 
-                final AlertDialog myBuilder = new AlertDialog.Builder(AllRewardRedeem.this)
-                        .setView(viewDialog).show();
 
-            }
-        });
+
 
         Intent i = getIntent();
-        String title = i.getStringExtra("RewardTitle");
+        final String title = i.getStringExtra("RewardTitle");
         String instructions = i.getStringExtra("RewardInstructions");
-        String imageURL = i.getStringExtra("RewardImg");
+        final String imageURL = i.getStringExtra("RewardImg");
         String terms = i.getStringExtra("RewardTerms");
-        int points = i.getIntExtra("RewardPoints", 0);
-        int quantity = i.getIntExtra("RewardQuantity", 0);
+        final int points = i.getIntExtra("RewardPoints", 0);
+        final int quantity = i.getIntExtra("RewardQuantity", 0);
         int quantityLeft = i.getIntExtra("RewardQuantityLeft", 0);
 
         //int image = i.getExtras().getInt("RewardImg");
@@ -110,6 +81,219 @@ public class AllRewardRedeem extends AppCompatActivity {
         Glide.with(getApplicationContext())
                 .load(imageURL)
                 .into(rewardImg);
+
+        db.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    String userIDAuth = "";
+                    int pointsBalance = 0;
+                    for(DocumentSnapshot documentSnapshots:task.getResult()){
+                        User user = documentSnapshots.toObject(User.class);
+                        userIDAuth = user.getUserID();
+                        pointsBalance = user.getPointsBalance();
+                        if(userIDAuth.equals(userID)){
+                            String points = String.valueOf(pointsBalance);
+                            tvcurrentPointsMain.setText(points);
+                        }
+                    }
+                }
+            }
+        });
+
+        btnRedeem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LayoutInflater inflater = (LayoutInflater)getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                final String quantitySelected = tvQuantity.getText().toString();
+                final Dialog dialog = new Dialog(AllRewardRedeem.this);
+                dialog.setContentView(R.layout.dialog_confirm_redemption);
+                dialog.setCancelable(false);
+                dialog.show();
+
+                Button btnYes, btnNo;
+                final TextView rewardTitle, tvQuantity, tvPointsRequired, tvCurrentpoints;
+                ImageView rewardImg;
+
+
+                btnYes = dialog.findViewById(R.id.btnYes);
+                btnNo = dialog.findViewById(R.id.btnNo);
+                rewardImg = dialog.findViewById(R.id.rewardImg);
+                rewardTitle = dialog.findViewById(R.id.rewardTitle);
+                tvQuantity = dialog.findViewById(R.id.tvQuantity);
+                tvPointsRequired = dialog.findViewById(R.id.tvPointsRequired);
+                tvCurrentpoints = dialog.findViewById(R.id.tvCurrentBalance);
+
+                //Set Reward Image
+                Glide.with(getApplicationContext())
+                        .load(imageURL)
+                        .into(rewardImg);
+
+
+                //Setting Quantity
+                tvQuantity.setText(quantitySelected);
+
+                final int qty = Integer.parseInt(quantitySelected);
+                int totalpointsNeededStr = qty * points;
+                String pointsNeeded = String.valueOf(totalpointsNeededStr);
+                String titleStr = title;
+                rewardTitle.setText(titleStr);
+
+                tvCurrentpoints.setText(tvcurrentPointsMain.getText().toString());
+                tvPointsRequired.setText(pointsNeeded);
+
+
+                btnYes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final int totalPointsSpend = qty * points;
+                        String currentPointsString = tvcurrentPointsMain.getText().toString();
+                        currentPoints = Integer.parseInt(currentPointsString);
+                        if(currentPoints < totalPointsSpend){
+                            Toast.makeText(AllRewardRedeem.this, "You do not have enough points!" + totalPointsSpend, Toast.LENGTH_LONG).show();
+
+                        }else{
+                            //Updating of User Points
+                            db.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if(task.isSuccessful()){
+                                        currentPoints = currentPoints - totalPointsSpend;
+                                        String userIDAuth = "";
+                                        for(final DocumentSnapshot documentSnapshots:task.getResult()){
+                                            User user = documentSnapshots.toObject(User.class);
+                                            userIDAuth = user.getUserID();
+//                                            Log.d("TAG THIS ID DIFFERENT", userID);
+//                                            Log.d("TAG ALL USER NOW", userIDAuth);
+                                            if(userIDAuth.equals(userID)){
+                                                String currentUser = documentSnapshots.getId();
+                                                Log.d("TAG Current User", currentUser);
+                                                DocumentReference usersPointsRef = db.collection("Users").document(currentUser);
+                                                Map<String, Object> points = new HashMap<>();
+                                                points.put(KEY_POINTS, currentPoints);
+                                                usersPointsRef.set(points, SetOptions.merge());
+
+
+                                                //Updating quantity left
+                                                db.collection("Rewards").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                        if(task.isSuccessful()){
+                                                            for(DocumentSnapshot documentSnapshot:task.getResult()){
+
+                                                                Rewards rewards = documentSnapshot.toObject(Rewards.class);
+                                                                String selectedQty = tvQuantity.getText().toString();
+                                                                int qty = Integer.parseInt(selectedQty);
+                                                                int quantity1 = rewards.getQuantityLeft();
+                                                                String titleCurrent = rewards.getName();
+                                                                Log.d("Tag CURRENT QTY ", String.valueOf(quantity1));
+                                                                int qtyLeft = quantity1 - qty;
+                                                                if(title.equals(titleCurrent)){
+                                                                    String currentReward = documentSnapshot.getId();
+                                                                    DocumentReference qtyRef = db.collection("Rewards").document(currentReward);
+                                                                    Map<String, Object> quantityLeft = new HashMap<>();
+                                                                    quantityLeft.put(KEY_QUANTITY, qtyLeft);
+                                                                    qtyRef.set(quantityLeft, SetOptions.merge());
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                });
+
+                                                //Success Dialog
+                                                final Dialog dialog = new Dialog(AllRewardRedeem.this);
+                                                dialog.setContentView(R.layout.dialog_success_redemption);
+                                                dialog.setCancelable(false);
+                                                dialog.show();
+
+                                                Button btnYes, btnNo;
+                                                ImageView rewardImg;
+                                                final TextView tvQuantity, tvTransNum, tvCurrentBalance, tvRewardTitle;
+
+                                                btnYes = dialog.findViewById(R.id.btnYes);
+                                                btnNo = dialog.findViewById(R.id.btnNo);
+                                                rewardImg = dialog.findViewById(R.id.rewardImg);
+                                                tvRewardTitle = dialog.findViewById(R.id.rewardTitle);
+                                                tvQuantity = dialog.findViewById(R.id.tvQuantity);
+                                                tvTransNum = dialog.findViewById(R.id.tvTransNum);
+                                                tvCurrentBalance = dialog.findViewById(R.id.tvCurrentBalance);
+
+                                                //Set Reward Image
+                                                Glide.with(getApplicationContext())
+                                                        .load(imageURL)
+                                                        .into(rewardImg);
+
+
+                                                //Setting Quantity
+                                                tvQuantity.setText(quantitySelected);
+
+                                                //Current points
+                                                db.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                        if(task.isSuccessful()){
+
+                                                            for(DocumentSnapshot documentSnapshotsBalance:task.getResult()){
+                                                                User user = documentSnapshotsBalance.toObject(User.class);
+                                                                String userIDAuth = user.getUserID();
+                                                                int pointsBalance = user.getPointsBalance();
+                                                                String strBalance = String.valueOf(pointsBalance);
+                                                                if(userIDAuth.equals(userID)){
+                                                                    tvCurrentBalance.setText(strBalance);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                });
+
+                                                //Title
+                                                String titleStr = title;
+                                                rewardTitle.setText(titleStr);
+
+                                                //Transaction No
+
+
+                                                //Adding into users Reward
+                                                btnYes.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+
+                                                    }
+                                                });
+
+                                                btnNo.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+                                                        dialog.dismiss();
+                                                    }
+                                                });
+
+
+
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                    }
+                });
+
+
+                btnNo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+
+            }
+        });
+
+
 
 
         initCounter();

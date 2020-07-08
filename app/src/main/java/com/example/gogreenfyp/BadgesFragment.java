@@ -53,7 +53,7 @@ public class BadgesFragment extends Fragment {
                 if(task.isSuccessful()){
                     for(QueryDocumentSnapshot document:task.getResult()){
                         Badge badge = document.toObject(Badge.class);
-                        badgeList.add(new Badge(badge.getName(), badge.getBadgeImage(), badge.getUsagePoints(), badge.getBonusPoints()));
+                        badgeList.add(new Badge(badge.getName(), badge.getImageURL(), badge.getUsagePoints(), badge.getBonusPoints()));
                     }
                     BadgesRecyclerViewAdapter myAdapter = new BadgesRecyclerViewAdapter(getContext(), badgeList);
                     recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));

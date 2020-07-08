@@ -1,6 +1,8 @@
 package com.example.gogreenfyp;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -54,7 +56,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
     TextView totalTimeUsed, nextUnlock, tvUsername;
-    ImageView badgeImage;
+    ImageView badgeImage, infoImg;
     ImageView profileImg;
     ProgressBar pb;
     FirebaseAuth fAuth;
@@ -78,6 +80,7 @@ public class ProfileFragment extends Fragment {
         profileImg = view.findViewById(R.id.profileImg);
         tvUsername = view.findViewById(R.id.tvUsername);
         badgeImage = view.findViewById(R.id.badgeImage);
+        infoImg = view.findViewById(R.id.infoImg);
         fStore = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
 
@@ -158,7 +161,17 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-
+        //Getting info of how to gain points
+        infoImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder myBuilder = new AlertDialog.Builder(getContext());
+                myBuilder.setMessage("You can earn points by using GoGreen wallet and earn bonus points by using reusable cointainers!");
+                myBuilder.setCancelable(true);
+                AlertDialog myDialog = myBuilder.create();
+                myDialog.show();
+            }
+        });
 
 
         return view;
@@ -253,6 +266,9 @@ public class ProfileFragment extends Fragment {
 ////
 ////        StorageReference re
 ////    }
+
+
+
 
 }
 

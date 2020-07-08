@@ -2,7 +2,7 @@ package com.example.gogreenfyp.pojo;
 
 public class Badge {
     private String name;
-    private String badgeImage;
+    private String imageURL;
     private int usagePoints;
     private int bonusPoints;
 
@@ -12,9 +12,9 @@ public class Badge {
         // empty constructor needed
     }
 
-    public Badge(String name, String badgeImage, int usagePoints, int bonusPoints) {
+    public Badge(String name, String imageURL, int usagePoints, int bonusPoints) {
         this.name = name;
-        this.badgeImage = badgeImage;
+        this.imageURL = imageURL;
         this.usagePoints = usagePoints;
         this.bonusPoints = bonusPoints;
     }
@@ -27,12 +27,12 @@ public class Badge {
         this.name = name;
     }
 
-    public String getBadgeImage() {
-        return badgeImage;
+    public String getImageURL() {
+        return imageURL;
     }
 
-    public void setBadgeImage(String badgeImage) {
-        this.badgeImage = badgeImage;
+    public void setImageURL(String badgeImage) {
+        this.imageURL = badgeImage;
     }
 
     public int getUsagePoints() {

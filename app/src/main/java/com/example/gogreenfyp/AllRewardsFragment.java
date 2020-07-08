@@ -45,6 +45,7 @@ public class AllRewardsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_all_rewards, container, false);
 
         listReward = new ArrayList<>();
+
         final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycleViewAllReward);
 
         rewardsCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

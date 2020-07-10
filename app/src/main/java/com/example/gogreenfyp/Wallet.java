@@ -57,7 +57,7 @@ public class Wallet {
 
         updateWalletAddress(firebaseAuth, address);
 
-        return address == null;
+        return address != null;
     }
 
     private static boolean saveWalletDetails(Activity activity, String walletFileName, String password, FirebaseAuth firebaseAuth){

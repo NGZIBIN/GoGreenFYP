@@ -47,6 +47,7 @@ public class WalletErrorDialog extends AlertDialog implements android.view.View.
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btnCreateWallet:
+                    Toast.makeText(activity, "Please be patient. It may take some time.", Toast.LENGTH_LONG).show();
                     try {
                         if(Wallet.createWallet(this.activity, this.firebaseAuth)){
                             Toast.makeText(activity, "Wallet creation successful", Toast.LENGTH_SHORT).show();

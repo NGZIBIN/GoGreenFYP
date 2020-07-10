@@ -73,11 +73,12 @@ public class Register extends AppCompatActivity {
                 String[] badgesArray = badges.split("\\s*,\\s*");
                 final List<String> badgesTag = Arrays.asList(badgesArray);
 
-                String userRewards = "GongCha, Koi";
+                String userRewards = "";
                 String[] userRewardsArray = userRewards.split("\\s*,\\s*");
                 final List<String> userRewardsTag = Arrays.asList(userRewardsArray);
 
-                String userRedeemedRewards = "GongCha, Koi";
+
+                String userRedeemedRewards = "";
                 String[] userRedeemedRewardsArray = userRedeemedRewards.split("\\s*,\\s*");
                 final List<String> userRedeemedRewardsTag = Arrays.asList(userRedeemedRewardsArray);
 

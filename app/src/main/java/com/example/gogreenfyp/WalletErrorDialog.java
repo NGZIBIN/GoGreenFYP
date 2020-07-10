@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -27,6 +28,7 @@ public class WalletErrorDialog extends AlertDialog implements android.view.View.
         public WalletErrorDialog(Activity a, FirebaseAuth fAuth) {
             super(a);
             // TODO Auto-generated constructor stub
+            this.activity = a;
             this.firebaseAuth = fAuth;
         }
 
@@ -47,7 +49,7 @@ public class WalletErrorDialog extends AlertDialog implements android.view.View.
                 case R.id.btnCreateWallet:
                     try {
                         if(Wallet.createWallet(this.activity, this.firebaseAuth)){
-                            Log.d("Wallet creation", "Success");
+                            Toast.makeText(activity, "Wallet creation successful", Toast.LENGTH_SHORT).show();
                         }
                     } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException | CipherException | IOException e) {
                         e.printStackTrace();

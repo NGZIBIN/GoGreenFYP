@@ -6,11 +6,11 @@ public class MyClass {
 
     public static void main(String[] args){
 
-        String pass1 = generateRandomPassword();
-        String pass2 = generateRandomPassword();
-
-        System.out.println(pass1);
-        System.out.println(pass2);
+//        String pass1 = generateRandomPassword();
+//        String pass2 = generateRandomPassword();
+//
+//        System.out.println(pass1);
+//        System.out.println(pass2);
     }
 
     public static String generateRandomPassword(){

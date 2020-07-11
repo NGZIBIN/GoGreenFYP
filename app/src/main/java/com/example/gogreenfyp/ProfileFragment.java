@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -58,6 +59,7 @@ public class ProfileFragment extends Fragment {
     TextView totalTimeUsed, nextUnlock, tvUsername;
     ImageView badgeImage, infoImg;
     ImageView profileImg;
+    CardView badgesCardView;
     ProgressBar pb;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
@@ -80,6 +82,7 @@ public class ProfileFragment extends Fragment {
         profileImg = view.findViewById(R.id.profileImg);
         tvUsername = view.findViewById(R.id.tvUsername);
         badgeImage = view.findViewById(R.id.badgeImage);
+        badgesCardView = view.findViewById(R.id.cardView);
         infoImg = view.findViewById(R.id.infoImg);
         fStore = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();

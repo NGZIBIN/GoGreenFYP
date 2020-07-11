@@ -40,7 +40,6 @@ public class WalletErrorDialog extends AlertDialog implements android.view.View.
             importWallet = (Button) findViewById(R.id.btnImportWallet);
             createWallet.setOnClickListener(this);
             importWallet.setOnClickListener(this);
-
         }
 
         @Override
@@ -48,8 +47,9 @@ public class WalletErrorDialog extends AlertDialog implements android.view.View.
             switch (v.getId()) {
                 case R.id.btnCreateWallet:
                     Toast.makeText(activity, "Please be patient. It may take some time.", Toast.LENGTH_LONG).show();
+                    Wallet wallet = new Wallet();
                     try {
-                        if(Wallet.createWallet(this.activity, this.firebaseAuth)){
+                        if(wallet.createWallet(this.activity, this.firebaseAuth)){
                             Toast.makeText(activity, "Wallet creation successful", Toast.LENGTH_SHORT).show();
                         }
                     } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException | CipherException | IOException e) {

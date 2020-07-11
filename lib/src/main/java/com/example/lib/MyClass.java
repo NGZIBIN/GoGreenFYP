@@ -6,11 +6,11 @@ public class MyClass {
 
     public static void main(String[] args){
 
-//        String pass1 = generateRandomPassword();
-//        String pass2 = generateRandomPassword();
+        String str1 = "BAFF065CFA87201DF8232D7D4FE32A31A2FAED6468CB0C8415CC46F1DDDAE163";
+        String str2 = "0x7719a994B36e69020A4E9269d326014784b089D9";
 //
-//        System.out.println(pass1);
-//        System.out.println(pass2);
+        System.out.println(str1.matches("[A-Za-z0-9]+"));
+        System.out.println(str2.matches("[A-Za-z0-9]+"));
     }
 
     public static String generateRandomPassword(){

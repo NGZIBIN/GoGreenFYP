@@ -1,6 +1,7 @@
 package com.example.gogreenfyp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
@@ -31,12 +32,14 @@ import java.security.Security;
 import java.util.HashMap;
 import java.util.Random;
 
+import jnr.ffi.annotations.In;
+
 public class Wallet {
 
-    private static FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-    private static CollectionReference collectionReference = firestore.collection("Users");
+    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private CollectionReference collectionReference = firestore.collection("Users");
 
-    public static boolean createWallet(Activity activity, FirebaseAuth firebaseAuth) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, CipherException, IOException {
+    public boolean createWallet(Activity activity, FirebaseAuth firebaseAuth) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, CipherException, IOException {
 
         String address;
         setupBouncyCastle();
@@ -51,16 +54,33 @@ public class Wallet {
         Credentials credentials = WalletUtils.loadCredentials(password, walletFile);
         address = credentials.getAddress();
 
-        if(saveWalletDetails(activity, walletFile.getName(), password, firebaseAuth)){
-            Log.d("Wallet saved", "Success");
-        }
+        saveWalletDetails(activity, walletFile.getName(), password, firebaseAuth);
 
         updateWalletAddress(firebaseAuth, address);
 
         return address != null;
     }
 
-    private static boolean saveWalletDetails(Activity activity, String walletFileName, String password, FirebaseAuth firebaseAuth){
+    public void savePrivateKey(Activity activity, String privateKey, FirebaseAuth firebaseAuth){
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        if(firebaseAuth.getCurrentUser() != null && privateKey != null) {
+            String userID = firebaseAuth.getCurrentUser().getUid();
+            Credentials credentials = Credentials.create(privateKey);
+            String address = credentials.getAddress();
+            editor.putString(userID, privateKey);
+            editor.apply();
+            updateWalletAddress(firebaseAuth, address);
+            Toast.makeText(activity, "Imported successfully", Toast.LENGTH_SHORT).show();
+            Log.d("Wallet saved", "Success");
+            activity.finish();
+        }
+
+    }
+
+    private void saveWalletDetails(Activity activity, String walletFileName, String password, FirebaseAuth firebaseAuth){
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -70,12 +90,11 @@ public class Wallet {
             editor.putString(userID+"File", walletFileName);
             editor.putString(userID+"Pass", password);
             editor.apply();
-            return true;
+            Log.d("Wallet saved", "Success");
         }
-        return false;
     }
 
-    private static void updateWalletAddress(FirebaseAuth firebaseAuth, final String walletAddress) {
+    private void updateWalletAddress(FirebaseAuth firebaseAuth, final String walletAddress) {
 
         if (firebaseAuth.getCurrentUser() != null) {
 

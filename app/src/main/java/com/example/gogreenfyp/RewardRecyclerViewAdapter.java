@@ -45,7 +45,6 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
 
         holder.tvRewardTitle.setText(Data.get(position).getName());
         holder.tvRewardPointsNeeded.setText(String.valueOf(Data.get(position).getPointsToRedeem()));
-//        holder.RewardImg.setImageResource(Data.get(position).get());
 
         // Image
         Glide.with(context)
@@ -65,6 +64,7 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
                 i.putExtra("RewardQuantityLeft", Data.get(position).getQuantityLeft());
                 i.putExtra("RewardTerms", Data.get(position).getTermsAndConditions());
                 i.putExtra("RewardImg", Data.get(position).getImageURL());
+                i.putExtra("RewardUseByDate", Data.get(position).getUseByDate());
                 context.startActivity(i);
             }
         });
@@ -77,8 +77,7 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
         return Data.size();
     }
 
-    public static class MyViewHolder extends  RecyclerView.ViewHolder {
-
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvRewardTitle;
         TextView tvRewardPointsNeeded;
         ImageView RewardImg;

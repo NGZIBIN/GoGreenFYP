@@ -55,7 +55,7 @@ public class AllRewardsFragment extends Fragment {
                     for(QueryDocumentSnapshot document: task.getResult()){
                         Rewards rewards = document.toObject(Rewards.class);
                         listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
-                                rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL()));
+                                rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate()));
 
                         Log.d("IMAGE", rewards.getImageURL());
                     }

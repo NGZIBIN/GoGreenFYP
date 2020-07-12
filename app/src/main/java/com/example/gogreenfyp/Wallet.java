@@ -21,6 +21,10 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.http.HttpService;
 
 import java.io.File;
 import java.io.IOException;
@@ -118,6 +122,14 @@ public class Wallet {
                 }
             });
         }
+    }
+
+    public void displayBalance(String address) throws IOException {
+
+        Web3j web3j = Web3j.build(new HttpService("https://ropsten.infura.io/v3/23d1c7856d664d41842c3e8f8c228fe8"));
+        EthGetBalance balance = web3j.ethGetBalance(address, DefaultBlockParameterName.LATEST).send();
+
+        Log.d("Balance", balance.getBalance().toString());
     }
 
     private static String generateRandomPassword(){

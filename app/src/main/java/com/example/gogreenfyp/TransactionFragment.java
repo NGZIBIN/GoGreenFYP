@@ -22,6 +22,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.http.HttpService;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +46,6 @@ public class TransactionFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,6 +57,11 @@ public class TransactionFragment extends Fragment {
             walletAddress = intent.getStringExtra("walletAddress");
         }
 
+        try {
+            new Wallet().displayBalance(walletAddress);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         expandableListAdpater = getExpandListAdapter();
         expandableListView.setAdapter(expandableListAdpater);
        // Toast.makeText(getContext(), walletAddress, Toast.LENGTH_SHORT).show();

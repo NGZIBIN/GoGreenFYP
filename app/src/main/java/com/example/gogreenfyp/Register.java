@@ -69,7 +69,7 @@ public class Register extends AppCompatActivity {
                 final int pointsBalance = 0;
                 final int badgeProgress = 0;
                 final String walletAddress = "0";
-                String badges = "Rookie, Elite, Prestige ";
+                String badges = "";
                 String[] badgesArray = badges.split("\\s*,\\s*");
                 final List<String> badgesTag = Arrays.asList(badgesArray);
 

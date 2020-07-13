@@ -33,6 +33,7 @@ public class BadgesRecyclerViewAdapter extends RecyclerView.Adapter<BadgesRecycl
         LayoutInflater inflater = LayoutInflater.from(context);
         view = inflater.inflate(R.layout.badgescardview, parent,false);
 
+
         return new MyViewHolder(view);
     }
 

@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Rewards_redeeming"></activity>
+        <activity android:name=".AllBadges"></activity>
+        <activity android:name=".Rewards_redeeming" />
         <activity android:name=".Use_reward" />
         <activity
             android:name=".InfoActivity"

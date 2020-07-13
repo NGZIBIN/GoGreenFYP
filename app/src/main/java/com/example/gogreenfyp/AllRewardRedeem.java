@@ -258,7 +258,6 @@ public class AllRewardRedeem extends AppCompatActivity {
 
 
                                                 //Adding into users Reward
-//
                                                 btnYes.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
@@ -272,7 +271,7 @@ public class AllRewardRedeem extends AppCompatActivity {
                                                                         if(title.equals(titleCurrent)){
                                                                             String currentReward = documentSnapshot.getId();
                                                                             DocumentReference rewardArray = db.collection("Users").document(currentUser);
-//                                                                            rewardArray.update("userRewards", FieldValue.arrayRemove());
+//
                                                                             rewardArray.update("userRewards", FieldValue.arrayUnion(currentReward));
                                                                         }
 
@@ -281,6 +280,7 @@ public class AllRewardRedeem extends AppCompatActivity {
                                                             }
                                                         });
 //                                                        Intent i = new Intent(AllRewardRedeem.class, AllRewardsFragment.class)
+                                                        finish();
 
 
 
@@ -322,23 +322,23 @@ public class AllRewardRedeem extends AppCompatActivity {
 
 
 
-        initCounter();
-        addBtn(new View(this));
-        minusBtn(new View(this));
+//        initCounter();
+//        addBtn(new View(this));
+//        minusBtn(new View(this));
     }
 
-    public void initCounter(){
-        counter = 1;
-        tvQuantity.setText(String.valueOf(counter));
-    }
-
-    public void minusBtn(View view){
-        counter --;
-        tvQuantity.setText(String.valueOf(counter));
-    }
-
-    public void addBtn(View view) {
-        counter ++;
-        tvQuantity.setText(String.valueOf(counter));
-    }
+//    public void initCounter(){
+//        counter = 1;
+//        tvQuantity.setText(String.valueOf(counter));
+//    }
+//
+//    public void minusBtn(View view){
+//        counter --;
+//        tvQuantity.setText(String.valueOf(counter));
+//    }
+//
+//    public void addBtn(View view) {
+//        counter ++;
+//        tvQuantity.setText(String.valueOf(counter));
+//    }
 }

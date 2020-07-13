@@ -104,25 +104,25 @@
             android:textSize="20dp"
             android:layout_marginLeft="75dp"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="addBtn"
-            android:src="@drawable/addicon"
-            android:layout_below="@id/titleQuantity"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="30dp"/>
+<!--        <ImageView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="addBtn"-->
+<!--            android:src="@drawable/addicon"-->
+<!--            android:layout_below="@id/titleQuantity"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginRight="30dp"/>-->
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="minusBtn"
-            android:src="@drawable/minusicon"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/titleQuantity"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="100dp"/>
+<!--        <ImageView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:onClick="minusBtn"-->
+<!--            android:src="@drawable/minusicon"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:layout_below="@id/titleQuantity"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_marginRight="100dp"/>-->
 
         <TextView
             android:id="@+id/counter"

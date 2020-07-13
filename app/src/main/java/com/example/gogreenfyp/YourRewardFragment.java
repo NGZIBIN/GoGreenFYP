@@ -90,7 +90,9 @@ public class YourRewardFragment extends Fragment {
                                 //Log.d("PRINT_REWARDS", USER_REWARDS.get(i));
                                 Rewards rewards = document.toObject(Rewards.class);
                                 listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
-                                        rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL()));
+
+                                        rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate()));
+
 
                                 //Log.d("PRINT_REWARDS2", rewards.getName());
                             }
@@ -98,7 +100,9 @@ public class YourRewardFragment extends Fragment {
                     }
 
                     // Display the rewards that have been redeem by user
-                    RewardRecyclerViewAdapter myAdapter = new RewardRecyclerViewAdapter(getContext(),listReward);
+
+                    YourRewardRecyclerViewAdapter myAdapter = new YourRewardRecyclerViewAdapter(getContext(),listReward);
+
                     recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
                     recyclerView.setAdapter(myAdapter);
                 }

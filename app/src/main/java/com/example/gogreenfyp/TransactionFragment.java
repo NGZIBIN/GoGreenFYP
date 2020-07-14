@@ -47,8 +47,7 @@ public class TransactionFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_transaction, container, false);
         expandableListView = view.findViewById(R.id.expandable_transactions);
 
@@ -56,18 +55,10 @@ public class TransactionFragment extends Fragment {
             Intent intent = getActivity().getIntent();
             walletAddress = intent.getStringExtra("walletAddress");
         }
-
-        try {
-            new Wallet().displayBalance(walletAddress);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         expandableListAdpater = getExpandListAdapter();
         expandableListView.setAdapter(expandableListAdpater);
-       // Toast.makeText(getContext(), walletAddress, Toast.LENGTH_SHORT).show();
         expandableListView.setGroupIndicator(null);
         expandableListView.setChildDivider(getResources().getDrawable(R.color.transparent));
-        // Inflate the layout for this fragment
         return view;
     }
 

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:clickable="true"
     android:id="@+id/AllRewardCardView"
@@ -40,19 +41,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rewardTitle"
                 android:textSize="12dp"
-                android:layout_marginLeft="15dp"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
-                android:text="Exp:" />
+                android:text="REDEEMED" />
 
-            <TextView
-                android:id="@+id/expiryDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="24Jan2020"
-                android:textSize="12dp"
-                android:layout_below="@id/rewardTitle"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="5dp"/>
         </RelativeLayout>
 
 

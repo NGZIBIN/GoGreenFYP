@@ -280,6 +280,7 @@ public class AllRewardRedeem extends AppCompatActivity {
                                                             }
                                                         });
 //                                                        Intent i = new Intent(AllRewardRedeem.class, AllRewardsFragment.class)
+                                                        Toast.makeText(AllRewardRedeem.this, "Successfully Redeem Reward!", Toast.LENGTH_SHORT).show();
                                                         finish();
 
 

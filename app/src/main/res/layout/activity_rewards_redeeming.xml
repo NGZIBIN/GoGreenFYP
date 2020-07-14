@@ -24,7 +24,7 @@
             android:textStyle="bold"/>
 
         <ImageView
-            android:id="@+id/RewardImg"
+            android:id="@+id/rewardImg"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginTop="20dp"
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_below="@id/RewardImg"
+            android:layout_below="@id/rewardImg"
             android:layout_centerHorizontal="true"
             android:text="Reward Title"
             android:textSize="18dp"
@@ -76,6 +76,15 @@
             android:background="@drawable/timerbg"/>
 
 
+        <Button
+            android:id="@+id/btnDone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Done"
+            android:background="#6CAADB"
+            android:textColor="#fff"
+            android:textStyle="bold"/>
 
     </RelativeLayout>
 

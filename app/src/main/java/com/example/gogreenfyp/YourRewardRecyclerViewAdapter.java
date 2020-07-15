@@ -16,15 +16,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
-public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecyclerViewAdapter.MyViewHolder> {
+public class YourRewardRecyclerViewAdapter extends RecyclerView.Adapter<YourRewardRecyclerViewAdapter.MyViewHolder> {
 
 
     private Context context;
     private List<Rewards> Data;
 
-    public RewardRecyclerViewAdapter(Context context, List<Rewards> data) {
+    public YourRewardRecyclerViewAdapter(Context context, List<Rewards> data) {
         this.context = context;
         Data = data;
     }
@@ -35,16 +38,23 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
 
         View view;
         LayoutInflater inflater = LayoutInflater.from(context);
-        view = inflater.inflate(R.layout.reward_cardview, parent,false);
+        view = inflater.inflate(R.layout.reward_your_reward_cardview, parent,false);
 
         return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
+        Date fStoreDate = Data.get(position).getUseByDate();
+        SimpleDateFormat spf = new SimpleDateFormat("F/MMM/yyyy");
+        final String rewardDate = spf.format(fStoreDate);
 
         holder.tvRewardTitle.setText(Data.get(position).getName());
-        holder.tvRewardPointsNeeded.setText(String.valueOf(Data.get(position).getPointsToRedeem()));
+        holder.tvExpiryDate.setText(rewardDate);
+        Log.d("REWARD DATE", String.valueOf(Data.get(position).getUseByDate()));
+
+
+
 
         // Image
         Glide.with(context)
@@ -53,10 +63,10 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
 
         //Log.d("IMAGE", Data.get(position).getImageURL());
 
-        holder.AllRewardCardView.setOnClickListener(new View.OnClickListener() {
+        holder.YourRewardCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(context, AllRewardRedeem.class);
+                Intent i = new Intent(context, Use_reward.class);
                 i.putExtra("RewardTitle", Data.get(position).getName());
                 i.putExtra("RewardInstructions", Data.get(position).getInstructions());
                 i.putExtra("RewardPoints", Data.get(position).getPointsToRedeem());
@@ -64,7 +74,7 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
                 i.putExtra("RewardQuantityLeft", Data.get(position).getQuantityLeft());
                 i.putExtra("RewardTerms", Data.get(position).getTermsAndConditions());
                 i.putExtra("RewardImg", Data.get(position).getImageURL());
-                i.putExtra("RewardUseByDate", Data.get(position).getUseByDate());
+                i.putExtra("RewardUseByDate", rewardDate);
                 context.startActivity(i);
             }
         });
@@ -78,18 +88,17 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvRewardTitle;
-        TextView tvRewardPointsNeeded;
+        TextView tvRewardTitle, tvExpiryDate;
         ImageView RewardImg;
-        CardView AllRewardCardView;
+        CardView YourRewardCardView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvRewardTitle = (TextView) itemView.findViewById(R.id.rewardTitle);
-            tvRewardPointsNeeded = (TextView) itemView.findViewById(R.id.rewardPointsToClaim);
+            tvExpiryDate = (TextView) itemView.findViewById(R.id.expiryDate);
             RewardImg = (ImageView) itemView.findViewById(R.id.rewardImg);
-            AllRewardCardView = (CardView) itemView.findViewById(R.id.AllRewardCardView);
+            YourRewardCardView = (CardView) itemView.findViewById(R.id.AllRewardCardView);
         }
     }
 }

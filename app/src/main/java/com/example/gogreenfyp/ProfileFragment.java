@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -36,9 +38,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -48,6 +53,8 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -55,15 +62,21 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
-    TextView totalTimeUsed, nextUnlock, tvUsername;
+    TextView totalTimeUsed, nextUnlock, tvUsername, allBadges;
     ImageView badgeImage, infoImg;
     ImageView profileImg;
+    CardView badgesCardView;
     ProgressBar pb;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     StorageReference storageRef;
     String userID;
     int _PROGRESS = 0;
+    private static final String KEY_POINTS = "pointsBalance";
+    private Boolean rookie;
+    private Boolean elite;
+    private Boolean prestige;
+
 
     private Uri imageUri;
     private Bitmap compressor;
@@ -80,10 +93,11 @@ public class ProfileFragment extends Fragment {
         profileImg = view.findViewById(R.id.profileImg);
         tvUsername = view.findViewById(R.id.tvUsername);
         badgeImage = view.findViewById(R.id.badgeImage);
+        allBadges = view.findViewById(R.id.allBadges);
         infoImg = view.findViewById(R.id.infoImg);
         fStore = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
-
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
         storageRef = FirebaseStorage.getInstance().getReference("Images");
         pb = view.findViewById(R.id.pb);
         userID = fAuth.getCurrentUser().getUid();
@@ -94,12 +108,15 @@ public class ProfileFragment extends Fragment {
                     String userIDAuth = "";
                     String username = "";
                     int progressCount = 0;
+                    int points = 0;
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
                         User user = documentSnapshot.toObject(User.class);
                         userIDAuth = user.getUserID();
                         progressCount = user.getBadgeProgress();
                         username = user.getUsername();
+                        points = user.getPointsBalance();
                         if (userIDAuth.equals(userID)) {
+                            final String currentUser = documentSnapshot.getId();
                             tvUsername.setText(username);
                             if (progressCount == 0) {
                                 _PROGRESS = 0;
@@ -109,25 +126,85 @@ public class ProfileFragment extends Fragment {
                             pb.setProgress(_PROGRESS);
                             totalTimeUsed.setText(_PROGRESS + "");
 
-                            if (progressCount < 10) {
-                                badgeImage.setImageResource(R.drawable.smallrookiebadge);
-                                nextUnlock.setText("10");
-                                pb.setMax(10);
-                            } else if (progressCount < 25) {
-                                badgeImage.setImageResource(R.drawable.smallelitebadge);
-                                nextUnlock.setText("25");
-                                pb.setMax(25);
-                            } else {
+
+                            //Badges Progress
+                            if(progressCount >= 50){
                                 badgeImage.setImageResource(R.drawable.smallprestigebadge);
-                                nextUnlock.setText("50");
+                                nextUnlock.setText("100");
+                                DocumentReference badgeArray = db.collection("Users").document(currentUser);
+                                badgeArray.update("userBadges", FieldValue.arrayUnion("wi6cFBpA8RE8pAg7uhZN"));
                                 pb.setMax(100);
                             }
+                            else if(progressCount >= 25){
+                                badgeImage.setImageResource(R.drawable.smallelitebadge);
+                                nextUnlock.setText("50");
+                                DocumentReference badgeArray = db.collection("Users").document(currentUser);
+                                badgeArray.update("userBadges", FieldValue.arrayUnion("aDnbDhHpLv3cynDIaxre"));
+                                pb.setMax(50);
+
+                            }
+                            else if(progressCount >= 10){
+                                badgeImage.setImageResource(R.drawable.smallrookiebadge);
+                                nextUnlock.setText("25");
+                                DocumentReference badgeArray = db.collection("Users").document(currentUser);
+                                badgeArray.update("userBadges", FieldValue.arrayUnion("VPluIGTSFoPK3OU5K7bh"));
+                                pb.setMax(25);
+                            }
+
+                            SharedPreferences settings = getActivity().getSharedPreferences("prefs", 0);
+                            rookie = settings.getBoolean("rookieFirst", true);
+                            elite = settings.getBoolean("eliteFirst", true);
+                            prestige = settings.getBoolean("prestigeFirst", true);
+
+
+
+//                            //Badges Points
+                            if(progressCount == 10 && rookie){
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putBoolean("rookieFirst", false);
+                                editor.commit();
+                                int newPoints = points + 200;
+                                DocumentReference badgeArray = db.collection("Users").document(currentUser);
+                                Map<String, Object> pointsNew = new HashMap<>();
+                                pointsNew.put(KEY_POINTS, newPoints);
+                                badgeArray.set(pointsNew, SetOptions.merge());
+                            }
+                            else if(progressCount == 25 && elite ){
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putBoolean("eliteFirst", false);
+                                editor.commit();
+                                int newPoints = points + 350;
+                                DocumentReference badgeArray = db.collection("Users").document(currentUser);
+                                Map<String, Object> pointsNew = new HashMap<>();
+                                pointsNew.put(KEY_POINTS, newPoints);
+                                badgeArray.set(pointsNew, SetOptions.merge());
+                            }
+                            else if(progressCount == 50 && prestige){
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putBoolean("prestigeFirst", false);
+                                editor.commit();
+                                int newPoints = points + 550;
+                                DocumentReference badgeArray = db.collection("Users").document(currentUser);
+                                Map<String, Object> pointsNew = new HashMap<>();
+                                pointsNew.put(KEY_POINTS, newPoints);
+                                badgeArray.set(pointsNew, SetOptions.merge());
+                            }
+
+
                         }
                     }
                 }
             }
         });
 
+        //Going all Badges activity
+        allBadges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), AllBadges.class);
+                startActivity(i);
+            }
+        });
 
         //Setting Fragment into FrameLayout
 
@@ -186,42 +263,6 @@ public class ProfileFragment extends Fragment {
 
     }
 
-//    private void Fileuploader(){
-//        StorageReference Ref = storageRef.child(System.currentTimeMillis() + "."+getExtension(imageUri));
-//        Ref.putFile(imageUri)
-//                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                    @Override
-//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                        // Get a URL to the uploaded content
-//                        Uri downloadUrl = taskSnapshot.;
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception exception) {
-//                        // Handle unsuccessful uploads
-//                        // ...
-//                    }
-//                });
-//    }
-
-//    private String getExtension(Uri uri){
-//        ContentResolver cr = getContext().getContentResolver();
-//        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-//        return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
-//    }
-
-
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(requestCode == 1 && requestCode == RESULT_OK && data != null && data.getData()!=null){
-//            imageUri = data.getData();
-//            profileImg.setImageURI(imageUri);
-//        };
-//    }
-    //
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);
@@ -239,33 +280,6 @@ public class ProfileFragment extends Fragment {
     }
 
 
-    //    @Override
-//    public void onClick(View view) {
-//        if(view.getId() == R.id.infoImg){
-//            Intent i = new Intent(getActivity().getApplicationContext(), infoActivity.class);
-//            startActivity(i);
-//        }
-//    }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(requestCode == REQUEST_IMAGE_CAPTURE){
-//            switch (requestCode){
-//                case RESULT_OK:
-//                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-//                    profileImg.setImageBitmap(bitmap);
-//                    handleUpload(bitmap);
-//            }
-//        }
-//    }
-//
-////    private void handleUpload(Bitmap bitmap){
-////        ByteArrayOutputStream boas = new ByteArrayOutputStream();
-////        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, boas);
-////
-////        StorageReference re
-////    }
 
 
 

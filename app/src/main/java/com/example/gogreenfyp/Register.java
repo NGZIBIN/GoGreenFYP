@@ -69,15 +69,16 @@ public class Register extends AppCompatActivity {
                 final int pointsBalance = 0;
                 final int badgeProgress = 0;
                 final String walletAddress = "0";
-                String badges = "Rookie, Elite, Prestige ";
+                String badges = "";
                 String[] badgesArray = badges.split("\\s*,\\s*");
                 final List<String> badgesTag = Arrays.asList(badgesArray);
 
-                String userRewards = "GongCha, Koi";
+                String userRewards = "";
                 String[] userRewardsArray = userRewards.split("\\s*,\\s*");
                 final List<String> userRewardsTag = Arrays.asList(userRewardsArray);
 
-                String userRedeemedRewards = "GongCha, Koi";
+
+                String userRedeemedRewards = "";
                 String[] userRedeemedRewardsArray = userRedeemedRewards.split("\\s*,\\s*");
                 final List<String> userRedeemedRewardsTag = Arrays.asList(userRedeemedRewardsArray);
 

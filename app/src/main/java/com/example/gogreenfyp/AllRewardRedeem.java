@@ -22,11 +22,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AllRewardRedeem extends AppCompatActivity {
@@ -167,7 +170,7 @@ public class AllRewardRedeem extends AppCompatActivity {
 //                                            Log.d("TAG THIS ID DIFFERENT", userID);
 //                                            Log.d("TAG ALL USER NOW", userIDAuth);
                                             if(userIDAuth.equals(userID)){
-                                                String currentUser = documentSnapshots.getId();
+                                                final String currentUser = documentSnapshots.getId();
                                                 Log.d("TAG Current User", currentUser);
                                                 DocumentReference usersPointsRef = db.collection("Users").document(currentUser);
                                                 Map<String, Object> points = new HashMap<>();
@@ -258,6 +261,30 @@ public class AllRewardRedeem extends AppCompatActivity {
                                                 btnYes.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
+                                                        db.collection("Rewards").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                if(task.isSuccessful()){
+                                                                    for(DocumentSnapshot documentSnapshot:task.getResult()){
+                                                                        Rewards rewards = documentSnapshot.toObject(Rewards.class);
+                                                                        String titleCurrent = rewards.getName();
+                                                                        if(title.equals(titleCurrent)){
+                                                                            String currentReward = documentSnapshot.getId();
+                                                                            DocumentReference rewardArray = db.collection("Users").document(currentUser);
+//
+                                                                            rewardArray.update("userRewards", FieldValue.arrayUnion(currentReward));
+                                                                        }
+
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+//                                                        Intent i = new Intent(AllRewardRedeem.class, AllRewardsFragment.class)
+                                                        Toast.makeText(AllRewardRedeem.this, "Successfully Redeem Reward!", Toast.LENGTH_SHORT).show();
+                                                        finish();
+
+
+
 
                                                     }
                                                 });
@@ -296,23 +323,23 @@ public class AllRewardRedeem extends AppCompatActivity {
 
 
 
-        initCounter();
-        addBtn(new View(this));
-        minusBtn(new View(this));
+//        initCounter();
+//        addBtn(new View(this));
+//        minusBtn(new View(this));
     }
 
-    public void initCounter(){
-        counter = 1;
-        tvQuantity.setText(String.valueOf(counter));
-    }
-
-    public void minusBtn(View view){
-        counter --;
-        tvQuantity.setText(String.valueOf(counter));
-    }
-
-    public void addBtn(View view) {
-        counter ++;
-        tvQuantity.setText(String.valueOf(counter));
-    }
+//    public void initCounter(){
+//        counter = 1;
+//        tvQuantity.setText(String.valueOf(counter));
+//    }
+//
+//    public void minusBtn(View view){
+//        counter --;
+//        tvQuantity.setText(String.valueOf(counter));
+//    }
+//
+//    public void addBtn(View view) {
+//        counter ++;
+//        tvQuantity.setText(String.valueOf(counter));
+//    }
 }

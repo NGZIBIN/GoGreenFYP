@@ -15,6 +15,7 @@ public class User {
     List<String> userRewards;
     List<String> userRedeemedRewards;
 
+
     public User(){
 
     }

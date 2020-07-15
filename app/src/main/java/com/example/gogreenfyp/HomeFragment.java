@@ -30,7 +30,6 @@ import java.math.BigDecimal;
 
 public class HomeFragment extends Fragment {
     private static String walletAddress;
-    private TextView tvETH;
 
     @Nullable
     @Override
@@ -39,7 +38,7 @@ public class HomeFragment extends Fragment {
         ViewPager2 viewPager2 = view.findViewById(R.id.viewPagerFrag);
         viewPager2.setAdapter(new PageAdapter(getActivity()));
 
-        tvETH = view.findViewById(R.id.tvEthBalance);
+        TextView tvETH = view.findViewById(R.id.tvEthBalance);
         if (getActivity() != null) {
             Intent intent = getActivity().getIntent();
             walletAddress = intent.getStringExtra("walletAddress");

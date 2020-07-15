@@ -1,38 +1,62 @@
 package com.example.gogreenfyp;
 
-public class Rewards  {
+import java.util.Date;
 
-    private String RewardName;
-    private int Points;
-    private int RewardImage;
+public class Rewards{
 
-    public Rewards(String rewardName, int points, int rewardImage) {
-        RewardName = rewardName;
-        Points = points;
-        RewardImage = rewardImage;
+   private String instructions;
+   private String name;
+   private String termsAndConditions;
+   private String imageURL;
+   private int pointsToRedeem;
+   private int quantity;
+   private int quantityLeft;
+   private Date useByDate;
+
+   public Rewards() {
+
     }
 
-    public String getRewardName() {
-        return RewardName;
+    public Rewards(String instructions, String name, String termsAndConditions, int pointsToRedeem, int quantity, int quantityLeft, String imageURL, Date useByDate) {
+        this.instructions = instructions;
+        this.name = name;
+        this.termsAndConditions = termsAndConditions;
+        this.pointsToRedeem = pointsToRedeem;
+        this.quantity = quantity;
+        this.quantityLeft = quantityLeft;
+        this.imageURL = imageURL;
+        this.useByDate = useByDate;
     }
 
-    public void setRewardName(String rewardName) {
-        RewardName = rewardName;
+    public String getInstructions() {
+        return instructions;
     }
 
-    public int getPoints() {
-        return Points;
+    public String getName() {
+        return name;
     }
 
-    public void setPoints(int points) {
-        Points = points;
+    public String getTermsAndConditions() {
+        return termsAndConditions;
     }
 
-    public int getRewardImage() {
-        return RewardImage;
+    public int getPointsToRedeem() {
+        return pointsToRedeem;
     }
 
-    public void setRewardImage(int rewardImage) {
-        RewardImage = rewardImage;
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public int getQuantityLeft() {
+        return quantityLeft;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public Date getUseByDate() {
+        return useByDate;
     }
 }

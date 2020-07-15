@@ -3,6 +3,7 @@ package com.example.gogreenfyp;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -40,15 +43,28 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
-        holder.tvRewardTitle.setText(Data.get(position).getRewardName());
-        holder.RewardImg.setImageResource(Data.get(position).getRewardImage());
-//        holder.tvRewardPointsNeeded.setText(Data.get(position).getPoints());
+        holder.tvRewardTitle.setText(Data.get(position).getName());
+        holder.tvRewardPointsNeeded.setText(String.valueOf(Data.get(position).getPointsToRedeem()));
+
+        // Image
+        Glide.with(context)
+                .load(Data.get(position).getImageURL())
+                .into(holder.RewardImg);
+
+        //Log.d("IMAGE", Data.get(position).getImageURL());
+
         holder.AllRewardCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(context, AllRewardRedeem.class);
-                i.putExtra("RewardTitle", Data.get(position).getRewardName());
-                i.putExtra("RewardImg", Data.get(position).getRewardImage());
+                i.putExtra("RewardTitle", Data.get(position).getName());
+                i.putExtra("RewardInstructions", Data.get(position).getInstructions());
+                i.putExtra("RewardPoints", Data.get(position).getPointsToRedeem());
+                i.putExtra("RewardQuantity", Data.get(position).getQuantity());
+                i.putExtra("RewardQuantityLeft", Data.get(position).getQuantityLeft());
+                i.putExtra("RewardTerms", Data.get(position).getTermsAndConditions());
+                i.putExtra("RewardImg", Data.get(position).getImageURL());
+                i.putExtra("RewardUseByDate", Data.get(position).getUseByDate());
                 context.startActivity(i);
             }
         });
@@ -61,13 +77,11 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
         return Data.size();
     }
 
-    public static class MyViewHolder extends  RecyclerView.ViewHolder {
-
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvRewardTitle;
         TextView tvRewardPointsNeeded;
         ImageView RewardImg;
         CardView AllRewardCardView;
-
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -76,8 +90,6 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
             tvRewardPointsNeeded = (TextView) itemView.findViewById(R.id.rewardPointsToClaim);
             RewardImg = (ImageView) itemView.findViewById(R.id.rewardImg);
             AllRewardCardView = (CardView) itemView.findViewById(R.id.AllRewardCardView);
-
-
         }
     }
 }

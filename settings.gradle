@@ -1,2 +1,3 @@
+include ':lib'
 rootProject.name='GoGreenFYP'
 include ':app'

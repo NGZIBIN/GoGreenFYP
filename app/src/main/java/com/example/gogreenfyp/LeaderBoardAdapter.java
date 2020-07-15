@@ -32,8 +32,7 @@ public class LeaderBoardAdapter extends ArrayAdapter<LeaderBoard> {
     public View getView(int position, View convertView, ViewGroup parent) {
         // The usual way to get the LayoutInflater object to
         //  "inflate" the XML file into a View object
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         // "Inflate" the row.xml as the layout for the View object
         View rowView = inflater.inflate(R.layout.row_leaderboard, parent, false);
 
@@ -48,12 +47,13 @@ public class LeaderBoardAdapter extends ArrayAdapter<LeaderBoard> {
         if(position == 0){
             ivCrown.setImageResource(R.drawable.crownfirst);
         }
-        if(position == 1){
+        else if(position == 1){
             ivCrown.setImageResource(R.drawable.crownsecond);
         }
-        if(position == 2){
+        else if(position == 2){
             ivCrown.setImageResource(R.drawable.crownthird);
         }
+
 
         tvName.setText(currentType.getName());
         tvCount.setText(currentType.getCount() + "");

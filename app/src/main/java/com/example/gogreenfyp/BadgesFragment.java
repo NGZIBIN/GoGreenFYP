@@ -68,7 +68,7 @@ public class BadgesFragment extends Fragment {
                         // Get all rewards for this user
                         if(USER_ID.equals(USER_ID_AUTH)){
                             USER_BADGES = (ArrayList<String>) documentSnapshot.get("userBadges");
-                            Log.d("REWARDS", USER_BADGES.toString());
+//                            Log.d("REWARDS", USER_BADGES.toString());
                         }
                     }
                 }
@@ -84,6 +84,9 @@ public class BadgesFragment extends Fragment {
                 if(task.isSuccessful()){
                     for(QueryDocumentSnapshot document:task.getResult()){
                         for(int i = 0; i <USER_BADGES.size(); i ++){
+//                            if(USER_BADGES.size() == 0){
+//
+//                            }
                             if(document.getId().equals(USER_BADGES.get(i))){
                                 Badge badge = document.toObject(Badge.class);
                                 badgeList.add(new Badge(badge.getName(), badge.getImageURL(), badge.getUsagePoints(), badge.getBonusPoints()));

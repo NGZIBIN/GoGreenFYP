@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,19 +20,20 @@ import com.bumptech.glide.Glide;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class YourRewardRecyclerViewAdapter extends RecyclerView.Adapter<YourRewardRecyclerViewAdapter.MyViewHolder> {
+public class YourRewardRecyclerViewAdapter extends RecyclerView.Adapter<YourRewardRecyclerViewAdapter.MyViewHolder> implements Filterable {
 
 
     private Context context;
     private List<Rewards> Data;
-
+    List<Rewards> allData;
     public YourRewardRecyclerViewAdapter(Context context, List<Rewards> data) {
         this.context = context;
         Data = data;
+        allData = new ArrayList<>(data);
     }
 
     @NonNull
@@ -46,14 +49,16 @@ public class YourRewardRecyclerViewAdapter extends RecyclerView.Adapter<YourRewa
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-
         Date fStoreDate = Data.get(position).getUseByDate();
-        SimpleDateFormat spf = new SimpleDateFormat("d/MMM/yyyy");
-        String rewardDate = spf.format(fStoreDate);
+        SimpleDateFormat spf = new SimpleDateFormat("F/MMM/yyyy");
+        final String rewardDate = spf.format(fStoreDate);
 
         holder.tvRewardTitle.setText(Data.get(position).getName());
         holder.tvExpiryDate.setText(rewardDate);
-        Log.d("REWARD DATE", String.valueOf(fStoreDate));
+        Log.d("REWARD DATE", String.valueOf(Data.get(position).getUseByDate()));
+
+
+
 
         // Image
         Glide.with(context)
@@ -85,6 +90,39 @@ public class YourRewardRecyclerViewAdapter extends RecyclerView.Adapter<YourRewa
     public int getItemCount() {
         return Data.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+
+    Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<Rewards> filteredList = new ArrayList<>();
+            if(charSequence == null || charSequence.length() == 0){
+                filteredList.addAll(allData);
+            }else{
+                String filter = charSequence.toString().toLowerCase().trim();
+                for (Rewards item : allData){
+                    if(item.getName().toLowerCase().contains(filter)){
+                        filteredList.add(item);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            Data.clear();
+            Data.addAll((List)filterResults.values);
+            notifyDataSetChanged();
+
+        }
+    };
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvRewardTitle, tvExpiryDate;

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -39,7 +41,7 @@ public class        YourRewardFragment extends Fragment {
     // Firebase Auth
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
-
+    SearchView searchView;
     String USER_ID;
     ArrayList<String> USER_REWARDS;
 
@@ -56,6 +58,7 @@ public class        YourRewardFragment extends Fragment {
         // Get current authenticated userid
         fAuth = FirebaseAuth.getInstance();
         USER_ID = fAuth.getCurrentUser().getUid();
+        searchView = view.findViewById(R.id.searchViewYourReward);
 
         USER_REWARDS = new ArrayList<String>();
 
@@ -87,24 +90,38 @@ public class        YourRewardFragment extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
                     for(QueryDocumentSnapshot document: task.getResult()){
-                        for (int i = 0; i < USER_REWARDS.size(); i++){
-                            if(document.getId().equals(USER_REWARDS.get(i))){
-                                //Log.d("PRINT_REWARDS", USER_REWARDS.get(i));
-                                Rewards rewards = document.toObject(Rewards.class);
-                                listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
+                        if(USER_REWARDS.size() != 1){
+                            for (int i = 0; i < USER_REWARDS.size(); i++){
+                                if(document.getId().equals(USER_REWARDS.get(i))){
+                                    //Log.d("PRINT_REWARDS", USER_REWARDS.get(i));
 
-                                        rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate()));
-
-
-                                //Log.d("PRINT_REWARDS2", rewards.getName());
+                                    Rewards rewards = document.toObject(Rewards.class);
+                                    Date date = rewards.getUseByDate();
+                                    Log.d("Tag date", date + "");
+                                    Toast.makeText(getContext(), date + "", Toast.LENGTH_SHORT).show();
+                                    listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
+                                            rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate()));
+                                    //Log.d("PRINT_REWARDS2", rewards.getName());
+                                }
                             }
                         }
+
                     }
-
                     // Display the rewards that have been redeem by user
-
                     YourRewardRecyclerViewAdapter myAdapter = new YourRewardRecyclerViewAdapter(getContext(),listReward);
 
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String s) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String s) {
+                            myAdapter.getFilter().filter(s);
+                            return false;
+                        }
+                    });
                     recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
                     recyclerView.setAdapter(myAdapter);
                 }

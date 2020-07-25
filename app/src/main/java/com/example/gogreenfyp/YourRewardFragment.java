@@ -60,6 +60,8 @@ public class        YourRewardFragment extends Fragment {
         USER_ID = fAuth.getCurrentUser().getUid();
         searchView = view.findViewById(R.id.searchViewYourReward);
 
+        USER_REWARDS = new ArrayList<String>();
+
         db.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {

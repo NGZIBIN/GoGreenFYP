@@ -129,7 +129,11 @@ public class LoginActivity extends AppCompatActivity {
                                 walletErrorDialog.show();
                             }else {
                                 Toast.makeText(LoginActivity.this, "Successfully Login!", Toast.LENGTH_LONG).show();
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class).putExtra("walletAddress", walletAdd));
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("address", walletAdd);
+                                editor.apply();
                             }
                             Log.d("TAG", "SUCCESS " + userIDAuth + " Wallet address " + walletAdd);
                         }

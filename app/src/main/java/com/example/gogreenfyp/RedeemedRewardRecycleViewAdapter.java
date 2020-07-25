@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,17 +17,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class RedeemedRewardRecycleViewAdapter extends RecyclerView.Adapter<RedeemedRewardRecycleViewAdapter.MyViewHolder> {
+public class RedeemedRewardRecycleViewAdapter extends RecyclerView.Adapter<RedeemedRewardRecycleViewAdapter.MyViewHolder> implements Filterable {
 
 
     private Context context;
     private List<Rewards> Data;
+    List<Rewards> allData;
 
     public RedeemedRewardRecycleViewAdapter(Context context, List<Rewards> data) {
         this.context = context;
         Data = data;
+        allData = new ArrayList<>(data);
     }
 
     @NonNull
@@ -77,6 +82,39 @@ public class RedeemedRewardRecycleViewAdapter extends RecyclerView.Adapter<Redee
     public int getItemCount() {
         return Data.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+
+    Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<Rewards> filteredList = new ArrayList<>();
+            if(charSequence == null || charSequence.length() == 0){
+                filteredList.addAll(allData);
+            }else{
+                String filter = charSequence.toString().toLowerCase().trim();
+                for (Rewards item : allData){
+                    if(item.getName().toLowerCase().contains(filter)){
+                        filteredList.add(item);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            Data.clear();
+            Data.addAll((List)filterResults.values);
+            notifyDataSetChanged();
+
+        }
+    };
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvRewardTitle;

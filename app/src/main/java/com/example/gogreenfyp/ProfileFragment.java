@@ -62,6 +62,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
+
     TextView totalTimeUsed, nextUnlock, tvUsername, allBadges;
     ImageView badgeImage, infoImg;
     ImageView profileImg;
@@ -76,8 +77,6 @@ public class ProfileFragment extends Fragment {
     private Boolean rookie;
     private Boolean elite;
     private Boolean prestige;
-
-
     private Uri imageUri;
     private Bitmap compressor;
 
@@ -224,15 +223,14 @@ public class ProfileFragment extends Fragment {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
-                        Toast.makeText(getContext(), "Permission Granted", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Permission not Granted", Toast.LENGTH_LONG).show();
                         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                     }
                     else {
-
                         choseImage();
-
                     }
-                }else{
+                }
+                else{
                     choseImage();
                 }
             }
@@ -278,11 +276,5 @@ public class ProfileFragment extends Fragment {
             }
         }
     }
-
-
-
-
-
-
 }
 

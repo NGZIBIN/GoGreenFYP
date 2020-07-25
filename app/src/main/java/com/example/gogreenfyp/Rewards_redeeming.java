@@ -58,6 +58,7 @@ public class Rewards_redeeming extends AppCompatActivity {
                 btnFinsh.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        dialog.dismiss();
                         Intent i = new Intent(Rewards_redeeming.this, MainActivity.class);
                         startActivity(i);
                     }

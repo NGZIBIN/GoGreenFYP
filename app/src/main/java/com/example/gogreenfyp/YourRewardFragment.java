@@ -57,6 +57,8 @@ public class        YourRewardFragment extends Fragment {
         fAuth = FirebaseAuth.getInstance();
         USER_ID = fAuth.getCurrentUser().getUid();
 
+        USER_REWARDS = new ArrayList<String>();
+
         db.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {

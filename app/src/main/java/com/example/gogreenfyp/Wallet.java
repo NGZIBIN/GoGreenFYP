@@ -100,6 +100,12 @@ public class Wallet {
         }
     }
 
+    public String getWalletAddress(Activity activity){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
+
+        return sharedPreferences.getString("address", "");
+    }
+
     private void updateWalletAddress(FirebaseAuth firebaseAuth, final String walletAddress) {
 
         if (firebaseAuth.getCurrentUser() != null) {

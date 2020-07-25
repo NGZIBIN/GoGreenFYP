@@ -38,7 +38,7 @@ public class TransactionFragment extends Fragment {
     ExpandableListView expandableListView;
     TransactionExpandableListAdpater expandableListAdpater;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private String walletAddress = "";
+    private Wallet wallet = new Wallet();
     private FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
     private CollectionReference collection = fireStore.collection("Transactions");
 
@@ -51,10 +51,6 @@ public class TransactionFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_transaction, container, false);
         expandableListView = view.findViewById(R.id.expandable_transactions);
 
-        if(getActivity() != null) {
-            Intent intent = getActivity().getIntent();
-            walletAddress = intent.getStringExtra("walletAddress");
-        }
         expandableListAdpater = getExpandListAdapter();
         expandableListView.setAdapter(expandableListAdpater);
         expandableListView.setGroupIndicator(null);
@@ -68,7 +64,10 @@ public class TransactionFragment extends Fragment {
         final ArrayList<TransactionHeader> transactions = new ArrayList<TransactionHeader>();
         final TransactionExpandableListAdpater expandableListAdpater = new TransactionExpandableListAdpater(getContext(), transactions, transactionHashMap);
 
-            String address = this.walletAddress;
+            String address = "";
+            if(getActivity() != null){
+                address = wallet.getWalletAddress(getActivity());
+            }
 
             collection.whereEqualTo("walletAddress", address).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override

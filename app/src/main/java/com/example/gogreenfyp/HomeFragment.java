@@ -30,7 +30,8 @@ import java.math.BigDecimal;
 
 public class HomeFragment extends Fragment {
     private static String walletAddress;
-    private TextView tvETH;
+    AsyncTaskBalance asyncTaskBalance;
+    private Wallet wallet = new Wallet();
 
     @Nullable
     @Override
@@ -39,11 +40,10 @@ public class HomeFragment extends Fragment {
         ViewPager2 viewPager2 = view.findViewById(R.id.viewPagerFrag);
         viewPager2.setAdapter(new PageAdapter(getActivity()));
 
-        tvETH = view.findViewById(R.id.tvEthBalance);
+        TextView tvETH = view.findViewById(R.id.tvEthBalance);
         if (getActivity() != null) {
-            Intent intent = getActivity().getIntent();
-            walletAddress = intent.getStringExtra("walletAddress");
-            AsyncTaskBalance asyncTaskBalance = new AsyncTaskBalance(tvETH);
+            walletAddress = wallet.getWalletAddress(getActivity());
+            asyncTaskBalance = new AsyncTaskBalance(tvETH);
             asyncTaskBalance.execute(walletAddress);
         }
 
@@ -95,22 +95,22 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String balance) {
-            super.onPostExecute(balance);
             if (tv != null) {
                 tv.get().setText(balance);
             }
         }
-        private String getETHBalance(String address) throws IOException {
-            Web3j web3j = Web3j.build(new HttpService("https://ropsten.infura.io/v3/23d1c7856d664d41842c3e8f8c228fe8"));
-            EthGetBalance balance = web3j.ethGetBalance(address, DefaultBlockParameterName.LATEST).send();
-
-            BigDecimal ether = Convert.fromWei(balance.getBalance().toString(), Convert.Unit.ETHER);
-            String etherBalance = ether.toString();
-
-            if (etherBalance.length() >= 12) {
-                etherBalance = etherBalance.substring(0, 13);
-            }
-            return etherBalance;
-        }
     }
+    private static String getETHBalance(String address) throws IOException {
+        Web3j web3j = Web3j.build(new HttpService("https://ropsten.infura.io/v3/23d1c7856d664d41842c3e8f8c228fe8"));
+        EthGetBalance balance = web3j.ethGetBalance(address, DefaultBlockParameterName.LATEST).send();
+
+        BigDecimal ether = Convert.fromWei(String.valueOf(balance.getBalance()), Convert.Unit.ETHER);
+        String etherBalance = ether.toString();
+
+        if (etherBalance.length() >= 12) {
+            etherBalance = etherBalance.substring(0, 13);
+        }
+        return etherBalance;
+    }
+
 }

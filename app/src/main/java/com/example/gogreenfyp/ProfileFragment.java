@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import  android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -64,6 +66,7 @@ import static android.app.Activity.RESULT_OK;
 public class ProfileFragment extends Fragment {
 
     TextView totalTimeUsed, nextUnlock, tvUsername, allBadges;
+    ImageView btnLogout;
     ImageView badgeImage, infoImg;
     ImageView profileImg;
     CardView badgesCardView;
@@ -94,6 +97,8 @@ public class ProfileFragment extends Fragment {
         badgeImage = view.findViewById(R.id.badgeImage);
         allBadges = view.findViewById(R.id.allBadges);
         infoImg = view.findViewById(R.id.infoImg);
+        btnLogout = view.findViewById(R.id.iv_logout);
+
         fStore = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -245,6 +250,40 @@ public class ProfileFragment extends Fragment {
                 myBuilder.setCancelable(true);
                 AlertDialog myDialog = myBuilder.create();
                 myDialog.show();
+            }
+        });
+
+        // Logout button
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog = new Dialog(getActivity());
+                dialog.setContentView(R.layout.dialog_logout);
+                dialog.setCancelable(false);
+                dialog.show();
+
+                Button btnLogout, btnNo;
+
+                btnLogout = dialog.findViewById(R.id.btnLogout);
+                btnNo = dialog.findViewById(R.id.btnNo);
+
+                btnLogout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        FirebaseAuth.getInstance().signOut();
+                        Intent i = new Intent(getActivity(), LoginActivity.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(i);
+                        Toast.makeText(getActivity(), "Successfully logged out", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                btnNo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
 

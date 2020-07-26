@@ -104,6 +104,7 @@ public class Use_reward extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 //                        dialog.setContentView(R.layout.activity_rewards_redeeming);
+                        dialog.dismiss();
                         Intent i = new Intent(Use_reward.this, Rewards_redeeming.class);
                         i.putExtra("rewardImg", imageURL);
                         i.putExtra("rewardTitle", title);

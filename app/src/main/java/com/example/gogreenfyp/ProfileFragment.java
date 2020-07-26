@@ -7,7 +7,9 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import  android.os.Bundle;
@@ -51,13 +53,18 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 
+import org.web3j.abi.datatypes.Int;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import jnr.ffi.annotations.In;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -253,26 +260,36 @@ public class ProfileFragment extends Fragment {
     }
 //
     private void choseImage() {
-        CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1, 1)
-                .start(requireActivity());
 
-
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if(getActivity() != null && intent.resolveActivity(getActivity().getPackageManager()) != null){
+            startActivityForResult(intent, 550);
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if(resultCode == RESULT_OK){
-                imageUri = result.getUri();
-                profileImg.setImageURI(imageUri);
-                Log.d("PASS TAG", "PASSSSSSSSSSSSSSSSSP PASSSSSSSSSSSSSS PASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
-            }else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
-                Exception error = result.getError();
-                Log.d("TAG",  "FAIL FIAL FIAL FAIL");
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == 550 && data != null) {
+            Uri selectedImage =  data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            if (selectedImage != null && getActivity() != null) {
+                Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                if (cursor != null) {
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String picturePath = cursor.getString(columnIndex);
+                    try {
+                        InputStream stream = getActivity().getContentResolver().openInputStream(selectedImage);
+                        Bitmap bitmap = BitmapFactory.decodeStream(stream);
+                        profileImg.setImageBitmap(bitmap);
+                    }
+                    catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    cursor.close();
+                }
             }
         }
     }

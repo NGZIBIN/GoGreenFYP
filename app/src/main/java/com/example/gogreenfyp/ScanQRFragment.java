@@ -26,6 +26,9 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,34 +64,41 @@ public class ScanQRFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        DIALOG_RESULT = result.getText();
+                        try {
+                            JSONObject qrObject = new JSONObject(result.getText());
+                            String  WALLET_ADDR = qrObject.getString("walletAddress");
+                            String  NAME = qrObject.getString("name");
+                            String  AMOUNT = qrObject.getString("amount");
 
-                        dialog = new Dialog(getActivity());
-                        dialog.setContentView(R.layout.dialog_payment_confirmation);
-                        dialog.setCancelable(false);
-                        dialog.show();
+                            // DIALOG_RESULT = result.getText();
 
-                        tv_amount = dialog.findViewById(R.id.tv_payment_amount);
-                        tv_receiver = dialog.findViewById(R.id.tv_payment_title_reciever);
-                        btn_dialog_yes = dialog.findViewById(R.id.btnYes);
-                        btn_dialog_no = dialog.findViewById(R.id.btnNo);
+                            dialog = new Dialog(getActivity());
+                            dialog.setContentView(R.layout.dialog_payment_confirmation);
+                            dialog.setCancelable(false);
+                            dialog.show();
 
-                        // TODO: Split the string to get MERCHANT and AMOUNT
+                            tv_amount = dialog.findViewById(R.id.tv_payment_amount);
+                            tv_receiver = dialog.findViewById(R.id.tv_payment_title_reciever);
+                            btn_dialog_yes = dialog.findViewById(R.id.btnYes);
+                            btn_dialog_no = dialog.findViewById(R.id.btnNo);
 
-                        // Set merchant
-                        tv_receiver.setText(DIALOG_RESULT);
+                            // TODO: Split the string to get MERCHANT and AMOUNT
 
-                        // Set amount
-                        //tv_amount.setText();
+                            // Set merchant & amount
+                            tv_receiver.setText(NAME);
+                            tv_amount.setText(AMOUNT);
 
-                        btn_dialog_no.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                // Dismiss dialog and start scanner again
-                                dialog.dismiss();
-                                codeScanner.startPreview();
-                            }
-                        });
+                            btn_dialog_no.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    // Dismiss dialog and start scanner again
+                                    dialog.dismiss();
+                                    codeScanner.startPreview();
+                                }
+                            });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
             }

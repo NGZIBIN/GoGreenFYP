@@ -156,6 +156,8 @@ public class AllRewardRedeem extends AppCompatActivity {
 
 
 
+
+
                         if(currentPoints < totalPointsSpend){
                             Toast.makeText(AllRewardRedeem.this, "You do not have enough points!" + totalPointsSpend, Toast.LENGTH_LONG).show();
 

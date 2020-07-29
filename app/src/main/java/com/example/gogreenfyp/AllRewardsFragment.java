@@ -37,7 +37,7 @@ public class AllRewardsFragment extends Fragment {
     SearchView searchView;
     String USER_ID;
     FirebaseAuth fAuth;
-    ArrayList<String> USER_ALLREWARDS;
+    ArrayList<String> USER_ALLREWARDS = new ArrayList<String>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference rewardsCollectionRef = db.collection("Rewards");
 
@@ -81,7 +81,7 @@ public class AllRewardsFragment extends Fragment {
                 if(task.isSuccessful()){
                     for(QueryDocumentSnapshot document: task.getResult()){
 
-                        if(USER_ALLREWARDS.size() != 0){
+
                             for(int i = 0; i < USER_ALLREWARDS.size(); i ++){
                                 if(document.getId().equals(USER_ALLREWARDS.get(i))){
                                     Rewards rewards = document.toObject(Rewards.class);
@@ -90,17 +90,12 @@ public class AllRewardsFragment extends Fragment {
                                         listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
                                                 rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate()));
                                     }
-                                    else{
-                                        RewardRecyclerViewAdapter myAdapter = new RewardRecyclerViewAdapter(getContext(),listReward);
-                                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-                                        recyclerView.setAdapter(myAdapter);
-                                    }
-
-                                }
                             }
                         }
-                        
 
+                        RewardRecyclerViewAdapter myAdapter = new RewardRecyclerViewAdapter(getContext(),listReward);
+                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                        recyclerView.setAdapter(myAdapter);
 
 //                        Log.d("IMAGE", rewards.getImageURL());
                     }

@@ -62,7 +62,7 @@ public class        YourRewardFragment extends Fragment {
     FirebaseFirestore fStore;
     SearchView searchView;
     String USER_ID;
-    ArrayList<String> USER_REWARDS;
+    ArrayList<String> USER_REWARDS = new ArrayList<String>();
     int requestCode = 123;
     int notificationID = 888;
 
@@ -70,6 +70,12 @@ public class        YourRewardFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public class dateDiff{
+        public long daysBetween(Date one, Date two){
+            long difference = (one.getTime() - two.getTime())/ 86400000;
+            return Math.abs(difference);
+            }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -121,16 +127,12 @@ public class        YourRewardFragment extends Fragment {
                                     Date date = rewards.getUseByDate();
                                     Date currDate = Calendar.getInstance().getTime();
                                     Log.d("CURRENT DATE", String.valueOf(currDate));
-                                    SimpleDateFormat spf = new SimpleDateFormat("dd/MM/yyyy");
-                                    String rewardDate = spf.format(date);
-                                    String newCurrDate = spf.format(currDate);
-                                    Log.d("REWARD DATE", String.valueOf(date));
-                                    Log.d("CURRENT DATE", String.valueOf(newCurrDate));
 
+                                    dateDiff diff = new dateDiff();
+                                    long days = diff.daysBetween(currDate, date);
+                                    Log.d("Days diff", String.valueOf(days));
 
-
-                                    if(currDate.after(date)){
-                                        Log.d("CORRECT", "YAY");
+                                    if(days == 1){
                                         NotificationManager notificationManager = (NotificationManager)
                                                 getActivity().getSystemService(getActivity().NOTIFICATION_SERVICE);
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -145,7 +147,7 @@ public class        YourRewardFragment extends Fragment {
                                         PendingIntent pIntent = PendingIntent.getActivity(getContext(), requestCode, intent, PendingIntent.FLAG_CANCEL_CURRENT);
                                         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), "default");
                                         builder.setContentTitle("Alert!");
-                                        builder.setContentText("Your reward have expired!");
+                                        builder.setContentText("Your reward" + title + "is expiring in 1 day. Use it before it expires!");
                                         builder.setSmallIcon(android.R.drawable.ic_menu_info_details);
                                         builder.setContentIntent(pIntent);
                                         builder.setAutoCancel(true);
@@ -193,9 +195,6 @@ public class        YourRewardFragment extends Fragment {
                                                 }
                                             }
                                         });
-
-                                    }else{
-
 
                                     }
 

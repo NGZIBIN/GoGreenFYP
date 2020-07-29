@@ -1,8 +1,15 @@
 package com.example.gogreenfyp;
 
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +18,11 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -21,6 +30,7 @@ import com.bumptech.glide.Glide;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -47,15 +57,16 @@ public class YourRewardRecyclerViewAdapter extends RecyclerView.Adapter<YourRewa
         return new MyViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
+
         Date fStoreDate = Data.get(position).getUseByDate();
-        SimpleDateFormat spf = new SimpleDateFormat("F/MMM/yyyy");
-        final String rewardDate = spf.format(fStoreDate);
+        SimpleDateFormat spf = new SimpleDateFormat("d/MMM/yyyy");
+        String rewardDate = spf.format(fStoreDate);
 
         holder.tvRewardTitle.setText(Data.get(position).getName());
         holder.tvExpiryDate.setText(rewardDate);
-        Log.d("REWARD DATE", String.valueOf(Data.get(position).getUseByDate()));
 
 
 

@@ -132,7 +132,6 @@ public class ProfileFragment extends Fragment {
                             pb.setProgress(_PROGRESS);
                             totalTimeUsed.setText(_PROGRESS + "");
 
-
                             //Badges Progress
                             if(progressCount >= 50){
                                 badgeImage.setImageResource(R.drawable.smallprestigebadge);
@@ -161,8 +160,6 @@ public class ProfileFragment extends Fragment {
                             rookie = settings.getBoolean("rookieFirst", true);
                             elite = settings.getBoolean("eliteFirst", true);
                             prestige = settings.getBoolean("prestigeFirst", true);
-
-
 
 //                            //Badges Points
                             if(progressCount == 10 && rookie){
@@ -195,14 +192,11 @@ public class ProfileFragment extends Fragment {
                                 pointsNew.put(KEY_POINTS, newPoints);
                                 badgeArray.set(pointsNew, SetOptions.merge());
                             }
-
-
                         }
                     }
                 }
             }
         });
-
         //Going all Badges activity
         allBadges.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,9 +205,7 @@ public class ProfileFragment extends Fragment {
                 startActivity(i);
             }
         });
-
         //Setting Fragment into FrameLayout
-
         FragmentManager fm = getActivity().getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
 
@@ -221,8 +213,6 @@ public class ProfileFragment extends Fragment {
         ft.replace(R.id.frameBadges, badgeFrag);
 
         ft.commit();
-
-
         //Set profile Image
         profileImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,7 +232,6 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
-
         //Getting info of how to gain points
         infoImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,11 +243,9 @@ public class ProfileFragment extends Fragment {
                 myDialog.show();
             }
         });
-
-
         return view;
     }
-//
+
     private void choseImage() {
 
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -272,25 +259,23 @@ public class ProfileFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK && requestCode == 550 && data != null) {
             Uri selectedImage =  data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
             if (selectedImage != null && getActivity() != null) {
-                Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                if (cursor != null) {
-                    cursor.moveToFirst();
-
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String picturePath = cursor.getString(columnIndex);
-                    try {
-                        InputStream stream = getActivity().getContentResolver().openInputStream(selectedImage);
-                        Bitmap bitmap = BitmapFactory.decodeStream(stream);
-                        profileImg.setImageBitmap(bitmap);
-                    }
-                    catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    cursor.close();
+                try {
+                    InputStream stream = getActivity().getContentResolver().openInputStream(selectedImage);
+                    Bitmap bitmap = BitmapFactory.decodeStream(stream);
+                    profileImg.setImageBitmap(bitmap);
+                }
+                catch (FileNotFoundException e) {
+                    e.printStackTrace();
                 }
             }
+        }
+    }
+    private void saveImage(Bitmap bitmap){
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        if(fAuth.getCurrentUser() != null) {
+            String userId = fAuth.getCurrentUser().getUid();
         }
     }
 }

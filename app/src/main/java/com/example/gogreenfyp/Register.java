@@ -22,6 +22,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -77,10 +78,13 @@ public class Register extends AppCompatActivity {
                 String[] userRewardsArray = userRewards.split("\\s*,\\s*");
                 final List<String> userRewardsTag = Arrays.asList(userRewardsArray);
 
-
                 String userRedeemedRewards = "";
                 String[] userRedeemedRewardsArray = userRedeemedRewards.split("\\s*,\\s*");
                 final List<String> userRedeemedRewardsTag = Arrays.asList(userRedeemedRewardsArray);
+
+                String userAllRewards = "Jzlsfx63CQUBIYZnDZOI, QHuso8ycF1mWRwPJeiOC, Rnwj7Pee7hSqJgd3c6Ib";
+                String[] userAllRewardsArray = userAllRewards.split("\\s*,\\s*");
+                final List<String> userAllRewardsTag = Arrays.asList(userAllRewardsArray);
 
 
 
@@ -114,7 +118,7 @@ public class Register extends AppCompatActivity {
                             Toast.makeText(Register.this, "Account Created", Toast.LENGTH_LONG).show();
                             userID = fAuth.getCurrentUser().getUid();
 
-                            User user = new User(userID, username, email, walletBalance, pointsBalance, badgeProgress, walletAddress,badgesTag, userRewardsTag, userRedeemedRewardsTag);
+                            User user = new User(userID, username, email, walletBalance, pointsBalance, badgeProgress, walletAddress,badgesTag, userRewardsTag, userRedeemedRewardsTag,userAllRewardsTag);
 
 
                             userRef.add(user);

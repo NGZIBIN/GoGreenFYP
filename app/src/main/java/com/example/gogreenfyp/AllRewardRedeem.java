@@ -271,8 +271,10 @@ public class AllRewardRedeem extends AppCompatActivity {
                                                                         if(title.equals(titleCurrent)){
                                                                             String currentReward = documentSnapshot.getId();
                                                                             DocumentReference rewardArray = db.collection("Users").document(currentUser);
-//
+
                                                                             rewardArray.update("userRewards", FieldValue.arrayUnion(currentReward));
+                                                                            rewardArray.update("allRewards", FieldValue.arrayRemove(currentReward));
+
                                                                         }
 
                                                                     }
@@ -280,6 +282,7 @@ public class AllRewardRedeem extends AppCompatActivity {
                                                             }
                                                         });
 //                                                        Intent i = new Intent(AllRewardRedeem.class, AllRewardsFragment.class)
+                                                        dialog.dismiss();
                                                         Toast.makeText(AllRewardRedeem.this, "Successfully Redeem Reward!", Toast.LENGTH_SHORT).show();
                                                         finish();
 
@@ -309,7 +312,7 @@ public class AllRewardRedeem extends AppCompatActivity {
                 });
 
 
-                btnNo.setOnClickListener(new View.OnClickListener() {
+                btnNo. setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();

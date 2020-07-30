@@ -44,7 +44,7 @@ public class RedeemedRewardsFragment extends Fragment {
     FirebaseFirestore fStore;
     SearchView searchView;
     String USER_ID;
-    ArrayList<String> USER_REWARDS;
+    ArrayList<String> USER_REWARDS = new ArrayList<String>();
 
     public RedeemedRewardsFragment() {
         // Required empty public constructor

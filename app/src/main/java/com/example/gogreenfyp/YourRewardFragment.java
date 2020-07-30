@@ -1,8 +1,18 @@
 package com.example.gogreenfyp;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,14 +28,23 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
+import static androidx.core.content.ContextCompat.getSystemService;
 
 
 /**
@@ -43,12 +62,20 @@ public class        YourRewardFragment extends Fragment {
     FirebaseFirestore fStore;
     SearchView searchView;
     String USER_ID;
-    ArrayList<String> USER_REWARDS;
+    ArrayList<String> USER_REWARDS = new ArrayList<String>();
+    int requestCode = 123;
+    int notificationID = 888;
 
     public YourRewardFragment() {
         // Required empty public constructor
     }
 
+    public class dateDiff{
+        public long daysBetween(Date one, Date two){
+            long difference = (one.getTime() - two.getTime())/ 86400000;
+            return Math.abs(difference);
+            }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -96,7 +123,81 @@ public class        YourRewardFragment extends Fragment {
                                     //Log.d("PRINT_REWARDS", USER_REWARDS.get(i));
 
                                     Rewards rewards = document.toObject(Rewards.class);
+                                    String title = rewards.getName();
                                     Date date = rewards.getUseByDate();
+                                    Date currDate = Calendar.getInstance().getTime();
+                                    Log.d("CURRENT DATE", String.valueOf(currDate));
+
+                                    dateDiff diff = new dateDiff();
+                                    long days = diff.daysBetween(currDate, date);
+                                    Log.d("Days diff", String.valueOf(days));
+
+                                    if(days == 1){
+                                        NotificationManager notificationManager = (NotificationManager)
+                                                getActivity().getSystemService(getActivity().NOTIFICATION_SERVICE);
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                            NotificationChannel channel = new
+                                                    NotificationChannel("default", "Default Channel",
+                                                    NotificationManager.IMPORTANCE_DEFAULT);
+
+                                            channel.setDescription("This is for default notification");
+                                            notificationManager.createNotificationChannel(channel);
+                                        }
+                                        Intent intent = new Intent(getContext(), YourRewardFragment.class);
+                                        PendingIntent pIntent = PendingIntent.getActivity(getContext(), requestCode, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                                        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), "default");
+                                        builder.setContentTitle("Alert!");
+                                        builder.setContentText("Your reward" + title + "is expiring in 1 day. Use it before it expires!");
+                                        builder.setSmallIcon(android.R.drawable.ic_menu_info_details);
+                                        builder.setContentIntent(pIntent);
+                                        builder.setAutoCancel(true);
+                                        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                                        builder.setSound(uri);
+
+                                        builder.setPriority(Notification.PRIORITY_HIGH);
+                                        Notification n = builder.build();
+                                        notificationManager.notify(notificationID, n);
+
+                                        //Current date is after Reward expiry date
+                                        //DO delete
+                                        db.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if(task.isSuccessful()){
+                                                    String userIDAuth = "";
+                                                    for(final DocumentSnapshot documentSnapshots:task.getResult()){
+                                                        User user = documentSnapshots.toObject(User.class);
+                                                        userIDAuth = user.getUserID();
+                                                        if(userIDAuth.equals(fAuth.getCurrentUser().getUid())){
+                                                            final String currentUser = documentSnapshots.getId();
+                                                            db.collection("Rewards").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                    if(task.isSuccessful()){
+                                                                        for(DocumentSnapshot documentSnapshot:task.getResult()){
+                                                                            Rewards rewards = documentSnapshot.toObject(Rewards.class);
+                                                                            String titleCurrent = rewards.getName();
+                                                                            if(title.equals(titleCurrent)){
+                                                                                String currentReward = documentSnapshot.getId();
+                                                                                DocumentReference rewardArray = db.collection("Users").document(currentUser);
+//
+                                                                                rewardArray.update("userRewards", FieldValue.arrayRemove(currentReward));
+
+                                                                            }
+
+                                                                        }
+                                                                    }
+                                                                }
+                                                            });
+
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        });
+
+                                    }
+
                                     Log.d("Tag date", date + "");
                                     Toast.makeText(getContext(), date + "", Toast.LENGTH_SHORT).show();
                                     listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
@@ -129,4 +230,6 @@ public class        YourRewardFragment extends Fragment {
         });
         return view;
     }
+
+
 }

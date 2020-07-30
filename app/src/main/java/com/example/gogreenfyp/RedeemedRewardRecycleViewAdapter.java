@@ -60,21 +60,6 @@ public class RedeemedRewardRecycleViewAdapter extends RecyclerView.Adapter<Redee
 
         //Log.d("IMAGE", Data.get(position).getImageURL());
 
-        holder.YourRewardCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(context, Use_reward.class);
-                i.putExtra("RewardTitle", Data.get(position).getName());
-                i.putExtra("RewardInstructions", Data.get(position).getInstructions());
-                i.putExtra("RewardPoints", Data.get(position).getPointsToRedeem());
-                i.putExtra("RewardQuantity", Data.get(position).getQuantity());
-                i.putExtra("RewardQuantityLeft", Data.get(position).getQuantityLeft());
-                i.putExtra("RewardTerms", Data.get(position).getTermsAndConditions());
-                i.putExtra("RewardImg", Data.get(position).getImageURL());
-                context.startActivity(i);
-            }
-        });
-
 
     }
 

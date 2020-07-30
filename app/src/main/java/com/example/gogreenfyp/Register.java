@@ -20,9 +20,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +37,9 @@ public class Register extends AppCompatActivity {
     String userID;
     ProgressBar pb;
     FirebaseAuth fAuth;
-
+//    ArrayList<String> userRedeemedRewardsTag = new ArrayList<>();
+//    ArrayList<String> userRewardsTag = new ArrayList<>();
+//    ArrayList<String> badgesTag = new ArrayList<>();
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference userRef = db.collection("Users");
@@ -81,6 +86,19 @@ public class Register extends AppCompatActivity {
                 String userRedeemedRewards = "";
                 String[] userRedeemedRewardsArray = userRedeemedRewards.split("\\s*,\\s*");
                 final List<String> userRedeemedRewardsTag = Arrays.asList(userRedeemedRewardsArray);
+
+//                final FirebaseFirestore db = FirebaseFirestore.getInstance();
+//                db.collection("Rewards").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if(task.isSuccessful()){
+//                            List<String> list = new ArrayList<>();
+//                            for (DocumentSnapshot documentSnapshot: task.getResult()){
+//                                list.add(documentSnapshot.getId());
+//                            }
+//                        }
+//                    }
+//                });
 
                 String userAllRewards = "Jzlsfx63CQUBIYZnDZOI, QHuso8ycF1mWRwPJeiOC, Rnwj7Pee7hSqJgd3c6Ib";
                 String[] userAllRewardsArray = userAllRewards.split("\\s*,\\s*");

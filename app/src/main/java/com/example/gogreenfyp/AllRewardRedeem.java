@@ -153,6 +153,11 @@ public class AllRewardRedeem extends AppCompatActivity {
                         final int totalPointsSpend = qty * points;
                         String currentPointsString = tvcurrentPointsMain.getText().toString();
                         currentPoints = Integer.parseInt(currentPointsString);
+
+
+
+
+
                         if(currentPoints < totalPointsSpend){
                             Toast.makeText(AllRewardRedeem.this, "You do not have enough points!" + totalPointsSpend, Toast.LENGTH_LONG).show();
 
@@ -271,7 +276,7 @@ public class AllRewardRedeem extends AppCompatActivity {
                                                                         if(title.equals(titleCurrent)){
                                                                             String currentReward = documentSnapshot.getId();
                                                                             DocumentReference rewardArray = db.collection("Users").document(currentUser);
-
+//
                                                                             rewardArray.update("userRewards", FieldValue.arrayUnion(currentReward));
                                                                             rewardArray.update("allRewards", FieldValue.arrayRemove(currentReward));
 
@@ -312,7 +317,7 @@ public class AllRewardRedeem extends AppCompatActivity {
                 });
 
 
-                btnNo. setOnClickListener(new View.OnClickListener() {
+                btnNo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();

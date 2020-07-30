@@ -20,7 +20,7 @@
             android:clickable="true"
             android:layout_centerInParent="true"
             android:src="@drawable/profilepic"
-            android:onClick="handleImageClick"/>
+            android:focusable="true" />
 
         <TextView
             android:id="@+id/tvUsername"

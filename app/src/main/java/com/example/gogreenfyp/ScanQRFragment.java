@@ -1,11 +1,16 @@
 package com.example.gogreenfyp;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.preference.PreferenceManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +22,9 @@ import android.widget.Toast;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.Result;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -27,6 +35,24 @@ import com.karumi.dexter.listener.single.PermissionListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.web3j.crypto.CipherException;
+import org.web3j.crypto.Credentials;
+import org.web3j.crypto.WalletUtils;
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.http.HttpService;
+import org.web3j.tx.RawTransactionManager;
+import org.web3j.tx.TransactionManager;
+import org.web3j.tx.Transfer;
+import org.web3j.utils.Convert;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.ref.WeakReference;
+import java.math.BigDecimal;
+
+import static org.web3j.tx.gas.DefaultGasProvider.GAS_LIMIT;
+import static org.web3j.tx.gas.DefaultGasProvider.GAS_PRICE;
 
 
 /**
@@ -39,7 +65,8 @@ public class ScanQRFragment extends Fragment {
     TextView walletAddress, tv_receiver, tv_amount;
     Button btn_dialog_yes, btn_dialog_no;
     Dialog dialog;
-
+    CollectionReference transactionReference = FirebaseFirestore.getInstance().collection("Transactions");
+    private FragmentActivity activity = getActivity();
     String DIALOG_RESULT;
 
     public ScanQRFragment() {
@@ -65,11 +92,12 @@ public class ScanQRFragment extends Fragment {
                     public void run() {
                         try {
                             JSONObject qrObject = new JSONObject(result.getText());
-                            String  WALLET_ADDR = qrObject.getString("walletAddress");
-                            String  NAME = qrObject.getString("name");
-                            String  AMOUNT = qrObject.getString("amount");
+                            String address = qrObject.getString("walletAddress");
+                            String name = qrObject.getString("name");
+                            String amount = qrObject.getDouble("amount")+"";
+                            String place = qrObject.getString("place");
 
-                            // DIALOG_RESULT = result.getText();
+                            //DIALOG_RESULT = result.getText();
 
                             dialog = new Dialog(getActivity());
                             dialog.setContentView(R.layout.dialog_payment_confirmation);
@@ -84,8 +112,15 @@ public class ScanQRFragment extends Fragment {
                             // TODO: Split the string to get MERCHANT and AMOUNT
 
                             // Set merchant & amount
-                            tv_receiver.setText(NAME);
-                            tv_amount.setText(AMOUNT);
+                            tv_receiver.setText(name);
+                            tv_amount.setText(amount);
+
+                            btn_dialog_yes.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                }
+                            });
 
                             btn_dialog_no.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -147,6 +182,41 @@ public class ScanQRFragment extends Fragment {
                 permissionToken.continuePermissionRequest();
             }
         }).check();
+    }
+
+    private static class AsyncTaskTransfer extends AsyncTask<String, String, String> {
+
+        private WeakReference<Activity> activityWeakReference;
+
+        public AsyncTaskTransfer(Activity activity) {
+            this.activityWeakReference = new WeakReference<Activity>(activity);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String transactionHash = "";
+            try {
+                Web3j web3j = Web3j.build(new HttpService("https://ropsten.infura.io/v3/23d1c7856d664d41842c3e8f8c228fe8"));
+                Credentials credentials = new Wallet().getWalletCredentials(activityWeakReference.get());
+                TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
+                Transfer transfer = new Transfer(web3j, transactionManager);
+                TransactionReceipt receipt = transfer.sendFunds(strings[0], BigDecimal.valueOf(0.9), Convert.Unit.ETHER, GAS_PRICE, GAS_LIMIT).send();
+                transactionHash = receipt.getTransactionHash();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return transactionHash;
+        }
+
+        @Override
+        protected void onPostExecute(String hash) {
+
+        }
     }
 }
 

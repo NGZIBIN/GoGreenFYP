@@ -2,6 +2,7 @@ package com.example.gogreenfyp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -115,6 +116,7 @@ public class AllRewardRedeem extends AppCompatActivity {
                 dialog.setCancelable(false);
                 dialog.show();
 
+
                 Button btnYes, btnNo;
                 final TextView rewardTitle, tvQuantity, tvPointsRequired, tvCurrentpoints;
                 ImageView rewardImg;
@@ -153,9 +155,6 @@ public class AllRewardRedeem extends AppCompatActivity {
                         final int totalPointsSpend = qty * points;
                         String currentPointsString = tvcurrentPointsMain.getText().toString();
                         currentPoints = Integer.parseInt(currentPointsString);
-
-
-
 
 
                         if(currentPoints < totalPointsSpend){
@@ -220,7 +219,7 @@ public class AllRewardRedeem extends AppCompatActivity {
                                                 final TextView tvQuantity, tvTransNum, tvCurrentBalance, tvRewardTitle;
 
                                                 btnYes = dialog.findViewById(R.id.btnYes);
-                                                btnNo = dialog.findViewById(R.id.btnNo);
+//                                                btnNo = dialog.findViewById(R.id.btnNo);
                                                 rewardImg = dialog.findViewById(R.id.rewardImg);
                                                 tvRewardTitle = dialog.findViewById(R.id.rewardTitle);
                                                 tvQuantity = dialog.findViewById(R.id.tvQuantity);
@@ -231,6 +230,8 @@ public class AllRewardRedeem extends AppCompatActivity {
                                                 Glide.with(getApplicationContext())
                                                         .load(imageURL)
                                                         .into(rewardImg);
+
+                                                tvRewardTitle.setText(title);
 
 
                                                 //Setting Quantity
@@ -259,9 +260,6 @@ public class AllRewardRedeem extends AppCompatActivity {
                                                 String titleStr = title;
                                                 rewardTitle.setText(titleStr);
 
-                                                //Transaction No
-
-
                                                 //Adding into users Reward
                                                 btnYes.setOnClickListener(new View.OnClickListener() {
                                                     @Override
@@ -288,21 +286,26 @@ public class AllRewardRedeem extends AppCompatActivity {
                                                         });
 //                                                        Intent i = new Intent(AllRewardRedeem.class, AllRewardsFragment.class)
                                                         dialog.dismiss();
+                                                        Intent i = new Intent(AllRewardRedeem.this, MainActivity.class);
+                                                        startActivity(i);
                                                         Toast.makeText(AllRewardRedeem.this, "Successfully Redeem Reward!", Toast.LENGTH_SHORT).show();
                                                         finish();
 
 
 
 
+
                                                     }
                                                 });
 
-                                                btnNo.setOnClickListener(new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        dialog.dismiss();
-                                                    }
-                                                });
+//                                                btnNo.setOnClickListener(new View.OnClickListener() {
+//                                                    @Override
+//                                                    public void onClick(View view) {
+//                                                        Intent i = new Intent(AllRewardRedeem.this, MainActivity.class);
+//                                                        startActivity(i);
+//                                                        dialog.dismiss();
+//                                                    }
+//                                                });
 
 
 

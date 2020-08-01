@@ -74,57 +74,60 @@ public class RedeemedRewardsFragment extends Fragment {
                         // Get all rewards for this user
                         if(USER_ID.equals(USER_ID_AUTH)){
                             USER_REWARDS = (ArrayList<String>) documentSnapshot.get("userRedeemedRewards");
-                            Log.d("REWARDS", USER_REWARDS.toString());
+                            Log.d("REDEEMED REWARDS", USER_REWARDS.toString());
                         }
                     }
-                }
-            }
-        });
+                    listReward = new ArrayList<>();
 
-        listReward = new ArrayList<>();
+                    final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycleViewRedeemedReward);
 
-        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycleViewRedeemedReward);
+                    rewardsCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(task.isSuccessful()){
+                                for(QueryDocumentSnapshot document: task.getResult()){
+                                    for (int i = 0; i < USER_REWARDS.size(); i++){
 
-        rewardsCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-                    for(QueryDocumentSnapshot document: task.getResult()){
-                        for (int i = 0; i < USER_REWARDS.size(); i++){
+                                        if(document.getId().equals(USER_REWARDS.get(i))){
 
-                            if(document.getId().equals(USER_REWARDS.get(i))){
+                                            Rewards rewards = document.toObject(Rewards.class);
 
-                                Rewards rewards = document.toObject(Rewards.class);
+                                            listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
 
-                                listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
+                                                    rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate(), rewards.getExpired()));
 
-                                        rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate()));
+                                        }
+                                    }
 
+
+                                }
+
+                                // Display the rewards that have been redeemed by user
+
+                                RedeemedRewardRecycleViewAdapter myAdapter = new RedeemedRewardRecycleViewAdapter(getContext(),listReward);
+
+                                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                    @Override
+                                    public boolean onQueryTextSubmit(String s) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onQueryTextChange(String s) {
+                                        myAdapter.getFilter().filter(s);
+                                        return false;
+                                    }
+                                });
+                                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                                recyclerView.setAdapter(myAdapter);
                             }
                         }
-                    }
-
-                    // Display the rewards that have been redeemed by user
-
-                    RedeemedRewardRecycleViewAdapter myAdapter = new RedeemedRewardRecycleViewAdapter(getContext(),listReward);
-
-                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                        @Override
-                        public boolean onQueryTextSubmit(String s) {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onQueryTextChange(String s) {
-                            myAdapter.getFilter().filter(s);
-                            return false;
-                        }
                     });
-                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-                    recyclerView.setAdapter(myAdapter);
                 }
             }
         });
+
+
         return view;
 
     }

@@ -12,12 +12,13 @@ public class Rewards{
    private int quantity;
    private int quantityLeft;
    private Date useByDate;
+   private Boolean expired;
 
    public Rewards() {
 
     }
 
-    public Rewards(String instructions, String name, String termsAndConditions, int pointsToRedeem, int quantity, int quantityLeft, String imageURL, Date useByDate) {
+    public Rewards(String instructions, String name, String termsAndConditions, int pointsToRedeem, int quantity, int quantityLeft, String imageURL, Date useByDate, Boolean expired) {
         this.instructions = instructions;
         this.name = name;
         this.termsAndConditions = termsAndConditions;
@@ -26,6 +27,16 @@ public class Rewards{
         this.quantityLeft = quantityLeft;
         this.imageURL = imageURL;
         this.useByDate = useByDate;
+        this.expired = expired;
+    }
+
+    public Boolean getExpired() {
+        return expired;
+    }
+
+    public boolean setExpired(Boolean expired) {
+        this.expired = expired;
+        return expired;
     }
 
     public String getInstructions() {

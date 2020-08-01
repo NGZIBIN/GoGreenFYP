@@ -137,11 +137,10 @@ public class Register extends AppCompatActivity {
                             userID = fAuth.getCurrentUser().getUid();
 
                             User user = new User(userID, username, email, walletBalance, pointsBalance, badgeProgress, walletAddress,badgesTag, userRewardsTag, userRedeemedRewardsTag,userAllRewardsTag);
-
-
                             userRef.add(user);
                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                        }else {
+                        }
+                        else {
                             Toast.makeText(Register.this, "Error, please try again! " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             pb.setVisibility(View.GONE);
 

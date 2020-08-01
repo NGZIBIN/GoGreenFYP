@@ -3,6 +3,7 @@ package com.example.gogreenfyp;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,8 +23,11 @@ import android.widget.Toast;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.Result;
 import com.karumi.dexter.Dexter;
@@ -65,8 +69,9 @@ public class ScanQRFragment extends Fragment {
     TextView walletAddress, tv_receiver, tv_amount;
     Button btn_dialog_yes, btn_dialog_no;
     Dialog dialog;
-    CollectionReference transactionReference = FirebaseFirestore.getInstance().collection("Transactions");
+    private static CollectionReference transactionReference = FirebaseFirestore.getInstance().collection("Transactions");
     private FragmentActivity activity = getActivity();
+    private static Transaction transaction;
     String DIALOG_RESULT;
 
     public ScanQRFragment() {
@@ -93,11 +98,15 @@ public class ScanQRFragment extends Fragment {
                         try {
                             JSONObject qrObject = new JSONObject(result.getText());
                             String address = qrObject.getString("walletAddress");
+                            String currentUserWallet = new Wallet().getWalletAddress(getActivity());
                             String name = qrObject.getString("name");
-                            String amount = qrObject.getDouble("amount")+"";
-                            String place = qrObject.getString("place");
+                            String item = qrObject.getString("item");
+                            double amount = qrObject.getDouble("amount");
+                            int points = qrObject.getInt("points");
 
                             //DIALOG_RESULT = result.getText();
+                            transaction = new Transaction(amount, name, item, "", currentUserWallet, points);
+                            String addressAmount = address+","+amount;
 
                             dialog = new Dialog(getActivity());
                             dialog.setContentView(R.layout.dialog_payment_confirmation);
@@ -113,12 +122,14 @@ public class ScanQRFragment extends Fragment {
 
                             // Set merchant & amount
                             tv_receiver.setText(name);
-                            tv_amount.setText(amount);
+                            tv_amount.setText(amount+"");
 
                             btn_dialog_yes.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-
+                                    dialog.dismiss();
+                                    AsyncTaskTransfer taskTransfer = new AsyncTaskTransfer(getActivity());
+                                    taskTransfer.execute(addressAmount);
                                 }
                             });
 
@@ -131,39 +142,23 @@ public class ScanQRFragment extends Fragment {
                                 }
                             });
                         } catch (JSONException e) {
+                            codeScanner.startPreview();
+                            Toast.makeText(getContext(), "Error while scanning QR code", Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         }
                     }
                 });
             }
         });
-
-        /*dialog.setContentView(R.layout.dialog_payment_confirmation);
-        dialog.setCancelable(false);
-        dialog.show();*/
-
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-//        requestScanner();
         codeScanner.startPreview();
         requestForCamera();
     }
-
-/*    private void requestScanner(){
-        IntentIntegrator integrator = new IntentIntegrator(getActivity());
-        integrator.setOrientationLocked(false);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-        integrator.setPrompt("Scan QR");
-        integrator.setCameraId(0);  // Use a specific camera of the device
-        integrator.setBeepEnabled(true);
-        integrator.setBarcodeImageEnabled(true);
-        integrator.initiateScan();
-    }*/
 
     private void requestForCamera() {
         Dexter.withContext(getContext()).withPermission(Manifest.permission.CAMERA).withListener(new PermissionListener() {
@@ -174,7 +169,7 @@ public class ScanQRFragment extends Fragment {
 
             @Override
             public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
-                Toast.makeText(getContext(), "Canera Permission Required", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Camera Permission Required", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -195,6 +190,7 @@ public class ScanQRFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            Toast.makeText(activityWeakReference.get(), "Transaction being processed in background. You will be notified when it completes.", Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -205,9 +201,12 @@ public class ScanQRFragment extends Fragment {
                 Credentials credentials = new Wallet().getWalletCredentials(activityWeakReference.get());
                 TransactionManager transactionManager = new RawTransactionManager(web3j, credentials);
                 Transfer transfer = new Transfer(web3j, transactionManager);
-                TransactionReceipt receipt = transfer.sendFunds(strings[0], BigDecimal.valueOf(0.9), Convert.Unit.ETHER, GAS_PRICE, GAS_LIMIT).send();
+                String[] addressAmount = strings[0].split(",");
+                double amount = Double.parseDouble(addressAmount[1]);
+                TransactionReceipt receipt = transfer.sendFunds(addressAmount[0], BigDecimal.valueOf(amount), Convert.Unit.ETHER, GAS_PRICE, GAS_LIMIT).send();
                 transactionHash = receipt.getTransactionHash();
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
             }
             return transactionHash;
@@ -215,8 +214,29 @@ public class ScanQRFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String hash) {
-
+            if(hash.length() < 1){
+                Toast.makeText(activityWeakReference.get(), "Error while processing transaction", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            transaction.setTransactionNo(hash);
+            insertTransaction(transaction, activityWeakReference.get());
         }
+    }
+    private static void insertTransaction(Transaction transaction, Activity activity){
+        transactionReference.add(transaction).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Toast.makeText(activity, "Transaction completed!", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+    private void handleDifferentTransactions(JSONObject jsonObject){
+
     }
 }
 

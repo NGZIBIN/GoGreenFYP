@@ -151,7 +151,7 @@ public class Wallet {
         if(activity == null || FirebaseAuth.getInstance().getCurrentUser() == null) {
             return  null;
         }
-        Credentials credentials = Credentials.create("");
+        Credentials credentials;
 
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);

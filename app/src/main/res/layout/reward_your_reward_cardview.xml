@@ -4,7 +4,7 @@
     android:id="@+id/AllRewardCardView"
     android:foreground="?android:attr/selectableItemBackground"
     android:layout_width="120dp"
-    android:layout_height="200dp"
+    android:layout_height="220dp"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:layout_margin="5dp"
     cardview:cardCornerRadius="4dp">
@@ -22,7 +22,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp">
+            android:layout_height="90dp">
 
             <TextView
                 android:id="@+id/rewardTitle"
@@ -35,10 +35,12 @@
                 android:textStyle="bold"/>
 
 
+
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/rewardTitle"
+                android:layout_below="@+id/expireSoon"
                 android:textSize="12dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="5dp"
@@ -50,9 +52,19 @@
                 android:layout_height="wrap_content"
                 android:text="24Jan2020"
                 android:textSize="12dp"
-                android:layout_below="@id/rewardTitle"
+                android:layout_below="@id/expireSoon"
                 android:layout_marginLeft="40dp"
                 android:layout_marginTop="5dp"/>
+
+            <TextView
+                android:id="@+id/expireSoon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rewardTitle"
+                android:layout_centerHorizontal="true"
+                android:textColor="#DD1818"
+                android:textSize="12dp" />
+
         </RelativeLayout>
 
 

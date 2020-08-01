@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -64,59 +65,66 @@ public class AllRewardsFragment extends Fragment {
                         // Get all rewards for this user
                         if(USER_ID.equals(USER_ID_AUTH)){
                             USER_ALLREWARDS = (ArrayList<String>) documentSnapshot.get("allRewards");
-                            Log.d("REWARDS", USER_ALLREWARDS.toString());
+                            Log.d("ALL REWARDS", USER_ALLREWARDS.toString());
                         }
                     }
-                }
-            }
-        });
+                    listReward = new ArrayList<>();
 
 
-        listReward = new ArrayList<>();
+                    rewardsCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(task.isSuccessful()){
+                                for(QueryDocumentSnapshot document: task.getResult()){
 
 
-        rewardsCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-                    for(QueryDocumentSnapshot document: task.getResult()){
-
-
-                            for(int i = 0; i < USER_ALLREWARDS.size(); i ++){
-                                if(document.getId().equals(USER_ALLREWARDS.get(i))){
-                                    Rewards rewards = document.toObject(Rewards.class);
-                                    int quantity1 = rewards.getQuantityLeft();
-                                    if(quantity1 > 0){
-                                        listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
-                                                rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate()));
+                                    for(int i = 0; i < USER_ALLREWARDS.size(); i ++){
+                                        if(document.getId().equals(USER_ALLREWARDS.get(i))){
+                                            Rewards rewards = document.toObject(Rewards.class);
+                                            int quantity1 = rewards.getQuantityLeft();
+                                            if(quantity1 > 0){
+                                                listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
+                                                        rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate(), rewards.getExpired()));
+                                            }
+                                            Log.d("New ALL REWARD", listReward.toString());
+                                        }
                                     }
-                            }
-                        }
 
-                        RewardRecyclerViewAdapter myAdapter = new RewardRecyclerViewAdapter(getContext(),listReward);
-                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-                        recyclerView.setAdapter(myAdapter);
+                                    RewardRecyclerViewAdapter myAdapter = new RewardRecyclerViewAdapter(getContext(),listReward);
+                                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                                    recyclerView.setAdapter(myAdapter);
+
 
 //                        Log.d("IMAGE", rewards.getImageURL());
-                    }
-                    RewardRecyclerViewAdapter myAdapter = new RewardRecyclerViewAdapter(getContext(),listReward);
-                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                        @Override
-                        public boolean onQueryTextSubmit(String s) {
-                            return false;
-                        }
+                                }
+                                RewardRecyclerViewAdapter myAdapter = new RewardRecyclerViewAdapter(getContext(),listReward);
+                                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                    @Override
+                                    public boolean onQueryTextSubmit(String s) {
+                                        return false;
+                                    }
 
-                        @Override
-                        public boolean onQueryTextChange(String s) {
-                            myAdapter.getFilter().filter(s);
-                            return false;
+                                    @Override
+                                    public boolean onQueryTextChange(String s) {
+                                        myAdapter.getFilter().filter(s);
+                                        return false;
+                                    }
+                                });
+                                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                                recyclerView.setAdapter(myAdapter);
+                            }
                         }
                     });
-                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-                    recyclerView.setAdapter(myAdapter);
+
+
                 }
+
+
+
             }
         });
+
+
         return view;
     }
 }

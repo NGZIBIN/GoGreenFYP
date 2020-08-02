@@ -22,6 +22,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.http.HttpService;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +38,7 @@ public class TransactionFragment extends Fragment {
     ExpandableListView expandableListView;
     TransactionExpandableListAdpater expandableListAdpater;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private String walletAddress = "";
+    private Wallet wallet = new Wallet();
     private FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
     private CollectionReference collection = fireStore.collection("Transactions");
 
@@ -40,24 +46,15 @@ public class TransactionFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_transaction, container, false);
         expandableListView = view.findViewById(R.id.expandable_transactions);
 
-        if(getActivity() != null) {
-            Intent intent = getActivity().getIntent();
-            walletAddress = intent.getStringExtra("walletAddress");
-        }
-
         expandableListAdpater = getExpandListAdapter();
         expandableListView.setAdapter(expandableListAdpater);
-       // Toast.makeText(getContext(), walletAddress, Toast.LENGTH_SHORT).show();
         expandableListView.setGroupIndicator(null);
         expandableListView.setChildDivider(getResources().getDrawable(R.color.transparent));
-        // Inflate the layout for this fragment
         return view;
     }
 
@@ -67,7 +64,10 @@ public class TransactionFragment extends Fragment {
         final ArrayList<TransactionHeader> transactions = new ArrayList<TransactionHeader>();
         final TransactionExpandableListAdpater expandableListAdpater = new TransactionExpandableListAdpater(getContext(), transactions, transactionHashMap);
 
-            String address = this.walletAddress;
+            String address = "";
+            if(getActivity() != null){
+                address = wallet.getWalletAddress(getActivity());
+            }
 
             collection.whereEqualTo("walletAddress", address).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
@@ -81,10 +81,10 @@ public class TransactionFragment extends Fragment {
 
                         String transNo = details.getTransactionNo();
                         String lastFourChars = transNo.substring(transNo.length() - 4);
-                        String lastEightChars = transNo.substring(transNo.length() - 12);
+                        String lastTwelveChars = transNo.substring(transNo.length() - 12);
                         String transactionTitle = transactionHeader.getItem()+" TX*" + lastFourChars;
 
-                        details.setTransactionNo(lastEightChars);
+                        details.setTransactionNo(lastTwelveChars);
                         transactionHeader.setItem(transactionTitle);
 
                         transactions.add(transactionHeader);
@@ -98,6 +98,5 @@ public class TransactionFragment extends Fragment {
             });
             return expandableListAdpater;
     }
-
 
 }

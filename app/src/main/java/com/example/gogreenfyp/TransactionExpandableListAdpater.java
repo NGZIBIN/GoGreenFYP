@@ -78,7 +78,7 @@ public class TransactionExpandableListAdpater extends BaseExpandableListAdapter 
         TextView tvPrice = (TextView)view.findViewById(R.id.tvPrice);
         TextView tvLocation = (TextView) view.findViewById(R.id.tvLocationName);
 
-        String roundUpTo2Decimals = "$"+String.format("%.2f", transactionHeader.getAmount());
+        String roundUpTo2Decimals = "ETH "+String.format("%.2f", transactionHeader.getAmount());
 
         tvFoodName.setText(transactionHeader.getItem());
         tvPrice.setText(roundUpTo2Decimals);

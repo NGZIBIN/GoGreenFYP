@@ -2,31 +2,49 @@ package com.example.gogreenfyp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
-public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecyclerViewAdapter.MyViewHolder> {
+public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecyclerViewAdapter.MyViewHolder> implements Filterable {
 
-
+    final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth fAuth = FirebaseAuth.getInstance();
+    String userID = fAuth.getCurrentUser().getUid();
+//    List<AllReward> rewardList =  new ArrayList<>();
+    ArrayList<String> allRewards;
     private Context context;
     private List<Rewards> Data;
+    List<Rewards> allData;
 
     public RewardRecyclerViewAdapter(Context context, List<Rewards> data) {
         this.context = context;
         Data = data;
+        allData = new ArrayList<>(data);
+
     }
 
     @NonNull
@@ -43,9 +61,18 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
+        Date fStoreDate = Data.get(position).getUseByDate();
+        Date currDate = Calendar.getInstance().getTime();
+
         holder.tvRewardTitle.setText(Data.get(position).getName());
         holder.tvRewardPointsNeeded.setText(String.valueOf(Data.get(position).getPointsToRedeem()));
-//        holder.RewardImg.setImageResource(Data.get(position).get());
+
+        dateDiff diff = new dateDiff();
+        long days = diff.daysBetween(currDate, fStoreDate);
+        Log.d("Days diff", String.valueOf(days));
+        int negDay = (int) - days;
+        Log.d("Negative day", String.valueOf(negDay));
+
 
         // Image
         Glide.with(context)
@@ -65,7 +92,14 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
                 i.putExtra("RewardQuantityLeft", Data.get(position).getQuantityLeft());
                 i.putExtra("RewardTerms", Data.get(position).getTermsAndConditions());
                 i.putExtra("RewardImg", Data.get(position).getImageURL());
-                context.startActivity(i);
+                i.putExtra("RewardUseByDate", Data.get(position).getUseByDate());
+                if(fStoreDate.after(currDate) || days == 0){
+                    context.startActivity(i);
+                }else{
+                    Toast.makeText(context, "Sorry Reward No Longer Available", Toast.LENGTH_SHORT).show();
+
+                }
+
             }
         });
 
@@ -77,8 +111,40 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
         return Data.size();
     }
 
-    public static class MyViewHolder extends  RecyclerView.ViewHolder {
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
 
+    Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+           List<Rewards> filteredList = new ArrayList<>();
+           if(charSequence == null || charSequence.length() == 0){
+               filteredList.addAll(allData);
+           }else{
+               String filter = charSequence.toString().toLowerCase().trim();
+               for (Rewards item : allData){
+                   if(item.getName().toLowerCase().contains(filter)){
+                       filteredList.add(item);
+                   }
+               }
+           }
+           FilterResults results = new FilterResults();
+           results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            Data.clear();
+            Data.addAll((List)filterResults.values);
+            notifyDataSetChanged();
+
+        }
+    };
+
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvRewardTitle;
         TextView tvRewardPointsNeeded;
         ImageView RewardImg;
@@ -91,6 +157,13 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
             tvRewardPointsNeeded = (TextView) itemView.findViewById(R.id.rewardPointsToClaim);
             RewardImg = (ImageView) itemView.findViewById(R.id.rewardImg);
             AllRewardCardView = (CardView) itemView.findViewById(R.id.AllRewardCardView);
+        }
+    }
+
+    public class dateDiff{
+        public long daysBetween(Date one, Date two){
+            long difference = (one.getTime() - two.getTime())/ 86400000;
+            return Math.abs(difference);
         }
     }
 }

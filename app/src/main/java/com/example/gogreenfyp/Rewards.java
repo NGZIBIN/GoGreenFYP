@@ -1,5 +1,7 @@
 package com.example.gogreenfyp;
 
+import java.util.Date;
+
 public class Rewards{
 
    private String instructions;
@@ -9,12 +11,14 @@ public class Rewards{
    private int pointsToRedeem;
    private int quantity;
    private int quantityLeft;
+   private Date useByDate;
+   private Boolean expired;
 
    public Rewards() {
 
     }
 
-    public Rewards(String instructions, String name, String termsAndConditions, int pointsToRedeem, int quantity, int quantityLeft, String imageURL) {
+    public Rewards(String instructions, String name, String termsAndConditions, int pointsToRedeem, int quantity, int quantityLeft, String imageURL, Date useByDate, Boolean expired) {
         this.instructions = instructions;
         this.name = name;
         this.termsAndConditions = termsAndConditions;
@@ -22,6 +26,17 @@ public class Rewards{
         this.quantity = quantity;
         this.quantityLeft = quantityLeft;
         this.imageURL = imageURL;
+        this.useByDate = useByDate;
+        this.expired = expired;
+    }
+
+    public Boolean getExpired() {
+        return expired;
+    }
+
+    public boolean setExpired(Boolean expired) {
+        this.expired = expired;
+        return expired;
     }
 
     public String getInstructions() {
@@ -50,5 +65,9 @@ public class Rewards{
 
     public String getImageURL() {
         return imageURL;
+    }
+
+    public Date getUseByDate() {
+        return useByDate;
     }
 }

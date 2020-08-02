@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,10 +13,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -23,6 +29,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -31,7 +39,11 @@ import java.util.List;
  */
 public class AllRewardsFragment extends Fragment {
     List<Rewards> listReward;
-
+    SearchView searchView;
+    String USER_ID;
+    FirebaseAuth fAuth;
+    ArrayList<String> USER_ALLREWARDS = new ArrayList<String>();
+    String currentUser = "";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference rewardsCollectionRef = db.collection("Rewards");
 
@@ -43,28 +55,95 @@ public class AllRewardsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_all_rewards, container, false);
-
-        listReward = new ArrayList<>();
-
         final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycleViewAllReward);
-
-        rewardsCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        searchView = view.findViewById(R.id.searchViewAllReward);
+        fAuth = FirebaseAuth.getInstance();
+        USER_ID = fAuth.getCurrentUser().getUid();
+        db.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
-                    for(QueryDocumentSnapshot document: task.getResult()){
-                        Rewards rewards = document.toObject(Rewards.class);
-                        listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
-                                rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL()));
+                    for (DocumentSnapshot documentSnapshot : task.getResult()){
+                        User user = documentSnapshot.toObject(User.class);
+                        String USER_ID_AUTH = user.getUserID();
 
-                        Log.d("IMAGE", rewards.getImageURL());
+                        // Get all rewards for this user
+                        if(USER_ID.equals(USER_ID_AUTH)){
+                            currentUser = documentSnapshot.getId();
+                            Log.d("Current user", currentUser);
+                            USER_ALLREWARDS = (ArrayList<String>) documentSnapshot.get("allRewards");
+                            if(USER_ALLREWARDS != null) {
+                                Log.d("ALL REWARDS", USER_ALLREWARDS.toString());
+                            }
+                        }
                     }
-                    RewardRecyclerViewAdapter myAdapter = new RewardRecyclerViewAdapter(getContext(),listReward);
-                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-                    recyclerView.setAdapter(myAdapter);
+                    listReward = new ArrayList<>();
+
+
+                    rewardsCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(task.isSuccessful()){
+                                for(QueryDocumentSnapshot document: task.getResult()){
+
+
+                                    for(int i = 0; i < USER_ALLREWARDS.size(); i ++){
+                                        if(document.getId().equals(USER_ALLREWARDS.get(i))){
+                                            Rewards rewards = document.toObject(Rewards.class);
+                                            Date date = rewards.getUseByDate();
+                                            Date currDate = Calendar.getInstance().getTime();
+                                            if(currDate.after(date)){
+                                                String currentReward = document.getId();
+                                                Log.d("Current Expired Reward" , currentReward);
+                                                Log.d("Current User", currentUser);
+                                                DocumentReference rewardArray = db.collection("Users").document(currentUser);
+
+                                                rewardArray.update("allRewards", FieldValue.arrayRemove(currentReward));
+                                            }
+                                            int quantity1 = rewards.getQuantityLeft();
+                                            if(quantity1 > 0){
+                                                listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
+                                                        rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate(), rewards.getExpired()));
+                                            }
+                                            Log.d("New ALL REWARD", listReward.toString());
+                                        }
+                                    }
+
+                                    RewardRecyclerViewAdapter myAdapter = new RewardRecyclerViewAdapter(getContext(),listReward);
+                                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                                    recyclerView.setAdapter(myAdapter);
+
+
+//                        Log.d("IMAGE", rewards.getImageURL());
+                                }
+                                RewardRecyclerViewAdapter myAdapter = new RewardRecyclerViewAdapter(getContext(),listReward);
+                                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                    @Override
+                                    public boolean onQueryTextSubmit(String s) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onQueryTextChange(String s) {
+                                        myAdapter.getFilter().filter(s);
+                                        return false;
+                                    }
+                                });
+                                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                                recyclerView.setAdapter(myAdapter);
+                            }
+                        }
+                    });
+
+
                 }
+
+
+
             }
         });
+
+
         return view;
     }
 }

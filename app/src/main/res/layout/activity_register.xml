@@ -62,6 +62,7 @@
             android:background="@drawable/textfieldbg"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:inputType="textPassword"
             android:hint="Password"
             android:layout_centerHorizontal="true"/>
 

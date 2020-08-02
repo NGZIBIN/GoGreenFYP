@@ -5,8 +5,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import  android.os.Bundle;
@@ -17,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -25,6 +29,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -36,9 +41,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -46,25 +54,37 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 
+import org.web3j.abi.datatypes.Int;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import jnr.ffi.annotations.In;
 
 import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
-    TextView totalTimeUsed, nextUnlock, tvUsername;
-    ImageView badgeImage, infoImg;
-    ImageView profileImg;
+
+    Button btnLogout;
+    TextView totalTimeUsed, nextUnlock, tvUsername, allBadges;
+    ImageView badgeImage, infoImg, profileImg;
+    CardView badgesCardView;
     ProgressBar pb;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     StorageReference storageRef;
     String userID;
     int _PROGRESS = 0;
-
+    private static final String KEY_POINTS = "pointsBalance";
+    private Boolean rookie;
+    private Boolean elite;
+    private Boolean prestige;
     private Uri imageUri;
     private Bitmap compressor;
 
@@ -75,15 +95,18 @@ public class ProfileFragment extends Fragment {
 
 //        View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.activity_info, null);
 //        final PopupWindow popupWindow = new PopupWindow(popupView, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        btnLogout = view.findViewById(R.id.btnLogout);
         totalTimeUsed = view.findViewById(R.id.totalTimeUsed);
         nextUnlock = view.findViewById(R.id.tvNextCheckpoint);
         profileImg = view.findViewById(R.id.profileImg);
         tvUsername = view.findViewById(R.id.tvUsername);
         badgeImage = view.findViewById(R.id.badgeImage);
+        allBadges = view.findViewById(R.id.allBadges);
         infoImg = view.findViewById(R.id.infoImg);
+
         fStore = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
-
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
         storageRef = FirebaseStorage.getInstance().getReference("Images");
         pb = view.findViewById(R.id.pb);
         userID = fAuth.getCurrentUser().getUid();
@@ -94,12 +117,15 @@ public class ProfileFragment extends Fragment {
                     String userIDAuth = "";
                     String username = "";
                     int progressCount = 0;
+                    int points = 0;
                     for (DocumentSnapshot documentSnapshot : task.getResult()) {
                         User user = documentSnapshot.toObject(User.class);
                         userIDAuth = user.getUserID();
                         progressCount = user.getBadgeProgress();
                         username = user.getUsername();
+                        points = user.getPointsBalance();
                         if (userIDAuth.equals(userID)) {
+                            final String currentUser = documentSnapshot.getId();
                             tvUsername.setText(username);
                             if (progressCount == 0) {
                                 _PROGRESS = 0;
@@ -109,28 +135,80 @@ public class ProfileFragment extends Fragment {
                             pb.setProgress(_PROGRESS);
                             totalTimeUsed.setText(_PROGRESS + "");
 
-                            if (progressCount < 10) {
-                                badgeImage.setImageResource(R.drawable.smallrookiebadge);
-                                nextUnlock.setText("10");
-                                pb.setMax(10);
-                            } else if (progressCount < 25) {
-                                badgeImage.setImageResource(R.drawable.smallelitebadge);
-                                nextUnlock.setText("25");
-                                pb.setMax(25);
-                            } else {
+                            //Badges Progress
+                            if(progressCount >= 50){
                                 badgeImage.setImageResource(R.drawable.smallprestigebadge);
-                                nextUnlock.setText("50");
+                                nextUnlock.setText("100");
+                                DocumentReference badgeArray = db.collection("Users").document(currentUser);
+                                badgeArray.update("userBadges", FieldValue.arrayUnion("wi6cFBpA8RE8pAg7uhZN"));
                                 pb.setMax(100);
+                            }
+                            else if(progressCount >= 25){
+                                badgeImage.setImageResource(R.drawable.smallelitebadge);
+                                nextUnlock.setText("50");
+                                DocumentReference badgeArray = db.collection("Users").document(currentUser);
+                                badgeArray.update("userBadges", FieldValue.arrayUnion("aDnbDhHpLv3cynDIaxre"));
+                                pb.setMax(50);
+
+                            }
+                            else if(progressCount >= 10){
+                                badgeImage.setImageResource(R.drawable.smallrookiebadge);
+                                nextUnlock.setText("25");
+                                DocumentReference badgeArray = db.collection("Users").document(currentUser);
+                                badgeArray.update("userBadges", FieldValue.arrayUnion("VPluIGTSFoPK3OU5K7bh"));
+                                pb.setMax(25);
+                            }
+
+                            SharedPreferences settings = getActivity().getSharedPreferences("prefs", 0);
+                            rookie = settings.getBoolean("rookieFirst", true);
+                            elite = settings.getBoolean("eliteFirst", true);
+                            prestige = settings.getBoolean("prestigeFirst", true);
+
+//                            //Badges Points
+                            if(progressCount == 10 && rookie){
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putBoolean("rookieFirst", false);
+                                editor.commit();
+                                int newPoints = points + 200;
+                                DocumentReference badgeArray = db.collection("Users").document(currentUser);
+                                Map<String, Object> pointsNew = new HashMap<>();
+                                pointsNew.put(KEY_POINTS, newPoints);
+                                badgeArray.set(pointsNew, SetOptions.merge());
+                            }
+                            else if(progressCount == 25 && elite ){
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putBoolean("eliteFirst", false);
+                                editor.commit();
+                                int newPoints = points + 350;
+                                DocumentReference badgeArray = db.collection("Users").document(currentUser);
+                                Map<String, Object> pointsNew = new HashMap<>();
+                                pointsNew.put(KEY_POINTS, newPoints);
+                                badgeArray.set(pointsNew, SetOptions.merge());
+                            }
+                            else if(progressCount == 50 && prestige){
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putBoolean("prestigeFirst", false);
+                                editor.commit();
+                                int newPoints = points + 550;
+                                DocumentReference badgeArray = db.collection("Users").document(currentUser);
+                                Map<String, Object> pointsNew = new HashMap<>();
+                                pointsNew.put(KEY_POINTS, newPoints);
+                                badgeArray.set(pointsNew, SetOptions.merge());
                             }
                         }
                     }
                 }
             }
         });
-
-
+        //Going all Badges activity
+        allBadges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), AllBadges.class);
+                startActivity(i);
+            }
+        });
         //Setting Fragment into FrameLayout
-
         FragmentManager fm = getActivity().getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
 
@@ -138,8 +216,6 @@ public class ProfileFragment extends Fragment {
         ft.replace(R.id.frameBadges, badgeFrag);
 
         ft.commit();
-
-
         //Set profile Image
         profileImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,25 +223,24 @@ public class ProfileFragment extends Fragment {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
-                        Toast.makeText(getContext(), "Permission Granted", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Permission not Granted", Toast.LENGTH_LONG).show();
                         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                     }
                     else {
-
                         choseImage();
-
                     }
-                }else{
+                }
+                else{
                     choseImage();
                 }
             }
         });
-
         //Getting info of how to gain points
         infoImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder myBuilder = new AlertDialog.Builder(getContext());
+                myBuilder.setTitle("GoGreen");
                 myBuilder.setMessage("You can earn points by using GoGreen wallet and earn bonus points by using reusable cointainers!");
                 myBuilder.setCancelable(true);
                 AlertDialog myDialog = myBuilder.create();
@@ -173,102 +248,82 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        // Logout
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //Confirm Logout Dialog
+                Dialog dialog = new Dialog(getContext());
+                dialog.setContentView(R.layout.dialog_logout);
+                dialog.setCancelable(false);
+                dialog.show();
+
+                Button btnYes, btnNo;
+
+                btnYes = dialog.findViewById(R.id.btnConfirmLogout);
+                btnNo = dialog.findViewById(R.id.btnNo);
+
+                btnYes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        // Sign out user from Firebase
+                        FirebaseAuth.getInstance().signOut();
+
+                        // Set intent to login
+                        Intent intent = new Intent(getContext(), LoginActivity.class);
+                        // Prevent back button access
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        Toast.makeText(getContext(), "Logged out", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                btnNo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+
 
         return view;
     }
-//
+
     private void choseImage() {
-        CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1, 1)
-                .start(requireActivity());
 
-
-    }
-
-//    private void Fileuploader(){
-//        StorageReference Ref = storageRef.child(System.currentTimeMillis() + "."+getExtension(imageUri));
-//        Ref.putFile(imageUri)
-//                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                    @Override
-//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                        // Get a URL to the uploaded content
-//                        Uri downloadUrl = taskSnapshot.;
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception exception) {
-//                        // Handle unsuccessful uploads
-//                        // ...
-//                    }
-//                });
-//    }
-
-//    private String getExtension(Uri uri){
-//        ContentResolver cr = getContext().getContentResolver();
-//        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
-//        return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
-//    }
-
-
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(requestCode == 1 && requestCode == RESULT_OK && data != null && data.getData()!=null){
-//            imageUri = data.getData();
-//            profileImg.setImageURI(imageUri);
-//        };
-//    }
-    //
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if(resultCode == RESULT_OK){
-                imageUri = result.getUri();
-                profileImg.setImageURI(imageUri);
-                Log.d("PASS TAG", "PASSSSSSSSSSSSSSSSSP PASSSSSSSSSSSSSS PASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
-            }else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
-                Exception error = result.getError();
-                Log.d("TAG",  "FAIL FIAL FIAL FAIL");
-            }
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if(getActivity() != null && intent.resolveActivity(getActivity().getPackageManager()) != null){
+            startActivityForResult(intent, 550);
         }
     }
 
-
-    //    @Override
-//    public void onClick(View view) {
-//        if(view.getId() == R.id.infoImg){
-//            Intent i = new Intent(getActivity().getApplicationContext(), infoActivity.class);
-//            startActivity(i);
-//        }
-//    }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(requestCode == REQUEST_IMAGE_CAPTURE){
-//            switch (requestCode){
-//                case RESULT_OK:
-//                    Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-//                    profileImg.setImageBitmap(bitmap);
-//                    handleUpload(bitmap);
-//            }
-//        }
-//    }
-//
-////    private void handleUpload(Bitmap bitmap){
-////        ByteArrayOutputStream boas = new ByteArrayOutputStream();
-////        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, boas);
-////
-////        StorageReference re
-////    }
-
-
-
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == 550 && data != null) {
+            Uri selectedImage =  data.getData();
+            if (selectedImage != null && getActivity() != null) {
+                try {
+                    InputStream stream = getActivity().getContentResolver().openInputStream(selectedImage);
+                    Bitmap bitmap = BitmapFactory.decodeStream(stream);
+                    profileImg.setImageBitmap(bitmap);
+                }
+                catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    private void saveImage(Bitmap bitmap){
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        if(fAuth.getCurrentUser() != null) {
+            String userId = fAuth.getCurrentUser().getUid();
+        }
+    }
 }
 

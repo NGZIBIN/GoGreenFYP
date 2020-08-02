@@ -14,13 +14,16 @@ public class User {
     List<String> userBadges;
     List<String> userRewards;
     List<String> userRedeemedRewards;
+    List<String> allRewards;
+
+
 
     public User(){
 
     }
 
 
-    public User(String userID, String username, String email, int walletBalance, int pointsBalance, int badgeProgress, String walletAddress, List<String> userBadges,  List<String> userRewards, List<String> userRedeemedRewards  ) {
+    public User(String userID, String username, String email, int walletBalance, int pointsBalance, int badgeProgress, String walletAddress, List<String> userBadges,  List<String> userRewards, List<String> userRedeemedRewards, List<String> allRewards ) {
 
         this.username = username;
         this.userID = userID;
@@ -32,6 +35,8 @@ public class User {
         this.userBadges = userBadges;
         this.userRewards = userRewards;
         this.userRedeemedRewards = userRedeemedRewards;
+        this.allRewards = allRewards;
+
     }
 
     public String getUserID() {
@@ -112,5 +117,13 @@ public class User {
 
     public void setUserRedeemedRewards(List<String> userRedeemedRewards) {
         this.userRedeemedRewards = userRedeemedRewards;
+    }
+
+    public List<String> getAllRewards() {
+        return allRewards;
+    }
+
+    public void setAllRewards(List<String> allRewards) {
+        this.allRewards = allRewards;
     }
 }

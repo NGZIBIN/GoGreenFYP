@@ -2,8 +2,10 @@ package com.example.gogreenfyp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -99,7 +101,6 @@ public class LoginActivity extends AppCompatActivity {
                         }else {
                             Toast.makeText(LoginActivity.this, "You are not registered yet!", Toast.LENGTH_LONG).show();
                             pb.setVisibility(View.GONE);
-
                         }
                     }
                 });
@@ -124,11 +125,20 @@ public class LoginActivity extends AppCompatActivity {
                         walletAdd = user.getWalletAddress();
                         if(userIDAuth.equals(userID)){
                             if(walletAdd.equals("0")){
-                                WalletErrorDialog walletErrorDialog = new WalletErrorDialog(LoginActivity.this);
+                                WalletErrorDialog walletErrorDialog = new WalletErrorDialog(LoginActivity.this, fAuth);
                                 walletErrorDialog.show();
                             }else {
                                 Toast.makeText(LoginActivity.this, "Successfully Login!", Toast.LENGTH_LONG).show();
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class).putExtra("walletAddress", walletAdd));
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
+                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("address", walletAdd);
+                                editor.putString("EwNKCidqMVTFSceVcnfPmmqpOE32","E0EE75D5005600C256676AFF24229609BB65F8105407A30586A1B9346D55206E");
+
+                                Log.d("HELP", getFilesDir().getAbsolutePath());
+
+                                editor.apply();
                             }
                             Log.d("TAG", "SUCCESS " + userIDAuth + " Wallet address " + walletAdd);
                         }

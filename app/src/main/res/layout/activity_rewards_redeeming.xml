@@ -24,7 +24,7 @@
             android:textStyle="bold"/>
 
         <ImageView
-            android:id="@+id/RewardImg"
+            android:id="@+id/rewardImg"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginTop="20dp"
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_below="@id/RewardImg"
+            android:layout_below="@id/rewardImg"
             android:layout_centerHorizontal="true"
             android:text="Reward Title"
             android:textSize="18dp"
@@ -59,7 +59,7 @@
             android:text="Reward Expires in"
             android:textColor="#FF0000"
             android:textSize="18dp"
-            android:layout_marginLeft="100dp"/>
+            android:layout_marginLeft="105dp"/>
 
         <TextView
             android:id="@+id/timer"
@@ -72,10 +72,29 @@
             android:textColor="#fff"
             android:textSize="14dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="120dp"
+            android:layout_marginRight="100dp"
             android:background="@drawable/timerbg"/>
 
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="40dp"
+            android:layout_below="@+id/timer"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/qrcode1"/>
 
+
+
+
+        <Button
+            android:id="@+id/btnDone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Done"
+            android:background="#6CAADB"
+            android:textColor="#fff"
+            android:textStyle="bold"/>
 
     </RelativeLayout>
 

@@ -19,7 +19,7 @@
             app:autoFocusButtonColor="@android:color/white"
             app:autoFocusButtonVisible="false"
             app:flashButtonColor="@android:color/white"
-            app:flashButtonVisible="false"
+            app:flashButtonVisible="true"
             app:frameColor="@android:color/white"
             app:frameCornersSize="50dp"
             app:frameCornersRadius="0dp"
@@ -30,14 +30,19 @@
             app:maskColor="#77000000"/>
 
         <TextView
+            android:id="@+id/qr_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Place QR Code within the scanning frame"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+            android:layout_marginStart="22dp"
+            android:layout_marginEnd="21dp"
             android:layout_marginBottom="80dp"
-            android:textSize="20dp"
-            android:textColor="#fff"/>
+            android:gravity="center"
+            android:text="Place QR Code within the scanning frame"
+            android:textColor="#fff"
+            android:textSize="18sp" />
 
     </RelativeLayout>
 

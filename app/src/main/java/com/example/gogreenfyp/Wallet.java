@@ -159,7 +159,7 @@ public class Wallet {
         if(sharedPreferences.getString(userID, null) == null){
             String fileName = sharedPreferences.getString(userID+"File","");
             String pass = sharedPreferences.getString(userID+"Pass", "");
-            File walletFile = new File(activity.getFilesDir().getAbsolutePath()+fileName);
+            File walletFile = new File(activity.getFilesDir().getAbsolutePath()+"/"+fileName);
             credentials = WalletUtils.loadCredentials(pass, walletFile);
         }
         else{

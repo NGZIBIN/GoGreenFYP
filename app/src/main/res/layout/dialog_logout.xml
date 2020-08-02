@@ -41,7 +41,7 @@
                 android:textStyle="bold" />
 
             <Button
-                android:id="@+id/btnLogout"
+                android:id="@+id/btnConfirmLogout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

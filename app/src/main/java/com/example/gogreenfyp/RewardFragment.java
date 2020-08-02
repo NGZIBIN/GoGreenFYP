@@ -41,15 +41,15 @@ public class RewardFragment extends Fragment {
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 switch (position){
                     case 0:{
-                        tab.setText("All Rewards");
+                        tab.setText("Catalog");
                         break;
                     }
                     case 1:{
-                        tab.setText("Your Rewards");
+                        tab.setText("My Rewards");
                         break;
                     }
                     case 2:{
-                        tab.setText("Redeemed");
+                        tab.setText("History");
                         break;
                     }
 

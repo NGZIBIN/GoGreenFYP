@@ -126,8 +126,6 @@ public class ScanQRFragment extends Fragment {
                             btn_dialog_yes = dialog.findViewById(R.id.btnYes);
                             btn_dialog_no = dialog.findViewById(R.id.btnNo);
 
-                            // TODO: Split the string to get MERCHANT and AMOUNT
-
                             // Set merchant & amount
                             tv_receiver.setText(name);
                             tv_amount.setText(amount+"");
@@ -150,9 +148,9 @@ public class ScanQRFragment extends Fragment {
                                 }
                             });
                         } catch (JSONException e) {
-                            codeScanner.startPreview();
-                            Toast.makeText(getContext(), "Error while scanning QR code", Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
+                                codeScanner.startPreview();
+                                Toast.makeText(getContext(), "Error while scanning QR code", Toast.LENGTH_SHORT).show();
+                                e.printStackTrace();
                         }
                     }
                 });

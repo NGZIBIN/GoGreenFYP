@@ -130,11 +130,16 @@ public class LoginActivity extends AppCompatActivity {
                             }else {
                                 Toast.makeText(LoginActivity.this, "Successfully Login!", Toast.LENGTH_LONG).show();
                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
                                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString("EwNKCidqMVTFSceVcnfPmmqpOE32","E0EE75D5005600C256676AFF24229609BB65F8105407A30586A1B9346D55206E");
 
                                 editor.putString("address", walletAdd);
+                                editor.putString("EwNKCidqMVTFSceVcnfPmmqpOE32","E0EE75D5005600C256676AFF24229609BB65F8105407A30586A1B9346D55206E");
+
+                                Log.d("HELP", getFilesDir().getAbsolutePath());
+
                                 editor.apply();
                             }
                             Log.d("TAG", "SUCCESS " + userIDAuth + " Wallet address " + walletAdd);

@@ -100,7 +100,7 @@ public class Register extends AppCompatActivity {
 //                    }
 //                });
 
-                String userAllRewards = "Jzlsfx63CQUBIYZnDZOI, QHuso8ycF1mWRwPJeiOC, Rnwj7Pee7hSqJgd3c6Ib";
+                String userAllRewards = "Jzlsfx63CQUBIYZnDZOI, QHuso8ycF1mWRwPJeiOC, Rnwj7Pee7hSqJgd3c6Ib, 3zchmHJA3DbIJ6rFu6ij";
                 String[] userAllRewardsArray = userAllRewards.split("\\s*,\\s*");
                 final List<String> userAllRewardsTag = Arrays.asList(userAllRewardsArray);
 

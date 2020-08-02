@@ -17,7 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class RedeemedRewardRecycleViewAdapter extends RecyclerView.Adapter<RedeemedRewardRecycleViewAdapter.MyViewHolder> implements Filterable {
@@ -50,8 +53,13 @@ public class RedeemedRewardRecycleViewAdapter extends RecyclerView.Adapter<Redee
         holder.tvRewardTitle.setText(Data.get(position).getName());
         Log.d("REWARD DATE", String.valueOf(Data.get(position).getUseByDate()));
 
+        Date fStoreDate = Data.get(position).getUseByDate();
+        Date currDate = Calendar.getInstance().getTime();
+        SimpleDateFormat spf = new SimpleDateFormat("d/MMM/yyyy");
 
-
+        if(currDate.after(fStoreDate)){
+            holder.tvRedeem.setText("Expired");
+        }
 
         // Image
         Glide.with(context)
@@ -102,7 +110,7 @@ public class RedeemedRewardRecycleViewAdapter extends RecyclerView.Adapter<Redee
     };
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvRewardTitle;
+        TextView tvRewardTitle, tvRedeem;
         ImageView RewardImg;
         CardView YourRewardCardView;
 
@@ -110,6 +118,7 @@ public class RedeemedRewardRecycleViewAdapter extends RecyclerView.Adapter<Redee
             super(itemView);
 
             tvRewardTitle = (TextView) itemView.findViewById(R.id.rewardTitle);
+            tvRedeem = (TextView) itemView.findViewById(R.id.tvRedeem);
             RewardImg = (ImageView) itemView.findViewById(R.id.rewardImg);
             YourRewardCardView = (CardView) itemView.findViewById(R.id.AllRewardCardView);
         }

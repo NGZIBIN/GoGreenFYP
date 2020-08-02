@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +27,13 @@ import com.budiyev.android.codescanner.DecodeCallback;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.zxing.Result;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -54,6 +59,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.math.BigDecimal;
+import java.util.HashMap;
 
 import static org.web3j.tx.gas.DefaultGasProvider.GAS_LIMIT;
 import static org.web3j.tx.gas.DefaultGasProvider.GAS_PRICE;
@@ -70,7 +76,9 @@ public class ScanQRFragment extends Fragment {
     Button btn_dialog_yes, btn_dialog_no;
     Dialog dialog;
     private static CollectionReference transactionReference = FirebaseFirestore.getInstance().collection("Transactions");
+    private static CollectionReference userReference = FirebaseFirestore.getInstance().collection("Users");
     private FragmentActivity activity = getActivity();
+    private static FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private static Transaction transaction;
     String DIALOG_RESULT;
 
@@ -226,6 +234,9 @@ public class ScanQRFragment extends Fragment {
         transactionReference.add(transaction).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
+                if(user != null) {
+                    updatePoints(transaction.getPoints(), user.getUid());
+                }
                 Toast.makeText(activity, "Transaction completed!", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -235,8 +246,24 @@ public class ScanQRFragment extends Fragment {
             }
         });
     }
-    private void handleDifferentTransactions(JSONObject jsonObject){
+    private static void updatePoints(Integer points, String userID){
+        userReference.whereEqualTo("userID", userID).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+
+                    String docPath = documentSnapshot.getId();
+                    DocumentReference documentReference = userReference.document(docPath);
+
+                    HashMap<String, Object> newPointsBalance = new HashMap<String, Object>();
+                    newPointsBalance.put("pointsBalance", points);
+
+                    documentReference.set(newPointsBalance, SetOptions.merge());
+                    Log.d("Update", "Success");
+                }
+            }
+        });
     }
 }
 

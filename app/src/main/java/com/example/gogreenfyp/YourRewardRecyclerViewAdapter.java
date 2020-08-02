@@ -1,5 +1,6 @@
 package com.example.gogreenfyp;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -58,15 +59,37 @@ public class YourRewardRecyclerViewAdapter extends RecyclerView.Adapter<YourRewa
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
         Date fStoreDate = Data.get(position).getUseByDate();
+        Date currDate = Calendar.getInstance().getTime();
         SimpleDateFormat spf = new SimpleDateFormat("d/MMM/yyyy");
         String rewardDate = spf.format(fStoreDate);
-
+        Log.d("Reward firestore Date", fStoreDate.toString());
         holder.tvRewardTitle.setText(Data.get(position).getName());
         holder.tvExpiryDate.setText(rewardDate);
+        Log.d("Reward Date", rewardDate);
+
+
+
+        dateDiff diff = new dateDiff();
+        long days = diff.daysBetween(currDate, fStoreDate);
+        Log.d("Days diff", String.valueOf(days));
+        int negDay = (int) - days;
+        Log.d("Negative day", String.valueOf(negDay));
+
+        if(currDate.after(fStoreDate)){
+            holder.tvExpireSoon.setText("Reward Expired");
+        }
+
+        if(days > 1 && days <= 7){
+            holder.tvExpireSoon.setText("Expiring in " + (days + 1) + " days!");
+        }
+        else if(days == 0){
+            holder.tvExpireSoon.setText("Expiring Today!");
+        }
 
 
 
@@ -78,21 +101,25 @@ public class YourRewardRecyclerViewAdapter extends RecyclerView.Adapter<YourRewa
 
         //Log.d("IMAGE", Data.get(position).getImageURL());
 
-        holder.YourRewardCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(context, Use_reward.class);
-                i.putExtra("RewardTitle", Data.get(position).getName());
-                i.putExtra("RewardInstructions", Data.get(position).getInstructions());
-                i.putExtra("RewardPoints", Data.get(position).getPointsToRedeem());
-                i.putExtra("RewardQuantity", Data.get(position).getQuantity());
-                i.putExtra("RewardQuantityLeft", Data.get(position).getQuantityLeft());
-                i.putExtra("RewardTerms", Data.get(position).getTermsAndConditions());
-                i.putExtra("RewardImg", Data.get(position).getImageURL());
-                i.putExtra("RewardUseByDate", rewardDate);
-                context.startActivity(i);
-            }
-        });
+            holder.YourRewardCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(context, Use_reward.class);
+                    i.putExtra("RewardTitle", Data.get(position).getName());
+                    i.putExtra("RewardInstructions", Data.get(position).getInstructions());
+                    i.putExtra("RewardPoints", Data.get(position).getPointsToRedeem());
+                    i.putExtra("RewardQuantity", Data.get(position).getQuantity());
+                    i.putExtra("RewardQuantityLeft", Data.get(position).getQuantityLeft());
+                    i.putExtra("RewardTerms", Data.get(position).getTermsAndConditions());
+                    i.putExtra("RewardImg", Data.get(position).getImageURL());
+                    i.putExtra("RewardUseByDate", rewardDate);
+                    if(fStoreDate.after(currDate) || days == 0) {
+                        context.startActivity(i);
+                    }else{
+                        Toast.makeText(context, "Reward Expired", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
 
     }
@@ -136,7 +163,7 @@ public class YourRewardRecyclerViewAdapter extends RecyclerView.Adapter<YourRewa
     };
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tvRewardTitle, tvExpiryDate;
+        TextView tvRewardTitle, tvExpiryDate, tvExpireSoon;
         ImageView RewardImg;
         CardView YourRewardCardView;
 
@@ -145,8 +172,16 @@ public class YourRewardRecyclerViewAdapter extends RecyclerView.Adapter<YourRewa
 
             tvRewardTitle = (TextView) itemView.findViewById(R.id.rewardTitle);
             tvExpiryDate = (TextView) itemView.findViewById(R.id.expiryDate);
+            tvExpireSoon = (TextView) itemView.findViewById(R.id.expireSoon);
             RewardImg = (ImageView) itemView.findViewById(R.id.rewardImg);
             YourRewardCardView = (CardView) itemView.findViewById(R.id.AllRewardCardView);
+        }
+    }
+
+    public class dateDiff{
+        public long daysBetween(Date one, Date two){
+            long difference = (one.getTime() - two.getTime())/ 86400000;
+            return Math.abs(difference);
         }
     }
 }

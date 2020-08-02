@@ -71,36 +71,37 @@ public class BadgesFragment extends Fragment {
 //                            Log.d("REWARDS", USER_BADGES.toString());
                         }
                     }
-                }
-            }
-        });
-        badgeList = new ArrayList<>();
+                    badgeList = new ArrayList<>();
 
-        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycleViewAllBadges);
+                    final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycleViewAllBadges);
 
-        badgesCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-                    for(QueryDocumentSnapshot document:task.getResult()){
+                    badgesCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(task.isSuccessful()){
+                                for(QueryDocumentSnapshot document:task.getResult()){
 
-                            for(int i = 0; i <USER_BADGES.size(); i ++){
+                                    for(int i = 0; i <USER_BADGES.size(); i ++){
 //                            if(USER_BADGES.size() == 0){
 //
 //                            }
-                                if(document.getId().equals(USER_BADGES.get(i))){
-                                    Badge badge = document.toObject(Badge.class);
-                                    badgeList.add(new Badge(badge.getName(), badge.getImageURL(), badge.getUsagePoints(), badge.getBonusPoints()));
-                                }
-                        }
+                                        if(document.getId().equals(USER_BADGES.get(i))){
+                                            Badge badge = document.toObject(Badge.class);
+                                            badgeList.add(new Badge(badge.getName(), badge.getImageURL(), badge.getUsagePoints(), badge.getBonusPoints()));
+                                        }
+                                    }
 
-                    }
-                    BadgesRecyclerViewAdapter myAdapter = new BadgesRecyclerViewAdapter(getContext(), badgeList);
-                    recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-                    recyclerView.setAdapter(myAdapter);
+                                }
+                                BadgesRecyclerViewAdapter myAdapter = new BadgesRecyclerViewAdapter(getContext(), badgeList);
+                                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+                                recyclerView.setAdapter(myAdapter);
+                            }
+                        }
+                    });
                 }
             }
         });
+
 
         return view;
     }

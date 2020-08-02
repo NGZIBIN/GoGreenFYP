@@ -240,6 +240,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder myBuilder = new AlertDialog.Builder(getContext());
+                myBuilder.setTitle("GoGreen");
                 myBuilder.setMessage("You can earn points by using GoGreen wallet and earn bonus points by using reusable cointainers!");
                 myBuilder.setCancelable(true);
                 AlertDialog myDialog = myBuilder.create();

@@ -8,30 +8,42 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.bouncycastle.asn1.dvcs.Data;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class Use_reward extends AppCompatActivity {
 
     Button btnUseReward;
     TextView tvRewardTitle, tvExpiryDate, tvRewardTerms;
     ImageView rewardImg;
+    String USER_ID;
+    ArrayList<String> USER_REWARDS = new ArrayList<String>();
+    List<Rewards> listReward;
+    Date date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,11 +54,14 @@ public class Use_reward extends AppCompatActivity {
         tvExpiryDate = findViewById(R.id.tvExpiryDate);
         tvRewardTerms = findViewById(R.id.tvTnc);
         rewardImg = findViewById(R.id.rewardImg);
+        USER_REWARDS = new ArrayList<String>();
+
 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseAuth fAuth = FirebaseAuth.getInstance();
         final String userID;
-        userID = fAuth.getCurrentUser().getUid();
+        USER_ID = fAuth.getCurrentUser().getUid();
+        CollectionReference rewardsCollectionRef = db.collection("Rewards");
 
         // Get intent
         Intent i = getIntent();
@@ -67,11 +82,7 @@ public class Use_reward extends AppCompatActivity {
         Glide.with(getApplicationContext())
                 .load(imageURL)
                 .into(rewardImg);
-
-        //Check if reward expiry date is after current date
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
-        String cDate = date.format(new Date());
+        
 
 
         btnUseReward.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +132,7 @@ public class Use_reward extends AppCompatActivity {
                                     for(final DocumentSnapshot documentSnapshot:task.getResult()){
                                         User user = documentSnapshot.toObject(User.class);
                                         userIDAuth = user.getUserID();
-                                        if(userIDAuth.equals(userID)){
+                                        if(userIDAuth.equals(USER_ID)){
                                             final String currentUser = documentSnapshot.getId();
 
                                             db.collection("Rewards").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -150,12 +161,6 @@ public class Use_reward extends AppCompatActivity {
                             }
                         });
 
-
-
-
-
-
-
                     }
                 });
                 btnNo.setOnClickListener(new View.OnClickListener() {
@@ -164,6 +169,7 @@ public class Use_reward extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
+
             }
         });
 

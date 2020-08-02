@@ -10,6 +10,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -24,6 +25,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecyclerViewAdapter.MyViewHolder> implements Filterable {
@@ -58,29 +61,17 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
+        Date fStoreDate = Data.get(position).getUseByDate();
+        Date currDate = Calendar.getInstance().getTime();
+
         holder.tvRewardTitle.setText(Data.get(position).getName());
         holder.tvRewardPointsNeeded.setText(String.valueOf(Data.get(position).getPointsToRedeem()));
 
-
-//        db.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if(task.isSuccessful()){
-//                    String userIDAuth = "";
-//                    for(DocumentSnapshot documentSnapshots:task.getResult()){
-//                        User user = documentSnapshots.toObject(User.class);
-//                        userIDAuth = user.getUserID();
-//                        if(userIDAuth.equals(userID)){
-//                           allRewards = (ArrayList<String>) documentSnapshots.get("userRewards");
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//        Log.d("ALl Rewards", allRewards + "");
-//        for(int i = 0; i<allRewards.size(); i++){
-//            holder.AllRewardCardView.setVisibility(View.GONE);
-//        }
+        dateDiff diff = new dateDiff();
+        long days = diff.daysBetween(currDate, fStoreDate);
+        Log.d("Days diff", String.valueOf(days));
+        int negDay = (int) - days;
+        Log.d("Negative day", String.valueOf(negDay));
 
 
         // Image
@@ -102,7 +93,13 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
                 i.putExtra("RewardTerms", Data.get(position).getTermsAndConditions());
                 i.putExtra("RewardImg", Data.get(position).getImageURL());
                 i.putExtra("RewardUseByDate", Data.get(position).getUseByDate());
-                context.startActivity(i);
+                if(fStoreDate.after(currDate) || days == 0){
+                    context.startActivity(i);
+                }else{
+                    Toast.makeText(context, "Sorry Reward No Longer Available", Toast.LENGTH_SHORT).show();
+
+                }
+
             }
         });
 
@@ -160,6 +157,13 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
             tvRewardPointsNeeded = (TextView) itemView.findViewById(R.id.rewardPointsToClaim);
             RewardImg = (ImageView) itemView.findViewById(R.id.rewardImg);
             AllRewardCardView = (CardView) itemView.findViewById(R.id.AllRewardCardView);
+        }
+    }
+
+    public class dateDiff{
+        public long daysBetween(Date one, Date two){
+            long difference = (one.getTime() - two.getTime())/ 86400000;
+            return Math.abs(difference);
         }
     }
 }

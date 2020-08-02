@@ -65,7 +65,9 @@ public class AllRewardsFragment extends Fragment {
                         // Get all rewards for this user
                         if(USER_ID.equals(USER_ID_AUTH)){
                             USER_ALLREWARDS = (ArrayList<String>) documentSnapshot.get("allRewards");
-                            Log.d("ALL REWARDS", USER_ALLREWARDS.toString());
+                            if(USER_ALLREWARDS != null) {
+                                Log.d("ALL REWARDS", USER_ALLREWARDS.toString());
+                            }
                         }
                     }
                     listReward = new ArrayList<>();

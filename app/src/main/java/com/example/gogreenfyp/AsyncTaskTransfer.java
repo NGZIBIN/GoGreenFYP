@@ -63,6 +63,7 @@ public class AsyncTaskTransfer extends AsyncTask<String, String, String> {
             Transfer transfer = new Transfer(web3j, transactionManager);
             String[] addressAmount = strings[0].split(",");
             double amount = Double.parseDouble(addressAmount[1]);
+            transaction.setAmount(amount);
             TransactionReceipt receipt = transfer.sendFunds(addressAmount[0], BigDecimal.valueOf(amount), Convert.Unit.ETHER, GAS_PRICE, GAS_LIMIT).send();
             transactionHash = receipt.getTransactionHash();
         }

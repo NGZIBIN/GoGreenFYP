@@ -49,4 +49,7 @@ public class Transaction {
     public void setTransactionNo(String transactionNo) {
         this.transactionNo = transactionNo;
     }
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
 }

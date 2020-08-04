@@ -109,12 +109,14 @@ public class AsyncTaskTransfer extends AsyncTask<String, String, String> {
                     User currentUser = documentSnapshot.toObject(User.class);
                     String docPath = documentSnapshot.getId();
                     int newTotalPoints = currentUser.getPointsBalance()+points;
+                    int newBadgeProgress = currentUser.getBadgeProgress()+1;
                     DocumentReference documentReference = userReference.document(docPath);
 
-                    HashMap<String, Object> newPointsBalance = new HashMap<String, Object>();
-                    newPointsBalance.put("pointsBalance", newTotalPoints);
+                    HashMap<String, Object> newData = new HashMap<String, Object>();
+                    newData.put("pointsBalance", newTotalPoints);
+                    newData.put("badgeProgress", newBadgeProgress);
 
-                    documentReference.set(newPointsBalance, SetOptions.merge());
+                    documentReference.set(newData, SetOptions.merge());
                     Log.d("Update", "Success");
                 }
             }

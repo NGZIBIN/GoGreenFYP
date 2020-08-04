@@ -268,6 +268,7 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
 
+                        dialog.dismiss();
                         // Sign out user from Firebase
                         FirebaseAuth.getInstance().signOut();
 

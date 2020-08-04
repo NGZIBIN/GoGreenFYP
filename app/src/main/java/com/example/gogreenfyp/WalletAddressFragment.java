@@ -85,7 +85,9 @@ public class WalletAddressFragment extends Fragment {
                             try {
                                 userObj.put("walletAddress", USER_WALLET_ADDR);
                                 userObj.put("name", user.getUsername());
-                                userObj.put("amount", 3.99);
+                                userObj.put("amount", 0);
+                                userObj.put("points", 0);
+                                userObj.put("item", "Peer-to-peer");
 
                             } catch (JSONException e) {
                                 // TODO Auto-generated catch block

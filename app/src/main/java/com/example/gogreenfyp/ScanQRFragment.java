@@ -18,16 +18,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.Result;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -51,6 +48,7 @@ public class ScanQRFragment extends Fragment {
     Button btn_dialog_yes, btn_dialog_no;
     Dialog dialog;
     String DIALOG_RESULT;
+    EditText etAmount;
 
     public ScanQRFragment() {
         // Required empty public constructor
@@ -84,28 +82,18 @@ public class ScanQRFragment extends Fragment {
 
                             //DIALOG_RESULT = result.getText();
                             final Transaction transaction = new Transaction(amount, name, item, "", currentUserWallet, points);
-                            String addressAmount = address+","+amount;
 
                             dialog = new Dialog(getActivity());
-                            dialog.setContentView(R.layout.dialog_payment_confirmation);
-                            dialog.setCancelable(false);
-                            dialog.show();
+                            configureDialogByAmount(amount, name);
 
-                            tv_amount = dialog.findViewById(R.id.tv_payment_amount);
-                            tv_receiver = dialog.findViewById(R.id.tv_payment_title_reciever);
                             btn_dialog_yes = dialog.findViewById(R.id.btnYes);
                             btn_dialog_no = dialog.findViewById(R.id.btnNo);
-
-                            // Set merchant & amount
-                            tv_receiver.setText(name);
-                            tv_amount.setText(amount+"");
 
                             btn_dialog_yes.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     dialog.dismiss();
-                                    AsyncTaskTransfer taskTransfer = new AsyncTaskTransfer(getActivity(), transaction);
-                                    taskTransfer.execute(addressAmount);
+                                    startTransactionProcess(address, amount, transaction);
                                 }
                             });
 
@@ -117,10 +105,12 @@ public class ScanQRFragment extends Fragment {
                                     codeScanner.startPreview();
                                 }
                             });
+                            dialog.setCancelable(false);
+                            dialog.show();
                         } catch (JSONException e) {
-                                codeScanner.startPreview();
-                                Toast.makeText(getContext(), "Error while scanning QR code", Toast.LENGTH_SHORT).show();
-                                e.printStackTrace();
+                            codeScanner.startPreview();
+                            Toast.makeText(getContext(), "Error while scanning QR code", Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
                         }
                     }
                 });
@@ -155,6 +145,39 @@ public class ScanQRFragment extends Fragment {
         }).check();
     }
 
+    private void configureDialogByAmount(double amt, String name) {
+        if (amt > 0) {
+            dialog.setContentView(R.layout.dialog_payment_confirmation);
+
+            tv_amount = dialog.findViewById(R.id.tv_payment_amount);
+            tv_receiver = dialog.findViewById(R.id.tv_payment_title_reciever);
+
+            // Set merchant & amount
+            tv_receiver.setText(name);
+            tv_amount.setText(amt + "");
+        } else {
+            dialog.setContentView(R.layout.dialog_p2p);
+
+            tv_receiver = dialog.findViewById(R.id.tvReceiever);
+            tv_receiver.setText(name);
+            etAmount = dialog.findViewById(R.id.etAmount);
+        }
+    }
+
+    private void startTransactionProcess(String address, double amount, Transaction transaction) {
+        AsyncTaskTransfer taskTransfer = new AsyncTaskTransfer(getActivity(), transaction);
+
+        if (etAmount != null) {
+            if (etAmount.getText().toString().length() < 1 || etAmount.getText().toString().equals("0")) {
+                Toast.makeText(getContext(), "Invalid input", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            taskTransfer.execute(address + "," + etAmount.getText().toString());
+        }
+        else {
+            taskTransfer.execute(address + "," + amount);
+        }
+    }
 }
 
 

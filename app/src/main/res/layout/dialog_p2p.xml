@@ -77,6 +77,7 @@
             android:layout_marginStart="11dp"
             android:layout_marginTop="55dp"
             android:layout_marginEnd="11dp"
+            android:text=""
             android:ems="10"
             android:hint="Amount (ETH)"
             android:inputType="numberDecimal" />

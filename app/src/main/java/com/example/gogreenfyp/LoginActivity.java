@@ -52,29 +52,6 @@ public class LoginActivity extends AppCompatActivity {
         pb = findViewById(R.id.pb);
         final String userID;
         fAuth = FirebaseAuth.getInstance();
-//        userID = fAuth.getCurrentUser().getUid();
-//        db.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if(task.isSuccessful()){
-//
-//                    String userIDAuth = "";
-//                    int walletAdd = 0;
-//                    for(DocumentSnapshot documentSnapshots: task.getResult()){
-//                        User user = documentSnapshots.toObject(User.class);
-//                        userIDAuth = user.getUserID();
-//                        walletAdd = user.getWalletAddress();
-//                        if(userIDAuth.equals(userID) && walletAdd == 0){
-//                            Log.d("TAG", "SUCCESS" + userIDAuth + "Wallet address " + walletAdd);
-//                        }
-//
-//                    }
-//
-//                }else {
-//                    Log.d("TAG", "Get failed with " , task.getException());
-//                }
-//            }
-//        });
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                             setUpAlertDialog();
 
                         }else {
-                            Toast.makeText(LoginActivity.this, "You are not registered yet!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "You are not registered yet or password is wrong. Please try again!", Toast.LENGTH_LONG).show();
                             pb.setVisibility(View.GONE);
                         }
                     }

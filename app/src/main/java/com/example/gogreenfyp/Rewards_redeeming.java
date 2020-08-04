@@ -89,7 +89,7 @@ public class Rewards_redeeming extends AppCompatActivity {
             @Override
             public void onFinish() {
                 AlertDialog.Builder myBuilder = new AlertDialog.Builder(Rewards_redeeming.this);
-                myBuilder.setTitle("YAY!");
+                myBuilder.setTitle("Redemption Complete");
                 myBuilder.setMessage("Thank you for your support! Continue to contribute and save the environment!");
                 myBuilder.setCancelable(false);
                 myBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {

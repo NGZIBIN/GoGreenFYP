@@ -90,51 +90,46 @@ public class AllRewardsFragment extends Fragment {
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if(task.isSuccessful()){
                                 for(QueryDocumentSnapshot document: task.getResult()){
-
-
-                                    for(int i = 0; i < USER_ALLREWARDS.size(); i ++){
-                                        for(int x = 0; x < USER_YOURREWARDS.size(); x ++){
-                                            Log.d("All rewards " , String.valueOf(USER_ALLREWARDS));
-                                            Log.d("Your rewards " , String.valueOf(USER_YOURREWARDS));
-                                            if(!document.getId().equals(USER_ALLREWARDS.get(i))){
-                                                if(!document.getId().equals(USER_YOURREWARDS.get(x))){
-                                                    String rewardNew = document.getId();
-                                                    Log.d("NEW REWARD", rewardNew);
+//                                    for(int i = 0; i < USER_ALLREWARDS.size(); i ++){
+//                                        for(int x = 0; x < USER_YOURREWARDS.size(); x ++){
+//                                            Log.d("All rewards " , String.valueOf(USER_ALLREWARDS));
+//                                            Log.d("Your rewards " , String.valueOf(USER_YOURREWARDS));
+//                                            if(!document.getId().equals(USER_ALLREWARDS.get(i))){
+//                                                if(!document.getId().equals(USER_YOURREWARDS.get(x))){
+//                                                    String rewardNew = document.getId();
+//                                                    Log.d("NEW REWARD", rewardNew);
+////
+//                                                    DocumentReference rewardArray = db.collection("Users").document(currentUser);
+//                                                    rewardArray.update("allRewards", FieldValue.arrayUnion(rewardNew));
+//                                                }
+//                                            }
 //
-                                                    DocumentReference rewardArray = db.collection("Users").document(currentUser);
-                                                    rewardArray.update("allRewards", FieldValue.arrayUnion(rewardNew));
-                                                }
-                                            }
-
-                                        }
-
-                                        if(document.getId().equals(USER_ALLREWARDS.get(i))){
-                                            Rewards rewards = document.toObject(Rewards.class);
-                                            Date date = rewards.getUseByDate();
-                                            Date currDate = Calendar.getInstance().getTime();
-                                            if(currDate.after(date)){
-                                                String currentReward = document.getId();
-                                                Log.d("Current Expired Reward" , currentReward);
-                                                Log.d("Current User", currentUser);
-                                                DocumentReference rewardArray = db.collection("Users").document(currentUser);
-                                                rewardArray.update("allRewards", FieldValue.arrayRemove(currentReward));
-                                            }
-                                            int quantity1 = rewards.getQuantityLeft();
-                                            if(quantity1 > 0){
-                                                listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
-                                                        rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate(), rewards.getExpired()));
-                                            }
-                                            Log.d("New ALL REWARD", listReward.toString());
-                                        }
-
-                                    }
-
+//                                        }
+//
+//                                        if(document.getId().equals(USER_ALLREWARDS.get(i))){
+//                                            Rewards rewards = document.toObject(Rewards.class);
+//                                            Date date = rewards.getUseByDate();
+//                                            Date currDate = Calendar.getInstance().getTime();
+//                                            if(currDate.after(date)){
+//                                                String currentReward = document.getId();
+//                                                Log.d("Current Expired Reward" , currentReward);
+//                                                Log.d("Current User", currentUser);
+//                                                DocumentReference rewardArray = db.collection("Users").document(currentUser);
+//                                                rewardArray.update("allRewards", FieldValue.arrayRemove(currentReward));
+//                                            }
+//                                            int quantity1 = rewards.getQuantityLeft();
+//                                            if(quantity1 > 0){
+//                                                listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
+//                                                        rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate(), rewards.getExpired()));
+//                                            }
+//                                            Log.d("New ALL REWARD", listReward.toString());
+//                                        }
+//
+//                                    }
 
                                     RewardRecyclerViewAdapter myAdapter = new RewardRecyclerViewAdapter(getContext(),listReward);
                                     recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
                                     recyclerView.setAdapter(myAdapter);
-
-
 //                        Log.d("IMAGE", rewards.getImageURL());
                                 }
                                 RewardRecyclerViewAdapter myAdapter = new RewardRecyclerViewAdapter(getContext(),listReward);

@@ -51,7 +51,7 @@ import static androidx.core.content.ContextCompat.getSystemService;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class        YourRewardFragment extends Fragment {
+public class YourRewardFragment extends Fragment {
     List<Rewards> listReward;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();

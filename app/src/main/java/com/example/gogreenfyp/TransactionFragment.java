@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -60,42 +62,49 @@ public class TransactionFragment extends Fragment {
 
     private TransactionExpandableListAdpater getExpandListAdapter(){
 
+        String address = "";
+        if(getActivity() != null){
+            address = wallet.getWalletAddress(getActivity());
+        }
         final HashMap<String, TransactionDetails> transactionHashMap = new HashMap<String, TransactionDetails>();
-        final ArrayList<TransactionHeader> transactions = new ArrayList<TransactionHeader>();
-        final TransactionExpandableListAdpater expandableListAdpater = new TransactionExpandableListAdpater(getContext(), transactions, transactionHashMap);
+        final ArrayList<TransactionHeader> transactionHeaders = new ArrayList<TransactionHeader>();
+        final ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+        final TransactionExpandableListAdpater expandableListAdpater = new TransactionExpandableListAdpater(getContext(), transactionHeaders, transactionHashMap, transactions, address);
 
-            String address = "";
-            if(getActivity() != null){
-                address = wallet.getWalletAddress(getActivity());
-            }
+        Task<QuerySnapshot> receiverAddressFilter = collection.whereEqualTo("to", address).get();
+        Task<QuerySnapshot> senderAddressFilter = collection.whereEqualTo("from", address).get();
 
-            collection.whereEqualTo("to", address).whereEqualTo("from", address).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                Tasks.whenAllSuccess(receiverAddressFilter, senderAddressFilter).addOnSuccessListener(new OnSuccessListener<List<Object>>() {
+                    @Override
+                    public void onSuccess(List<Object> objects) {
+                        for(Object object : objects) {
+                            QuerySnapshot snapshot = (QuerySnapshot) object;
+                            for (QueryDocumentSnapshot documentSnapshot : snapshot) {
+                                Transaction transaction = documentSnapshot.toObject(Transaction.class);
+                                Log.d("Transaction", transaction.getTransactionNo());
+                                TransactionDetails details = new TransactionDetails(transaction.getTransactionNo(), transaction.getPoints());
+                                TransactionHeader transactionHeader = new TransactionHeader(transaction.getItem(), transaction.getPlace(), transaction.getAmount());
 
-                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                String transNo = details.getTransactionNo();
+                                String lastFourChars = transNo.substring(transNo.length() - 4);
+                                String lastTwelveChars = transNo.substring(transNo.length() - 12);
+                                String transactionTitle = transactionHeader.getItem()+" TX*" + lastFourChars;
 
-                        Transaction transaction = documentSnapshot.toObject(Transaction.class);
-                        TransactionDetails details = new TransactionDetails(transaction.getTransactionNo(), transaction.getPoints());
-                        TransactionHeader transactionHeader = new TransactionHeader(transaction.getItem(), transaction.getPlace(), transaction.getAmount());
+                                details.setTransactionNo(lastTwelveChars);
+                                transactionHeader.setItem(transactionTitle);
 
-                        String transNo = details.getTransactionNo();
-                        String lastFourChars = transNo.substring(transNo.length() - 4);
-                        String lastTwelveChars = transNo.substring(transNo.length() - 12);
-                        String transactionTitle = transactionHeader.getItem()+" TX*" + lastFourChars;
-
-                        details.setTransactionNo(lastTwelveChars);
-                        transactionHeader.setItem(transactionTitle);
-
-                        transactions.add(transactionHeader);
-                        transactionHashMap.put(transactionTitle, details);
+                                transactions.add(transaction);
+                                transactionHeaders.add(transactionHeader);
+                                transactionHashMap.put(transactionTitle, details);
+                            }
+                        }
+                        expandableListAdpater.setTransactions(transactions);
+                        expandableListAdpater.setListTitle(transactionHeaders);
+                        expandableListAdpater.setExpandableListData(transactionHashMap);
+                        expandableListAdpater.notifyDataSetChanged();
                     }
-                    expandableListAdpater.setListTitle(transactions);
-                    expandableListAdpater.setExpandableListData(transactionHashMap);
-                    expandableListAdpater.notifyDataSetChanged();
-                }
-            });
-            return expandableListAdpater;
+                });
+        return expandableListAdpater;
     }
 
 }

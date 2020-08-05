@@ -26,6 +26,9 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,7 +81,18 @@ public class WalletAddressFragment extends Fragment {
                             tvWalletAddr.setText(USER_WALLET_ADDR);
                             tvUsername.setText(user.getUsername());
 
-                            qrImageView.setImageBitmap(generateQRBitMap(USER_WALLET_ADDR));
+                            JSONObject userObj = new JSONObject();
+                            try {
+                                userObj.put("walletAddress", USER_WALLET_ADDR);
+                                userObj.put("name", user.getUsername());
+                                userObj.put("amount", 3.99);
+
+                            } catch (JSONException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+
+                            qrImageView.setImageBitmap(generateQRBitMap(userObj.toString()));
                         }
                     }
                 }

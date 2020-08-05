@@ -46,5 +46,7 @@ public class Transaction {
         return points;
     }
 
-
+    public void setTransactionNo(String transactionNo) {
+        this.transactionNo = transactionNo;
+    }
 }

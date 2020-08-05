@@ -20,8 +20,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +37,9 @@ public class Register extends AppCompatActivity {
     String userID;
     ProgressBar pb;
     FirebaseAuth fAuth;
-
+//    ArrayList<String> userRedeemedRewardsTag = new ArrayList<>();
+//    ArrayList<String> userRewardsTag = new ArrayList<>();
+//    ArrayList<String> badgesTag = new ArrayList<>();
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference userRef = db.collection("Users");
@@ -77,10 +83,26 @@ public class Register extends AppCompatActivity {
                 String[] userRewardsArray = userRewards.split("\\s*,\\s*");
                 final List<String> userRewardsTag = Arrays.asList(userRewardsArray);
 
-
                 String userRedeemedRewards = "";
                 String[] userRedeemedRewardsArray = userRedeemedRewards.split("\\s*,\\s*");
                 final List<String> userRedeemedRewardsTag = Arrays.asList(userRedeemedRewardsArray);
+
+//                final FirebaseFirestore db = FirebaseFirestore.getInstance();
+//                db.collection("Rewards").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if(task.isSuccessful()){
+//                            List<String> list = new ArrayList<>();
+//                            for (DocumentSnapshot documentSnapshot: task.getResult()){
+//                                list.add(documentSnapshot.getId());
+//                            }
+//                        }
+//                    }
+//                });
+
+                String userAllRewards = "Jzlsfx63CQUBIYZnDZOI, QHuso8ycF1mWRwPJeiOC, Rnwj7Pee7hSqJgd3c6Ib, 3zchmHJA3DbIJ6rFu6ij";
+                String[] userAllRewardsArray = userAllRewards.split("\\s*,\\s*");
+                final List<String> userAllRewardsTag = Arrays.asList(userAllRewardsArray);
 
 
 
@@ -114,12 +136,11 @@ public class Register extends AppCompatActivity {
                             Toast.makeText(Register.this, "Account Created", Toast.LENGTH_LONG).show();
                             userID = fAuth.getCurrentUser().getUid();
 
-                            User user = new User(userID, username, email, walletBalance, pointsBalance, badgeProgress, walletAddress,badgesTag, userRewardsTag, userRedeemedRewardsTag);
-
-
+                            User user = new User(userID, username, email, walletBalance, pointsBalance, badgeProgress, walletAddress,badgesTag, userRewardsTag, userRedeemedRewardsTag,userAllRewardsTag);
                             userRef.add(user);
                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                        }else {
+                        }
+                        else {
                             Toast.makeText(Register.this, "Error, please try again! " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             pb.setVisibility(View.GONE);
 

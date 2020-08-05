@@ -13,7 +13,7 @@
         android:padding="8dp">
 
         <SearchView
-            android:id="@+id/searchViewYourReward"
+            android:id="@+id/searchViewRedeemedReward"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@drawable/searchbarbg"
@@ -24,7 +24,6 @@
             android:id="@+id/recycleViewRedeemedReward"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
 
 
         </androidx.recyclerview.widget.RecyclerView>

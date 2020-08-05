@@ -7,7 +7,9 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import  android.os.Bundle;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -51,21 +54,26 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 
+import org.web3j.abi.datatypes.Int;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import jnr.ffi.annotations.In;
 
 import static android.app.Activity.RESULT_OK;
 
 public class ProfileFragment extends Fragment {
 
+    Button btnLogout;
     TextView totalTimeUsed, nextUnlock, tvUsername, allBadges;
-    ImageView badgeImage, infoImg;
-    ImageView profileImg;
+    ImageView badgeImage, infoImg, profileImg;
     CardView badgesCardView;
     ProgressBar pb;
     FirebaseAuth fAuth;
@@ -87,6 +95,7 @@ public class ProfileFragment extends Fragment {
 
 //        View popupView = LayoutInflater.from(getActivity()).inflate(R.layout.activity_info, null);
 //        final PopupWindow popupWindow = new PopupWindow(popupView, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        btnLogout = view.findViewById(R.id.btnLogout);
         totalTimeUsed = view.findViewById(R.id.totalTimeUsed);
         nextUnlock = view.findViewById(R.id.tvNextCheckpoint);
         profileImg = view.findViewById(R.id.profileImg);
@@ -94,6 +103,7 @@ public class ProfileFragment extends Fragment {
         badgeImage = view.findViewById(R.id.badgeImage);
         allBadges = view.findViewById(R.id.allBadges);
         infoImg = view.findViewById(R.id.infoImg);
+
         fStore = FirebaseFirestore.getInstance();
         fAuth = FirebaseAuth.getInstance();
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -125,7 +135,6 @@ public class ProfileFragment extends Fragment {
                             pb.setProgress(_PROGRESS);
                             totalTimeUsed.setText(_PROGRESS + "");
 
-
                             //Badges Progress
                             if(progressCount >= 50){
                                 badgeImage.setImageResource(R.drawable.smallprestigebadge);
@@ -154,8 +163,6 @@ public class ProfileFragment extends Fragment {
                             rookie = settings.getBoolean("rookieFirst", true);
                             elite = settings.getBoolean("eliteFirst", true);
                             prestige = settings.getBoolean("prestigeFirst", true);
-
-
 
 //                            //Badges Points
                             if(progressCount == 10 && rookie){
@@ -188,14 +195,11 @@ public class ProfileFragment extends Fragment {
                                 pointsNew.put(KEY_POINTS, newPoints);
                                 badgeArray.set(pointsNew, SetOptions.merge());
                             }
-
-
                         }
                     }
                 }
             }
         });
-
         //Going all Badges activity
         allBadges.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,9 +208,7 @@ public class ProfileFragment extends Fragment {
                 startActivity(i);
             }
         });
-
         //Setting Fragment into FrameLayout
-
         FragmentManager fm = getActivity().getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
 
@@ -214,8 +216,6 @@ public class ProfileFragment extends Fragment {
         ft.replace(R.id.frameBadges, badgeFrag);
 
         ft.commit();
-
-
         //Set profile Image
         profileImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,12 +235,12 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
-
         //Getting info of how to gain points
         infoImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder myBuilder = new AlertDialog.Builder(getContext());
+                myBuilder.setTitle("GoGreen");
                 myBuilder.setMessage("You can earn points by using GoGreen wallet and earn bonus points by using reusable cointainers!");
                 myBuilder.setCancelable(true);
                 AlertDialog myDialog = myBuilder.create();
@@ -248,32 +248,81 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        // Logout
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //Confirm Logout Dialog
+                Dialog dialog = new Dialog(getContext());
+                dialog.setContentView(R.layout.dialog_logout);
+                dialog.setCancelable(false);
+                dialog.show();
+
+                Button btnYes, btnNo;
+
+                btnYes = dialog.findViewById(R.id.btnConfirmLogout);
+                btnNo = dialog.findViewById(R.id.btnNo);
+
+                btnYes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        // Sign out user from Firebase
+                        FirebaseAuth.getInstance().signOut();
+
+                        // Set intent to login
+                        Intent intent = new Intent(getContext(), LoginActivity.class);
+                        // Prevent back button access
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        Toast.makeText(getContext(), "Logged out", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                btnNo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+
 
         return view;
     }
-//
+
     private void choseImage() {
-        CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1, 1)
-                .start(requireActivity());
 
-
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if(getActivity() != null && intent.resolveActivity(getActivity().getPackageManager()) != null){
+            startActivityForResult(intent, 550);
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if(resultCode == RESULT_OK){
-                imageUri = result.getUri();
-                profileImg.setImageURI(imageUri);
-                Log.d("PASS TAG", "PASSSSSSSSSSSSSSSSSP PASSSSSSSSSSSSSS PASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
-            }else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
-                Exception error = result.getError();
-                Log.d("TAG",  "FAIL FIAL FIAL FAIL");
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == 550 && data != null) {
+            Uri selectedImage =  data.getData();
+            if (selectedImage != null && getActivity() != null) {
+                try {
+                    InputStream stream = getActivity().getContentResolver().openInputStream(selectedImage);
+                    Bitmap bitmap = BitmapFactory.decodeStream(stream);
+                    profileImg.setImageBitmap(bitmap);
+                }
+                catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
+        }
+    }
+    private void saveImage(Bitmap bitmap){
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+        if(fAuth.getCurrentUser() != null) {
+            String userId = fAuth.getCurrentUser().getUid();
         }
     }
 }

@@ -147,6 +147,28 @@ public class Wallet {
         return password;
     }
 
+    public Credentials getWalletCredentials(Activity activity) throws IOException, CipherException {
+        if(activity == null || FirebaseAuth.getInstance().getCurrentUser() == null) {
+            return  null;
+        }
+        Credentials credentials;
+
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
+
+        if(sharedPreferences.getString(userID, null) == null){
+            String fileName = sharedPreferences.getString(userID+"File","");
+            String pass = sharedPreferences.getString(userID+"Pass", "");
+            File walletFile = new File(activity.getFilesDir().getAbsolutePath()+ "/" +fileName);
+            credentials = WalletUtils.loadCredentials(pass, walletFile);
+        }
+        else{
+            String privateKey = sharedPreferences.getString(userID, "");
+            credentials = Credentials.create(privateKey);
+        }
+        return credentials;
+    }
+
     private static void setupBouncyCastle() {
         Provider provider = Security.getProvider(BouncyCastleProvider.PROVIDER_NAME);
         if (provider == null) {

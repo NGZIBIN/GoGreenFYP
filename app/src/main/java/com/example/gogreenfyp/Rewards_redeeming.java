@@ -2,7 +2,9 @@ package com.example.gogreenfyp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -85,6 +88,20 @@ public class Rewards_redeeming extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                AlertDialog.Builder myBuilder = new AlertDialog.Builder(Rewards_redeeming.this);
+                myBuilder.setTitle("YAY!");
+                myBuilder.setMessage("Thank you for your support! Continue to contribute and save the environment!");
+                myBuilder.setCancelable(false);
+                myBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(Rewards_redeeming.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                AlertDialog myDialog = myBuilder.create();
+                myDialog.show();
+
 
             }
         }.start();

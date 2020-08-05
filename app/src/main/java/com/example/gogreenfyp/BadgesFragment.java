@@ -82,9 +82,7 @@ public class BadgesFragment extends Fragment {
                                 for(QueryDocumentSnapshot document:task.getResult()){
 
                                     for(int i = 0; i <USER_BADGES.size(); i ++){
-//                            if(USER_BADGES.size() == 0){
-//
-//                            }
+
                                         if(document.getId().equals(USER_BADGES.get(i))){
                                             Badge badge = document.toObject(Badge.class);
                                             badgeList.add(new Badge(badge.getName(), badge.getImageURL(), badge.getUsagePoints(), badge.getBonusPoints()));

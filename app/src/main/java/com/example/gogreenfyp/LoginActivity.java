@@ -23,6 +23,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.web3j.crypto.CipherException;
+import org.web3j.crypto.WalletUtils;
+
+import java.io.File;
+import java.io.IOException;
+
 public class LoginActivity extends AppCompatActivity {
 
     Button btnLogin;
@@ -46,29 +52,6 @@ public class LoginActivity extends AppCompatActivity {
         pb = findViewById(R.id.pb);
         final String userID;
         fAuth = FirebaseAuth.getInstance();
-//        userID = fAuth.getCurrentUser().getUid();
-//        db.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if(task.isSuccessful()){
-//
-//                    String userIDAuth = "";
-//                    int walletAdd = 0;
-//                    for(DocumentSnapshot documentSnapshots: task.getResult()){
-//                        User user = documentSnapshots.toObject(User.class);
-//                        userIDAuth = user.getUserID();
-//                        walletAdd = user.getWalletAddress();
-//                        if(userIDAuth.equals(userID) && walletAdd == 0){
-//                            Log.d("TAG", "SUCCESS" + userIDAuth + "Wallet address " + walletAdd);
-//                        }
-//
-//                    }
-//
-//                }else {
-//                    Log.d("TAG", "Get failed with " , task.getException());
-//                }
-//            }
-//        });
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                             setUpAlertDialog();
 
                         }else {
-                            Toast.makeText(LoginActivity.this, "You are not registered yet!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "You are not registered yet or password is wrong. Please try again!", Toast.LENGTH_LONG).show();
                             pb.setVisibility(View.GONE);
                         }
                     }
@@ -134,8 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString("address", walletAdd);
-                                editor.putString("EwNKCidqMVTFSceVcnfPmmqpOE32","E0EE75D5005600C256676AFF24229609BB65F8105407A30586A1B9346D55206E");
-
+                                editor.putString("e5wD8XF8mtgxRsylmWbfxfdhfg73", "c76f0914073da9e30e040ff52adcb518838d50f429eca344e01ce8e6a06247b8");
                                 Log.d("HELP", getFilesDir().getAbsolutePath());
 
                                 editor.apply();

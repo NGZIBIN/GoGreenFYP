@@ -46,6 +46,7 @@ public class WalletErrorDialog extends AlertDialog implements android.view.View.
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.btnCreateWallet:
+                    dismiss();
                     Toast.makeText(activity, "Please be patient. It may take some time.", Toast.LENGTH_LONG).show();
                     Wallet wallet = new Wallet();
                     try {
@@ -63,7 +64,9 @@ public class WalletErrorDialog extends AlertDialog implements android.view.View.
                 default:
                     break;
             }
-            dismiss();
+            if(isShowing()) {
+                dismiss();
+            }
         }
 
 }

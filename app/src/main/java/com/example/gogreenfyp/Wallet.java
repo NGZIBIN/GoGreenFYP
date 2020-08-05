@@ -59,8 +59,9 @@ public class Wallet {
 
         Credentials credentials = WalletUtils.loadCredentials(password, walletFile);
         address = credentials.getAddress();
+        String privateKey = credentials.getEcKeyPair().getPrivateKey().toString(16);
 
-        saveWalletDetails(activity, walletFile.getName(), password, firebaseAuth);
+        savePrivateKey(activity, privateKey, firebaseAuth);
 
         updateWalletAddress(firebaseAuth, address);
 
@@ -84,20 +85,6 @@ public class Wallet {
             activity.finish();
         }
 
-    }
-
-    private void saveWalletDetails(Activity activity, String walletFileName, String password, FirebaseAuth firebaseAuth){
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        if(firebaseAuth.getCurrentUser() != null) {
-            String userID = firebaseAuth.getCurrentUser().getUid();
-            editor.putString(userID+"File", walletFileName);
-            editor.putString(userID+"Pass", password);
-            editor.apply();
-            Log.d("Wallet saved", "Success");
-        }
     }
 
     public String getWalletAddress(Activity activity){
@@ -151,22 +138,12 @@ public class Wallet {
         if(activity == null || FirebaseAuth.getInstance().getCurrentUser() == null) {
             return  null;
         }
-        Credentials credentials;
 
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
+        String privateKey = sharedPreferences.getString(userID, "");
 
-        if(sharedPreferences.getString(userID, null) == null){
-            String fileName = sharedPreferences.getString(userID+"File","");
-            String pass = sharedPreferences.getString(userID+"Pass", "");
-            File walletFile = new File(activity.getFilesDir().getAbsolutePath()+ "/" +fileName);
-            credentials = WalletUtils.loadCredentials(pass, walletFile);
-        }
-        else{
-            String privateKey = sharedPreferences.getString(userID, "");
-            credentials = Credentials.create(privateKey);
-        }
-        return credentials;
+        return Credentials.create(privateKey);
     }
 
     private static void setupBouncyCastle() {

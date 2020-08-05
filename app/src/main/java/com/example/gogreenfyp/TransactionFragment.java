@@ -69,7 +69,7 @@ public class TransactionFragment extends Fragment {
                 address = wallet.getWalletAddress(getActivity());
             }
 
-            collection.whereEqualTo("walletAddress", address).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            collection.whereEqualTo("to", address).whereEqualTo("from", address).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
@@ -90,7 +90,6 @@ public class TransactionFragment extends Fragment {
                         transactions.add(transactionHeader);
                         transactionHashMap.put(transactionTitle, details);
                     }
-                    //Toast.makeText(getContext(), transactionHashMap.size()+"", Toast.LENGTH_SHORT).show();
                     expandableListAdpater.setListTitle(transactions);
                     expandableListAdpater.setExpandableListData(transactionHashMap);
                     expandableListAdpater.notifyDataSetChanged();

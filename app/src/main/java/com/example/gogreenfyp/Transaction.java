@@ -6,24 +6,30 @@ public class Transaction {
     private String place;
     private String item;
     private String transactionNo;
-    private String walletAddress;
+    private String from;
+    private String to;
     private int points;
 
     public Transaction(){
 
     }
 
-    public Transaction(double amount, String place, String item, String transactionNo, String walletAddress, int points) {
+    public Transaction(double amount, String place, String item, String transactionNo, String from, String to, int points) {
         this.amount = amount;
         this.place = place;
         this.item = item;
         this.transactionNo = transactionNo;
-        this.walletAddress = walletAddress;
+        this.from = from;
+        this.to = to;
         this.points = points;
     }
 
-    public String getWalletAddress() {
-        return walletAddress;
+    public String getFrom() {
+        return from;
+    }
+
+    public String getTo() {
+        return to;
     }
 
     public double getAmount() {
@@ -52,4 +58,5 @@ public class Transaction {
     public void setAmount(double amount) {
         this.amount = amount;
     }
+
 }

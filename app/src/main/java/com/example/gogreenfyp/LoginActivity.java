@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.gogreenfyp.pojo.User;
+import com.example.gogreenfyp.wallet.WalletErrorDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -22,12 +24,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.web3j.crypto.CipherException;
-import org.web3j.crypto.WalletUtils;
-
-import java.io.File;
-import java.io.IOException;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -135,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void goRegister(View view){
-        Intent i = new Intent(this, Register.class);
+        Intent i = new Intent(this, RegisterActivity.class);
         startActivity(i);
     }
 

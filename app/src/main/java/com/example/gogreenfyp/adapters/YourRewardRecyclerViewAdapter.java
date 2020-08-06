@@ -87,21 +87,6 @@ public class YourRewardRecyclerViewAdapter extends RecyclerView.Adapter<YourRewa
 
         }
 
-
-
-//        else if(days > 0 && days <= 7 || days == 0){
-//            if(days == 0){
-//                holder.tvExpireSoon.setText("Expiring Today!");
-//            }else{
-//                holder.tvExpireSoon.setText("Expiring in " + (days + 1) + " days!");
-//            }
-//
-//        }
-
-
-
-
-
         // Image
         Glide.with(context)
                 .load(Data.get(position).getImageURL())

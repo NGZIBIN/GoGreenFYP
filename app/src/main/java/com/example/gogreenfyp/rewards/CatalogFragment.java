@@ -28,6 +28,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -82,13 +84,17 @@ public class CatalogFragment extends Fragment {
                         // Add document id to array
                         CATALOG_REWARDS_ID.add(document.getId());
 
-                        // Add rewards to list
-                        listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
-                            rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate(), rewards.getExpired()));
+                        // Get reward expiry date
+                        Date reward_endDate = rewards.getUseByDate();
+                        // Get current date
+                        Date currDate = Calendar.getInstance().getTime();
 
-
+                        // Add rewards to list if not expired
+                        if(!currDate.after(reward_endDate)){
+                            listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
+                                    rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate(), rewards.getExpired()));
+                        }
                     }
-
                 }
 
                 // Loop through userRewards array in user document
@@ -118,11 +124,13 @@ public class CatalogFragment extends Fragment {
                                     Log.d("USER REWARDS", USER_REWARDS.toString());
                                     Log.d("LIST REWARDS start", String.valueOf(listReward.size()));
 
-                                    // Compare array, if id matches then remove from listRewards
+                                    // TODO Please remove, for testing purposes
                                     /*for(int i = 0; i < listReward.size(); i++)
                                     {
                                         Log.d("LIST REWARDS start", listReward.get(i).getName());
                                     }*/
+
+                                    // Comparing catalog array to user array, if id matches then remove from listRewards
                                     for(int i = 0; i < listReward.size(); i++)
                                     {
                                         for(int j = 0; j < USER_REWARDS.size(); j++)
@@ -136,6 +144,7 @@ public class CatalogFragment extends Fragment {
                                         }
                                     }
 
+                                    // Comparing catalog to user history, if id matches then remove from listRewards
                                     for(int i = 0; i < listReward.size(); i++)
                                     {
                                         for(int j = 0; j < USER_HISTORY_REWARDS_ID.size(); j++)
@@ -148,6 +157,12 @@ public class CatalogFragment extends Fragment {
                                             }
                                         }
                                     }
+
+                                    // TODO Please remove, for testing purposes
+                                    /*for(int i = 0; i < listReward.size(); i++)
+                                    {
+                                        Log.d("LIST REWARDS end", listReward.get(i).getName());
+                                    }*/
                                 }
 
                             }

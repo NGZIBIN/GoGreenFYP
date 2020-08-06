@@ -49,7 +49,7 @@ public class MyRewardFragment extends Fragment {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     SearchView searchView;
-    String USER_ID;
+    String USER_DOC_ID;
     String CURR_USER_ID;
     ArrayList<String> CATALOG_REWARDS_ID;
     ArrayList<String> USER_REWARDS = new ArrayList<String>();
@@ -93,9 +93,12 @@ public class MyRewardFragment extends Fragment {
 
                         // Check if current user id == USER_ID
                         if (CURR_USER_ID.equals(USER_ID)) {
-
                             // Get current user's rewards and store in list
                             USER_REWARDS = (ArrayList<String>) documentSnapshot.get("userRewards");
+
+                            // Store user's document ID
+                            USER_DOC_ID = documentSnapshot.getId();
+                            Log.d("USER DOC ID:" ,USER_DOC_ID);
                         }
                     }
                 }
@@ -122,17 +125,32 @@ public class MyRewardFragment extends Fragment {
                                 Rewards rewards = document.toObject(Rewards.class);
 
                                 //Log.d("REWARDS", listReward.toString());
+                                // Set reward document id
+                                String reward_id = document.getId();
+
+                                // Get reward expiry date
+                                Date reward_endDate = rewards.getUseByDate();
+                                // Get current date
+                                Date currDate = Calendar.getInstance().getTime();
 
                                 for(int j = 0; j < USER_REWARDS.size(); j++)
                                 {
-                                    if (document.getId().equals(USER_REWARDS.get(j))) {
-                                        // Add rewards to list
-                                        listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
-                                                rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate(), rewards.getExpired()));
+                                    // Compare rewards documentID to userRewards ID
+                                    if (reward_id.equals(USER_REWARDS.get(j))) {
+                                        // If date is not expired add to list
+                                        if(currDate.after(reward_endDate)){
 
+                                            // If expired, remove from userRewards and add to userRedeemed
+                                            DocumentReference userRewards_arr = db.collection("Users").document(USER_DOC_ID);
+                                            Log.d("REWARD ID EXPIRY:", String.valueOf(CURR_USER_ID));
+                                            userRewards_arr.update("userRewards", FieldValue.arrayRemove(reward_id));
+                                            userRewards_arr.update("userRedeemedRewards", FieldValue.arrayUnion(reward_id));
+                                        } else {
+                                            listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
+                                                    rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate(), rewards.getExpired()));
+                                        }
                                     }
                                 }
-                                // Log.d("REWARDS end", listReward.toString());
                             }
 
                             // Setup card view to adapter
@@ -144,7 +162,6 @@ public class MyRewardFragment extends Fragment {
                 });
             }
         });
-
         return view;
     }
     public class dateDiff{

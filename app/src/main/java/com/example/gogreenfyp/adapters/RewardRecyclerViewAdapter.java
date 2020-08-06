@@ -92,12 +92,14 @@ public class RewardRecyclerViewAdapter extends RecyclerView.Adapter<RewardRecycl
                 i.putExtra("RewardTerms", Data.get(position).getTermsAndConditions());
                 i.putExtra("RewardImg", Data.get(position).getImageURL());
                 i.putExtra("RewardUseByDate", Data.get(position).getUseByDate());
-                if(fStoreDate.after(currDate) || days == 0){
+
+                context.startActivity(i);
+                /*if(fStoreDate.after(currDate) || days == 0){
                     context.startActivity(i);
                 }else{
                     Toast.makeText(context, "Sorry Reward No Longer Available", Toast.LENGTH_SHORT).show();
 
-                }
+                }*/
 
             }
         });

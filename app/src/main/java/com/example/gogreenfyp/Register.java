@@ -100,9 +100,9 @@ public class Register extends AppCompatActivity {
 //                    }
 //                });
 
-                String userAllRewards = "Jzlsfx63CQUBIYZnDZOI, QHuso8ycF1mWRwPJeiOC, Rnwj7Pee7hSqJgd3c6Ib";
-                String[] userAllRewardsArray = userAllRewards.split("\\s*,\\s*");
-                final List<String> userAllRewardsTag = Arrays.asList(userAllRewardsArray);
+//                String userAllRewards = "Jzlsfx63CQUBIYZnDZOI, QHuso8ycF1mWRwPJeiOC, Rnwj7Pee7hSqJgd3c6Ib";
+//                String[] userAllRewardsArray = userAllRewards.split("\\s*,\\s*");
+//                final List<String> userAllRewardsTag = Arrays.asList(userAllRewardsArray);
 
 
 
@@ -136,12 +136,12 @@ public class Register extends AppCompatActivity {
                             Toast.makeText(Register.this, "Account Created", Toast.LENGTH_LONG).show();
                             userID = fAuth.getCurrentUser().getUid();
 
-                            User user = new User(userID, username, email, walletBalance, pointsBalance, badgeProgress, walletAddress,badgesTag, userRewardsTag, userRedeemedRewardsTag,userAllRewardsTag);
+                            User user = new User(userID, username, email, walletBalance, pointsBalance, badgeProgress, walletAddress,badgesTag, userRewardsTag, userRedeemedRewardsTag);
                             userRef.add(user);
                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                         }
                         else {
-                            Toast.makeText(Register.this, "Error, please try again! " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(Register.this, "Error, please try again! ", Toast.LENGTH_LONG).show();
                             pb.setVisibility(View.GONE);
 
                         }

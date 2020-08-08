@@ -108,7 +108,7 @@ public class CatalogFragment extends Fragment {
                                             // Get current date
                                             Date currDate = Calendar.getInstance().getTime();
 
-                                            // Add rewards to list if not expired
+                                            // Add rewards to list if not expired, if they are not in USER_REWARDS and USER_HISTORY_REWARDS_ID
                                             if(!currDate.after(reward_endDate) && !USER_REWARDS.contains(document.getId()) && !USER_HISTORY_REWARDS_ID.contains(document.getId())){
                                                 // Add document id to array
 

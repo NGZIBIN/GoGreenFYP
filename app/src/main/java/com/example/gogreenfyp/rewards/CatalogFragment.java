@@ -37,11 +37,10 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class CatalogFragment extends Fragment {
-    List<Rewards> listReward;
+    List<Rewards> listReward = listReward = new ArrayList<>();;
     SearchView searchView;
     String CURR_USER_ID;
     FirebaseAuth fAuth;
-    ArrayList<String> CATALOG_REWARDS_ID;
     ArrayList<String> USER_HISTORY_REWARDS_ID;
     ArrayList<String> USER_ALLREWARDS = new ArrayList<String>();
     ArrayList<String> USER_REWARDS = new ArrayList<String>();
@@ -63,122 +62,68 @@ public class CatalogFragment extends Fragment {
         fAuth = FirebaseAuth.getInstance();
         CURR_USER_ID = fAuth.getCurrentUser().getUid();
 
-        // Retrieve catalog of rewards
-        rewardsCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        // Loop through userRewards array in user document
+        db.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
 
-                    // Declare an empty arraylist to store rewards
-                    listReward = new ArrayList<>();
+                    // Declare empty arraylist to store user rewards
+                    USER_REWARDS = new ArrayList<>();
+                    USER_HISTORY_REWARDS_ID = new ArrayList<>();
 
-                    // Declare empty arraylist to store rewards ID
-                    CATALOG_REWARDS_ID = new ArrayList<>();
+                    // Loop through all user documents
+                    for (DocumentSnapshot documentSnapshot : task.getResult()) {
+                        // Convert user document into User objects
+                        User user = documentSnapshot.toObject(User.class);
 
-                    // Loop through all rewards documents
-                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        // Get all user id
+                        String USER_ID = user.getUserID();
 
-                        // Convert documents to rewards object
-                        Rewards rewards = document.toObject(Rewards.class);
+                        // Check if current user id == USER_ID
+                        if (CURR_USER_ID.equals(USER_ID)) {
+                            // Get current user's rewards and store in list
+                            USER_REWARDS = (ArrayList<String>) documentSnapshot.get("userRewards");
+                            USER_HISTORY_REWARDS_ID = (ArrayList<String>) documentSnapshot.get("userRedeemedRewards");
 
-                        // Add document id to array
-                        CATALOG_REWARDS_ID.add(document.getId());
-
-                        // Get reward expiry date
-                        Date reward_endDate = rewards.getUseByDate();
-                        // Get current date
-                        Date currDate = Calendar.getInstance().getTime();
-
-                        // Add rewards to list if not expired
-                        if(!currDate.after(reward_endDate)){
-                            listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(),
-                                    rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate(), rewards.getExpired()));
+                            Log.d("USER REWARDS", USER_REWARDS.toString());
+                            break;
                         }
                     }
-                }
 
-                // Loop through userRewards array in user document
-                db.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
+                            // Retrieve catalog of rewards
+                            rewardsCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
 
-                            // Declare empty arraylist to store user rewards
-                            USER_REWARDS = new ArrayList<>();
-                            USER_HISTORY_REWARDS_ID = new ArrayList<>();
+                                        // Loop through all rewards documents
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
 
-                            // Loop through all user documents
-                            for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                                // Convert user document into User objects
-                                User user = documentSnapshot.toObject(User.class);
+                                            // Convert documents to rewards object
+                                            Rewards rewards = document.toObject(Rewards.class);
 
-                                // Get all user id
-                                String USER_ID = user.getUserID();
+                                            // Get reward expiry date
+                                            Date reward_endDate = rewards.getUseByDate();
+                                            // Get current date
+                                            Date currDate = Calendar.getInstance().getTime();
 
-                                // Check if current user id == USER_ID
-                                if(CURR_USER_ID.equals(USER_ID)){
-                                    // Get current user's rewards and store in list
-                                    USER_REWARDS = (ArrayList<String>) documentSnapshot.get("userRewards");
-                                    USER_HISTORY_REWARDS_ID = (ArrayList<String>) documentSnapshot.get("userRedeemedRewards");
+                                            // Add rewards to list if not expired
+                                            if(!currDate.after(reward_endDate) && !USER_REWARDS.contains(document.getId()) && !USER_HISTORY_REWARDS_ID.contains(document.getId())){
+                                                // Add document id to array
 
-                                    Log.d("USER REWARDS", USER_REWARDS.toString());
-                                    Log.d("LIST REWARDS start", String.valueOf(listReward.size()));
-
-                                    // TODO Please remove, for testing purposes
-                                    /*for(int i = 0; i < listReward.size(); i++)
-                                    {
-                                        Log.d("LIST REWARDS start", listReward.get(i).getName());
-                                    }*/
-
-                                    // Comparing catalog array to user array, if id matches then remove from listRewards
-                                    for(int i = 0; i < listReward.size(); i++)
-                                    {
-                                        for(int j = 0; j < USER_REWARDS.size(); j++)
-                                        {
-                                            // Log.d("LIST REWARDS", CATALOG_REWARDS_ID.toString());
-                                            if((CATALOG_REWARDS_ID.get(i).equals(USER_REWARDS.get(j))))
-                                            {
-                                                listReward.remove(i);
-//                                              Log.d("LIST REWARDS end", listReward.toString());
+                                                listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(), rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate(), rewards.getExpired()));
                                             }
                                         }
+                                        RewardRecyclerViewAdapter myAdapter = new RewardRecyclerViewAdapter(getContext(), listReward);
+                                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                                        recyclerView.setAdapter(myAdapter);
                                     }
-
-                                    // Comparing catalog to user history, if id matches then remove from listRewards
-                                    for(int i = 0; i < listReward.size(); i++)
-                                    {
-                                        for(int j = 0; j < USER_HISTORY_REWARDS_ID.size(); j++)
-                                        {
-                                            // Log.d("LIST REWARDS", CATALOG_REWARDS_ID.toString());
-                                            if((CATALOG_REWARDS_ID.get(i).equals(USER_HISTORY_REWARDS_ID.get(j))))
-                                            {
-                                                listReward.remove(i);
-//                                              Log.d("LIST REWARDS end", listReward.toString());
-                                            }
-                                        }
-                                    }
-
-                                    // TODO Please remove, for testing purposes
-                                    /*for(int i = 0; i < listReward.size(); i++)
-                                    {
-                                        Log.d("LIST REWARDS end", listReward.get(i).getName());
-                                    }*/
                                 }
-
-                            }
-                            Log.d("LIST REWARDS end", String.valueOf(listReward.size()));
-
-                            // Setup card view to adapter
-                            RewardRecyclerViewAdapter myAdapter = new RewardRecyclerViewAdapter(getContext(),listReward);
-                            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-                            recyclerView.setAdapter(myAdapter);
-                        }
-                    }
-                });
-
+                            });
+                }
             }
         });
-
         return view;
     }
 }

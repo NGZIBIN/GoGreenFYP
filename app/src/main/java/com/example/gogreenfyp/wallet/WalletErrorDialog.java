@@ -51,7 +51,7 @@ public class WalletErrorDialog extends AlertDialog implements android.view.View.
                     Wallet wallet = new Wallet();
                     try {
                         if(wallet.createWallet(this.activity, this.firebaseAuth)){
-                            Toast.makeText(activity, "Wallet creation successful", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, "Wallet creation successful. Please proceed to login", Toast.LENGTH_SHORT).show();
                         }
                     } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException | CipherException | IOException e) {
                         e.printStackTrace();

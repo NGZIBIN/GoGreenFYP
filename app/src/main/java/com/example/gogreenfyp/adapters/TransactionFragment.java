@@ -24,6 +24,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 
 
@@ -73,7 +74,6 @@ public class TransactionFragment extends Fragment {
                             QuerySnapshot snapshot = (QuerySnapshot) object;
                             for (QueryDocumentSnapshot documentSnapshot : snapshot) {
                                 Transaction transaction = documentSnapshot.toObject(Transaction.class);
-                                Log.d("Transaction", transaction.getTransactionNo());
                                 TransactionDetails details = new TransactionDetails(transaction.getTransactionNo(), transaction.getPoints());
                                 TransactionHeader transactionHeader = new TransactionHeader(transaction.getItem(), transaction.getPlace(), transaction.getAmount());
 

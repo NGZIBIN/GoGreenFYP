@@ -9,9 +9,9 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.example.gogreenfyp.R;
+import com.example.gogreenfyp.pojo.Transaction;
 import com.example.gogreenfyp.wallet.TransactionHeader;
 import com.example.gogreenfyp.pojo.TransactionDetails;
-
 import java.util.HashMap;
 import java.util.List;
 

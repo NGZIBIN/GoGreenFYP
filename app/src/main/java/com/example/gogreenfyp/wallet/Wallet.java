@@ -80,7 +80,7 @@ public class Wallet {
             editor.putString(userID, privateKey);
             editor.apply();
             updateWalletAddress(firebaseAuth, address);
-            Toast.makeText(activity, "Imported successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "Imported successfully. Please proceed to login", Toast.LENGTH_SHORT).show();
             Log.d("Wallet saved", "Success");
             activity.finish();
         }

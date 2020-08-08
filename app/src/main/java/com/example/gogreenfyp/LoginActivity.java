@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.gogreenfyp.pojo.User;
+import com.example.gogreenfyp.wallet.WalletErrorDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -111,8 +113,7 @@ public class LoginActivity extends AppCompatActivity {
                                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString("address", walletAdd);
-                                editor.putString("EwNKCidqMVTFSceVcnfPmmqpOE32","E0EE75D5005600C256676AFF24229609BB65F8105407A30586A1B9346D55206E");
-
+                                editor.putString("e5wD8XF8mtgxRsylmWbfxfdhfg73", "c76f0914073da9e30e040ff52adcb518838d50f429eca344e01ce8e6a06247b8");
                                 Log.d("HELP", getFilesDir().getAbsolutePath());
 
                                 editor.apply();
@@ -130,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void goRegister(View view){
-        Intent i = new Intent(this, Register.class);
+        Intent i = new Intent(this, RegisterActivity.class);
         startActivity(i);
     }
 

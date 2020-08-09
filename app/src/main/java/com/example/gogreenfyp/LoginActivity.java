@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                     etPassword.setError("Password must have at least 8 characters");
                     return;
                 }
-                    pb.setVisibility(View.VISIBLE);
+                pb.setVisibility(View.VISIBLE);
 
 
                 fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {

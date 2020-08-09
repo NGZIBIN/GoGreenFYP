@@ -16,12 +16,8 @@ public class User {
     List<String> userRedeemedRewards;
     List<String> allRewards;
 
-
-
     public User(){
-
     }
-
 
     public User(String userID, String username, String email, int walletBalance, int pointsBalance, int badgeProgress, String walletAddress, List<String> userBadges,  List<String> userRewards, List<String> userRedeemedRewards, List<String> allRewards ) {
 

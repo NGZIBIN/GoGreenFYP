@@ -2,10 +2,12 @@ package com.example.gogreenfyp.wallet;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,9 +76,12 @@ public class ScanQRFragment extends Fragment {
                             String item = qrObject.getString("item");
                             double amount = qrObject.getDouble("amount");
                             int points = qrObject.getInt("points");
+                            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                            String senderName = sharedPreferences.getString("username","");
+                            String newName = name+","+senderName;
 
                             //DIALOG_RESULT = result.getText();
-                            final Transaction transaction = new Transaction(amount, name, item, "", fromAddress, toAddress, points);
+                            final Transaction transaction = new Transaction(amount, newName, item, "", fromAddress, toAddress, points);
 
                             dialog = new Dialog(getActivity());
                             configureDialogByAmount(amount, name);

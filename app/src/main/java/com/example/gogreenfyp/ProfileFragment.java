@@ -3,26 +3,20 @@ package com.example.gogreenfyp;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import  android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,9 +30,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.gogreenfyp.pojo.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -49,23 +42,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 
-import org.web3j.abi.datatypes.Int;
-
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-import jnr.ffi.annotations.In;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -73,7 +56,7 @@ public class ProfileFragment extends Fragment {
 
     Button btnLogout;
     TextView totalTimeUsed, nextUnlock, tvUsername, allBadges;
-    ImageView badgeImage, infoImg, profileImg;
+    ImageView infoImg;
     CardView badgesCardView;
     ProgressBar pb;
     FirebaseAuth fAuth;
@@ -98,9 +81,7 @@ public class ProfileFragment extends Fragment {
         btnLogout = view.findViewById(R.id.btnLogout);
         totalTimeUsed = view.findViewById(R.id.totalTimeUsed);
         nextUnlock = view.findViewById(R.id.tvNextCheckpoint);
-        profileImg = view.findViewById(R.id.profileImg);
         tvUsername = view.findViewById(R.id.tvUsername);
-        badgeImage = view.findViewById(R.id.badgeImage);
         allBadges = view.findViewById(R.id.allBadges);
         infoImg = view.findViewById(R.id.infoImg);
 
@@ -137,14 +118,12 @@ public class ProfileFragment extends Fragment {
 
                             //Badges Progress
                             if(progressCount >= 50){
-                                badgeImage.setImageResource(R.drawable.smallprestigebadge);
                                 nextUnlock.setText("100");
                                 DocumentReference badgeArray = db.collection("Users").document(currentUser);
                                 badgeArray.update("userBadges", FieldValue.arrayUnion("wi6cFBpA8RE8pAg7uhZN"));
                                 pb.setMax(100);
                             }
                             else if(progressCount >= 25){
-                                badgeImage.setImageResource(R.drawable.smallelitebadge);
                                 nextUnlock.setText("50");
                                 DocumentReference badgeArray = db.collection("Users").document(currentUser);
                                 badgeArray.update("userBadges", FieldValue.arrayUnion("aDnbDhHpLv3cynDIaxre"));
@@ -152,7 +131,6 @@ public class ProfileFragment extends Fragment {
 
                             }
                             else if(progressCount >= 10){
-                                badgeImage.setImageResource(R.drawable.smallrookiebadge);
                                 nextUnlock.setText("25");
                                 DocumentReference badgeArray = db.collection("Users").document(currentUser);
                                 badgeArray.update("userBadges", FieldValue.arrayUnion("VPluIGTSFoPK3OU5K7bh"));
@@ -204,7 +182,7 @@ public class ProfileFragment extends Fragment {
         allBadges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getActivity(), AllBadges.class);
+                Intent i = new Intent(getActivity(), AllBadgesActivity.class);
                 startActivity(i);
             }
         });
@@ -212,29 +190,11 @@ public class ProfileFragment extends Fragment {
         FragmentManager fm = getActivity().getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
 
-        Fragment badgeFrag = new BadgesFragment();
+        Fragment badgeFrag = new UserBadgesFragment();
         ft.replace(R.id.frameBadges, badgeFrag);
 
         ft.commit();
         //Set profile Image
-        profileImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-                        Toast.makeText(getContext(), "Permission not Granted", Toast.LENGTH_LONG).show();
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                    }
-                    else {
-                        choseImage();
-                    }
-                }
-                else{
-                    choseImage();
-                }
-            }
-        });
         //Getting info of how to gain points
         infoImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -289,42 +249,7 @@ public class ProfileFragment extends Fragment {
                 });
             }
         });
-
-
         return view;
-    }
-
-    private void choseImage() {
-
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        if(getActivity() != null && intent.resolveActivity(getActivity().getPackageManager()) != null){
-            startActivityForResult(intent, 550);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && requestCode == 550 && data != null) {
-            Uri selectedImage =  data.getData();
-            if (selectedImage != null && getActivity() != null) {
-                try {
-                    InputStream stream = getActivity().getContentResolver().openInputStream(selectedImage);
-                    Bitmap bitmap = BitmapFactory.decodeStream(stream);
-                    profileImg.setImageBitmap(bitmap);
-                }
-                catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-    private void saveImage(Bitmap bitmap){
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-        if(fAuth.getCurrentUser() != null) {
-            String userId = fAuth.getCurrentUser().getUid();
-        }
     }
 }
 

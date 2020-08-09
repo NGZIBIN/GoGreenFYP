@@ -59,4 +59,7 @@ public class Transaction {
         this.amount = amount;
     }
 
+    public void setPlace(String place) {
+        this.place = place;
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.gogreenfyp.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import androidx.preference.PreferenceManager;
+
+import com.example.gogreenfyp.LoginActivity;
 import com.example.gogreenfyp.R;
 import com.example.gogreenfyp.pojo.Transaction;
 import com.example.gogreenfyp.wallet.TransactionHeader;
@@ -93,13 +97,19 @@ public class TransactionExpandableListAdpater extends BaseExpandableListAdapter 
         TextView tvLocation = (TextView) view.findViewById(R.id.tvLocationName);
 
         String roundUpTo2Decimals = "ETH "+String.format("%.2f", transactionHeader.getAmount());
+        String[] receiverSenderName = transaction.getPlace().split(",");
+
         if(transaction.getTo().equals(fromAddress)){
             tvPrice.setTextColor(Color.parseColor("#00FF00"));
+            tvLocation.setText(receiverSenderName[1]);
         }
+        else {
+            tvLocation.setText(receiverSenderName[0]);
+        }
+
 
         tvFoodName.setText(transactionHeader.getItem());
         tvPrice.setText(roundUpTo2Decimals);
-        tvLocation.setText(transactionHeader.getPlace());
 
         return view;
 

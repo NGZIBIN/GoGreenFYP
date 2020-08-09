@@ -152,6 +152,7 @@ public class RewardInformationActivity extends AppCompatActivity {
                 btnYes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        dialog.dismiss();
                         final int totalPointsSpend = qty * points;
                         String currentPointsString = tvcurrentPointsMain.getText().toString();
                         currentPoints = Integer.parseInt(currentPointsString);

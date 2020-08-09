@@ -56,7 +56,7 @@ public class ProfileFragment extends Fragment {
 
     Button btnLogout;
     TextView totalTimeUsed, nextUnlock, tvUsername, allBadges;
-    ImageView badgeImage, infoImg, profileImg;
+    ImageView infoImg;
     CardView badgesCardView;
     ProgressBar pb;
     FirebaseAuth fAuth;
@@ -81,9 +81,7 @@ public class ProfileFragment extends Fragment {
         btnLogout = view.findViewById(R.id.btnLogout);
         totalTimeUsed = view.findViewById(R.id.totalTimeUsed);
         nextUnlock = view.findViewById(R.id.tvNextCheckpoint);
-        profileImg = view.findViewById(R.id.profileImg);
         tvUsername = view.findViewById(R.id.tvUsername);
-        badgeImage = view.findViewById(R.id.badgeImage);
         allBadges = view.findViewById(R.id.allBadges);
         infoImg = view.findViewById(R.id.infoImg);
 
@@ -120,14 +118,12 @@ public class ProfileFragment extends Fragment {
 
                             //Badges Progress
                             if(progressCount >= 50){
-                                badgeImage.setImageResource(R.drawable.smallprestigebadge);
                                 nextUnlock.setText("100");
                                 DocumentReference badgeArray = db.collection("Users").document(currentUser);
                                 badgeArray.update("userBadges", FieldValue.arrayUnion("wi6cFBpA8RE8pAg7uhZN"));
                                 pb.setMax(100);
                             }
                             else if(progressCount >= 25){
-                                badgeImage.setImageResource(R.drawable.smallelitebadge);
                                 nextUnlock.setText("50");
                                 DocumentReference badgeArray = db.collection("Users").document(currentUser);
                                 badgeArray.update("userBadges", FieldValue.arrayUnion("aDnbDhHpLv3cynDIaxre"));
@@ -135,7 +131,6 @@ public class ProfileFragment extends Fragment {
 
                             }
                             else if(progressCount >= 10){
-                                badgeImage.setImageResource(R.drawable.smallrookiebadge);
                                 nextUnlock.setText("25");
                                 DocumentReference badgeArray = db.collection("Users").document(currentUser);
                                 badgeArray.update("userBadges", FieldValue.arrayUnion("VPluIGTSFoPK3OU5K7bh"));
@@ -204,24 +199,6 @@ public class ProfileFragment extends Fragment {
 
         ft.commit();
         //Set profile Image
-        profileImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-                        Toast.makeText(getContext(), "Permission not Granted", Toast.LENGTH_LONG).show();
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                    }
-                    else {
-                        choseImage();
-                    }
-                }
-                else{
-                    choseImage();
-                }
-            }
-        });
         //Getting info of how to gain points
         infoImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -276,42 +253,7 @@ public class ProfileFragment extends Fragment {
                 });
             }
         });
-
-
         return view;
-    }
-
-    private void choseImage() {
-
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        if(getActivity() != null && intent.resolveActivity(getActivity().getPackageManager()) != null){
-            startActivityForResult(intent, 550);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && requestCode == 550 && data != null) {
-            Uri selectedImage =  data.getData();
-            if (selectedImage != null && getActivity() != null) {
-                try {
-                    InputStream stream = getActivity().getContentResolver().openInputStream(selectedImage);
-                    Bitmap bitmap = BitmapFactory.decodeStream(stream);
-                    profileImg.setImageBitmap(bitmap);
-                }
-                catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-    private void saveImage(Bitmap bitmap){
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-        if(fAuth.getCurrentUser() != null) {
-            String userId = fAuth.getCurrentUser().getUid();
-        }
     }
 }
 

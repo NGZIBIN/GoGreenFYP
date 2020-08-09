@@ -35,6 +35,8 @@ public class ImportWalletActivity extends AppCompatActivity {
 
                 if(isValidKey(privateKey)){
                     wallet.savePrivateKey(ImportWalletActivity.this, privateKey, firebaseAuth);
+                    Toast.makeText(ImportWalletActivity.this, "Imported successfully. Please proceed to login.", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
                 else{
                     etPrivateKey.setError("Invalid private key.");

@@ -1,6 +1,7 @@
 package com.example.gogreenfyp.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +9,9 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.example.gogreenfyp.R;
+import com.example.gogreenfyp.pojo.Transaction;
 import com.example.gogreenfyp.wallet.TransactionHeader;
 import com.example.gogreenfyp.pojo.TransactionDetails;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,11 +20,19 @@ public class TransactionExpandableListAdpater extends BaseExpandableListAdapter 
     private Context context;
     private List<TransactionHeader> listTitle;
     private HashMap<String, TransactionDetails> expandableListData;
+    private List<Transaction> transactions;
+    private String fromAddress;
 
-    public TransactionExpandableListAdpater(Context context, List<TransactionHeader> listTitle, HashMap<String, TransactionDetails> expandableListData) {
+
+    public TransactionExpandableListAdpater(Context context, List<TransactionHeader> listTitle, HashMap<String, TransactionDetails> expandableListData, List<Transaction> transactions, String fromAddress) {
         this.context = context;
         this.listTitle = listTitle;
         this.expandableListData = expandableListData;
+        this.transactions = transactions;
+        this.fromAddress = fromAddress;
+    }
+    public void setTransactions(List<Transaction> transactions){
+        this.transactions = transactions;
     }
 
     public void setListTitle(List<TransactionHeader> transactionHeaders){
@@ -73,6 +82,7 @@ public class TransactionExpandableListAdpater extends BaseExpandableListAdapter 
     public View getGroupView(int groupPosition, boolean b, View view, ViewGroup viewGroup) {
 
         TransactionHeader transactionHeader =  (TransactionHeader) getGroup(groupPosition);
+        Transaction transaction = transactions.get(groupPosition);
 
         if (view == null){
             LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -83,6 +93,9 @@ public class TransactionExpandableListAdpater extends BaseExpandableListAdapter 
         TextView tvLocation = (TextView) view.findViewById(R.id.tvLocationName);
 
         String roundUpTo2Decimals = "ETH "+String.format("%.2f", transactionHeader.getAmount());
+        if(transaction.getTo().equals(fromAddress)){
+            tvPrice.setTextColor(Color.parseColor("#00FF00"));
+        }
 
         tvFoodName.setText(transactionHeader.getItem());
         tvPrice.setText(roundUpTo2Decimals);

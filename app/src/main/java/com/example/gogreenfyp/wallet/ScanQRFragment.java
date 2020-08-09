@@ -68,15 +68,15 @@ public class ScanQRFragment extends Fragment {
                     public void run() {
                         try {
                             JSONObject qrObject = new JSONObject(result.getText());
-                            String address = qrObject.getString("walletAddress");
-                            String currentUserWallet = new Wallet().getWalletAddress(getActivity());
+                            String toAddress = qrObject.getString("walletAddress");
+                            String fromAddress = new Wallet().getWalletAddress(getActivity());
                             String name = qrObject.getString("name");
                             String item = qrObject.getString("item");
                             double amount = qrObject.getDouble("amount");
                             int points = qrObject.getInt("points");
 
                             //DIALOG_RESULT = result.getText();
-                            final Transaction transaction = new Transaction(amount, name, item, "", currentUserWallet, points);
+                            final Transaction transaction = new Transaction(amount, name, item, "", fromAddress, toAddress, points);
 
                             dialog = new Dialog(getActivity());
                             configureDialogByAmount(amount, name);
@@ -88,7 +88,7 @@ public class ScanQRFragment extends Fragment {
                                 @Override
                                 public void onClick(View v) {
                                     dialog.dismiss();
-                                    startTransactionProcess(address, amount, transaction);
+                                    startTransactionProcess(toAddress, amount, transaction);
                                 }
                             });
 

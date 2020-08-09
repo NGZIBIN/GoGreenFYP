@@ -92,35 +92,34 @@ public class CatalogFragment extends Fragment {
                     }
 
                             // Retrieve catalog of rewards
-                            rewardsCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
+                    rewardsCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
 
-                                        // Loop through all rewards documents
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                // Loop through all rewards documents
+                                for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                            // Convert documents to rewards object
-                                            Rewards rewards = document.toObject(Rewards.class);
+                                    // Convert documents to rewards object
+                                    Rewards rewards = document.toObject(Rewards.class);
 
-                                            // Get reward expiry date
-                                            Date reward_endDate = rewards.getUseByDate();
-                                            // Get current date
-                                            Date currDate = Calendar.getInstance().getTime();
+                                    // Get reward expiry date
+                                    Date reward_endDate = rewards.getUseByDate();
+                                    // Get current date
+                                    Date currDate = Calendar.getInstance().getTime();
 
-                                            // Add rewards to list if not expired, if they are not in USER_REWARDS and USER_HISTORY_REWARDS_ID
-                                            if(!currDate.after(reward_endDate) && !USER_REWARDS.contains(document.getId()) && !USER_HISTORY_REWARDS_ID.contains(document.getId())){
-                                                // Add document id to array
-
-                                                listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(), rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate(), rewards.getExpired()));
-                                            }
-                                        }
-                                        RewardRecyclerViewAdapter myAdapter = new RewardRecyclerViewAdapter(getContext(), listReward);
-                                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-                                        recyclerView.setAdapter(myAdapter);
+                                    // Add rewards to list if not expired, if they are not in USER_REWARDS and USER_HISTORY_REWARDS_ID
+                                    if(!currDate.after(reward_endDate) && !USER_REWARDS.contains(document.getId()) && !USER_HISTORY_REWARDS_ID.contains(document.getId())){
+                                        // Add document id to array
+                                        listReward.add(new Rewards(rewards.getInstructions(), rewards.getName(), rewards.getTermsAndConditions(), rewards.getPointsToRedeem(), rewards.getQuantity(), rewards.getQuantityLeft(), rewards.getImageURL(), rewards.getUseByDate(), rewards.getExpired()));
                                     }
                                 }
-                            });
+                                RewardRecyclerViewAdapter myAdapter = new RewardRecyclerViewAdapter(getContext(), listReward);
+                                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                                recyclerView.setAdapter(myAdapter);
+                            }
+                        }
+                    });
                 }
             }
         });

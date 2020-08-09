@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import  android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,6 +142,9 @@ public class ProfileFragment extends Fragment {
                                 badgeArray.update("userBadges", FieldValue.arrayUnion("VPluIGTSFoPK3OU5K7bh"));
                                 pb.setMax(25);
                             }
+                            else {
+                                nextUnlock.setText("10");
+                            }
 
                             SharedPreferences settings = getActivity().getSharedPreferences("prefs", 0);
                             rookie = settings.getBoolean("rookieFirst", true);
@@ -157,6 +161,7 @@ public class ProfileFragment extends Fragment {
                                 Map<String, Object> pointsNew = new HashMap<>();
                                 pointsNew.put(KEY_POINTS, newPoints);
                                 badgeArray.set(pointsNew, SetOptions.merge());
+                                Log.d("Rookie", rookie+"");
                             }
                             else if(progressCount == 25 && elite ){
                                 SharedPreferences.Editor editor = settings.edit();

@@ -65,8 +65,6 @@ public class YourRewardRecyclerViewAdapter extends RecyclerView.Adapter<YourRewa
         holder.tvExpiryDate.setText(rewardDate);
         Log.d("Reward Date", rewardDate);
 
-
-
         dateDiff diff = new dateDiff();
         long days = diff.daysBetween(currDate, fStoreDate);
         Log.d("Days diff", String.valueOf(days));

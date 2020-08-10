@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -36,7 +37,6 @@ public class LeaderboardFragment extends Fragment {
     private LeaderBoardAdapter aa;
     private FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private CollectionReference collection = fireStore.collection("Users");
 
     public LeaderboardFragment() {
         // Required empty public constructor
@@ -51,7 +51,8 @@ public class LeaderboardFragment extends Fragment {
         listviewLeaderboard = view.findViewById(R.id.listViewLeaderBoard);
         al = new ArrayList<LeaderBoard>();
 
-        collection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+
+        FirebaseFirestore.getInstance().collection("Users").orderBy("badgeProgress", Query.Direction.DESCENDING).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 int currentCount = 0;
@@ -62,11 +63,9 @@ public class LeaderboardFragment extends Fragment {
                 }
 
                 if(getContext() != null) {
-                    ArrayList<LeaderBoard> sortedRankings = sortLeaderBoardRanking(al);
-                    aa = new LeaderBoardAdapter(getContext(), R.layout.row_leaderboard, sortedRankings);
+                    aa = new LeaderBoardAdapter(getContext(), R.layout.row_leaderboard, al);
                     listviewLeaderboard.setAdapter(aa);
                 }
-                //Toast.makeText(getContext(), "Success! "+al.size(), Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -80,19 +79,5 @@ public class LeaderboardFragment extends Fragment {
         });
 
         return view;
-    }
-    private ArrayList<LeaderBoard> sortLeaderBoardRanking(ArrayList<LeaderBoard> leaderBoards){
-        int currentCount = 0;
-        ArrayList<LeaderBoard> sortedRankings = new ArrayList<LeaderBoard>();
-        for(int i = 0; i < leaderBoards.size(); i++){
-            if(leaderBoards.get(i).getCount() > currentCount) {
-                currentCount = leaderBoards.get(i).getCount();
-                sortedRankings.add(0, leaderBoards.get(i));
-            }
-            else{
-                sortedRankings.add(leaderBoards.get(i));
-            }
-        }
-        return sortedRankings;
     }
 }

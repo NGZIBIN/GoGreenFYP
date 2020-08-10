@@ -21,7 +21,7 @@
             android:layout_centerHorizontal="true"
             android:text="Loading.."
             android:textColor="#000000"
-            android:textSize="20dp"
+            android:textSize="24dp"
             android:textStyle="bold" />
 
         <Button
@@ -34,9 +34,9 @@
             android:layout_marginStart="63dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="3dp"
-            android:text="Log out"
+            android:text="Logout"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
 
 
     </RelativeLayout>
@@ -107,7 +107,8 @@
             android:layout_alignParentRight="true"
             android:text="How to earn points ?"
             android:layout_below="@id/pb"
-            android:textSize="18dp"
+            android:layout_marginTop="5dp"
+            android:textSize="14dp"
             android:textColor="#000000"
             android:paddingRight="60dp"/>
 
@@ -131,8 +132,8 @@
             android:background="#AAAAAA"
             android:layout_below="@id/pb"
             android:layout_marginTop="30dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             />
 
         <TextView
@@ -145,7 +146,7 @@
             android:textSize="25dp"
             android:layout_below="@id/horizontalLine"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             />
 
         <TextView
@@ -154,7 +155,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/horizontalLine"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_marginRight="20dp"
             android:text="View All Badges"
             android:textColor="#2196F3" />

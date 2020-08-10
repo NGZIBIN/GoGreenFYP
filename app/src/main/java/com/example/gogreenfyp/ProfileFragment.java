@@ -138,9 +138,6 @@ public class ProfileFragment extends Fragment {
                             } else {
                                 nextUnlock.setText("10");
                             }
-                            else{
-                                nextUnlock.setText("10");
-                            }
 
                             SharedPreferences settings = getActivity().getSharedPreferences("prefs", 0);
                             rookie = settings.getBoolean("rookieFirst", true);

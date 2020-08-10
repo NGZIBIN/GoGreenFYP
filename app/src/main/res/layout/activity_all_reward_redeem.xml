@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="10"
-    tools:context=".AllRewardRedeem">
+    tools:context=".rewards.RewardInformationActivity">
 
 
     <RelativeLayout
@@ -26,12 +26,12 @@
             android:id="@+id/rewardTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_below="@id/RewardImg"
             android:layout_centerHorizontal="true"
-            android:text="Reward Title"
-            android:textSize="18dp"
-            android:textColor="#000000"/>
+            android:layout_marginTop="20dp"
+            android:text="Loading..."
+            android:textColor="#000000"
+            android:textSize="18dp" />
 
         <TextView
             android:id="@+id/pointsNeeded"
@@ -91,10 +91,9 @@
             android:id="@+id/currentPoints"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2500"
-            android:textSize="20dp"
             android:layout_below="@id/titleBalance"
-            android:layout_marginLeft="25dp" />
+            android:layout_marginLeft="25dp"
+            android:textSize="20dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -166,7 +165,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
-                android:text="Please read these Terms carefully. Access to, and use of Usabilla products (“Products”), Usabilla services (“Services”), and the Usabilla website https://app.usabilla.com/ (“Website”), including any of its content, is conditional on your agreement to these Terms. You must read, agree with, and accept all of the terms and conditions contained in these Terms. By creating an account, or by using or visiting our Website, you are bound to these Terms and you indicate your continued acceptance of these Terms." />
+                android:text="Loading..." />
         </ScrollView>
 
         <Button

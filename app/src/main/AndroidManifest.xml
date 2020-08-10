@@ -18,17 +18,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AllBadges"></activity>
-        <activity android:name=".Rewards_redeeming" />
-        <activity android:name=".Use_reward" />
+        <activity android:name=".AllBadgesActivity"></activity>
+        <activity android:name=".rewards.RewardRedemptionActivity" />
+        <activity android:name=".rewards.RewardRedemptionInfoActivity" />
         <activity
             android:name=".InfoActivity"
             android:theme="@style/AppTheme.PopMe" />
-        <activity android:name=".AllRewardRedeem" />
+        <activity android:name=".rewards.RewardInformationActivity" />
         <activity android:name=".ForgetPassword" />
-        <activity android:name=".Register" />
+        <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".ImportWalletActivity"/>
+        <activity android:name=".wallet.ImportWalletActivity"/>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.gogreenfyp.pojo.User;
+import com.example.gogreenfyp.wallet.WalletErrorDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -46,29 +48,6 @@ public class LoginActivity extends AppCompatActivity {
         pb = findViewById(R.id.pb);
         final String userID;
         fAuth = FirebaseAuth.getInstance();
-//        userID = fAuth.getCurrentUser().getUid();
-//        db.collection("Users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if(task.isSuccessful()){
-//
-//                    String userIDAuth = "";
-//                    int walletAdd = 0;
-//                    for(DocumentSnapshot documentSnapshots: task.getResult()){
-//                        User user = documentSnapshots.toObject(User.class);
-//                        userIDAuth = user.getUserID();
-//                        walletAdd = user.getWalletAddress();
-//                        if(userIDAuth.equals(userID) && walletAdd == 0){
-//                            Log.d("TAG", "SUCCESS" + userIDAuth + "Wallet address " + walletAdd);
-//                        }
-//
-//                    }
-//
-//                }else {
-//                    Log.d("TAG", "Get failed with " , task.getException());
-//                }
-//            }
-//        });
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
                     etPassword.setError("Password must have at least 8 characters");
                     return;
                 }
-                    pb.setVisibility(View.VISIBLE);
+                pb.setVisibility(View.VISIBLE);
 
 
                 fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -99,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                             setUpAlertDialog();
 
                         }else {
-                            Toast.makeText(LoginActivity.this, "You are not registered yet!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "You are not registered yet or password is wrong. Please try again!", Toast.LENGTH_LONG).show();
                             pb.setVisibility(View.GONE);
                         }
                     }
@@ -134,10 +113,7 @@ public class LoginActivity extends AppCompatActivity {
                                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString("address", walletAdd);
-                                editor.putString("EwNKCidqMVTFSceVcnfPmmqpOE32","E0EE75D5005600C256676AFF24229609BB65F8105407A30586A1B9346D55206E");
-
-                                Log.d("HELP", getFilesDir().getAbsolutePath());
-
+                                editor.putString("username", user.getUsername());
                                 editor.apply();
                             }
                             Log.d("TAG", "SUCCESS " + userIDAuth + " Wallet address " + walletAdd);
@@ -153,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void goRegister(View view){
-        Intent i = new Intent(this, Register.class);
+        Intent i = new Intent(this, RegisterActivity.class);
         startActivity(i);
     }
 

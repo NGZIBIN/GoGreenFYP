@@ -159,7 +159,7 @@ public class RewardInformationActivity extends AppCompatActivity {
 
 
                         if(currentPoints < totalPointsSpend){
-                            Toast.makeText(RewardInformationActivity.this, "You do not have enough points!" + totalPointsSpend, Toast.LENGTH_LONG).show();
+                            Toast.makeText(RewardInformationActivity.this, "You do not have enough points!", Toast.LENGTH_LONG).show();
 
                         }else{
                             //Updating of User Points

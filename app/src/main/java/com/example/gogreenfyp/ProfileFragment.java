@@ -136,6 +136,9 @@ public class ProfileFragment extends Fragment {
                                 badgeArray.update("userBadges", FieldValue.arrayUnion("VPluIGTSFoPK3OU5K7bh"));
                                 pb.setMax(25);
                             }
+                            else{
+                                nextUnlock.setText("10");
+                            }
 
                             SharedPreferences settings = getActivity().getSharedPreferences("prefs", 0);
                             rookie = settings.getBoolean("rookieFirst", true);
@@ -173,6 +176,7 @@ public class ProfileFragment extends Fragment {
                                 pointsNew.put(KEY_POINTS, newPoints);
                                 badgeArray.set(pointsNew, SetOptions.merge());
                             }
+
                         }
                     }
                 }

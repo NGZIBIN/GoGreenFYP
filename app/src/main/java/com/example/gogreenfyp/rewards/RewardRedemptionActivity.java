@@ -89,19 +89,24 @@ public class RewardRedemptionActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                AlertDialog.Builder myBuilder = new AlertDialog.Builder(RewardRedemptionActivity.this);
-                myBuilder.setTitle("Redemption Complete");
-                myBuilder.setMessage("Thank you for your support! Continue to contribute and save the environment!");
-                myBuilder.setCancelable(false);
-                myBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                final Dialog dialog = new Dialog(RewardRedemptionActivity.this);
+                dialog.setContentView(R.layout.dialog_use_success);
+                dialog.setCancelable(false);
+                dialog.show();
+
+
+                Button btnFinsh;
+
+                btnFinsh = dialog.findViewById(R.id.btnFinish);
+
+                btnFinsh.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent intent = new Intent(RewardRedemptionActivity.this, MainActivity.class);
-                        startActivity(intent);
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                        Intent i = new Intent(RewardRedemptionActivity.this, MainActivity.class);
+                        startActivity(i);
                     }
                 });
-                AlertDialog myDialog = myBuilder.create();
-                myDialog.show();
 
 
             }

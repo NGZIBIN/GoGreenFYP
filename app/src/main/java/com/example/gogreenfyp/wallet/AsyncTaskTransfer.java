@@ -90,7 +90,7 @@ public class AsyncTaskTransfer extends AsyncTask<String, String, String> {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 if(user != null) {
-                    updatePoints(transaction.getPoints(), user.getUid());
+                    updatePoints(transaction.getPoints(), user.getUid(), transaction.getItem());
                 }
                 Toast.makeText(activity, "Transaction completed!", Toast.LENGTH_SHORT).show();
             }
@@ -101,7 +101,7 @@ public class AsyncTaskTransfer extends AsyncTask<String, String, String> {
             }
         });
     }
-    private void updatePoints(final Integer points, String userID){
+    private void updatePoints(final Integer points, String userID, String item){
 
         userReference.whereEqualTo("userID", userID).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -112,12 +112,15 @@ public class AsyncTaskTransfer extends AsyncTask<String, String, String> {
                     User currentUser = documentSnapshot.toObject(User.class);
                     String docPath = documentSnapshot.getId();
                     int newTotalPoints = currentUser.getPointsBalance()+points;
-                    int newBadgeProgress = currentUser.getBadgeProgress()+1;
                     DocumentReference documentReference = userReference.document(docPath);
 
                     HashMap<String, Object> newData = new HashMap<String, Object>();
                     newData.put("pointsBalance", newTotalPoints);
-                    newData.put("badgeProgress", newBadgeProgress);
+
+                    if(!item.contains("Peer")){
+                        int newBadgeProgress = currentUser.getBadgeProgress()+1;
+                        newData.put("badgeProgress", newBadgeProgress);
+                    }
 
                     documentReference.set(newData, SetOptions.merge());
                     Log.d("Update", "Success");

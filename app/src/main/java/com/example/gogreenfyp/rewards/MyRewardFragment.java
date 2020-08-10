@@ -158,6 +158,23 @@ public class MyRewardFragment extends Fragment {
                             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
                             recyclerView.setAdapter(myAdapter);
                         }
+
+                        // Search rewards
+                        YourRewardRecyclerViewAdapter myAdapter = new YourRewardRecyclerViewAdapter(getContext(),listReward);
+                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                            @Override
+                            public boolean onQueryTextSubmit(String s) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onQueryTextChange(String s) {
+                                myAdapter.getFilter().filter(s);
+                                return false;
+                            }
+                        });
+                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                        recyclerView.setAdapter(myAdapter);
                     }
                 });
             }

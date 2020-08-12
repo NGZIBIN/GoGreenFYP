@@ -1,12 +1,15 @@
 package com.example.gogreenfyp.wallet;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
+import com.example.gogreenfyp.LoginActivity;
 import com.example.gogreenfyp.pojo.Transaction;
 import com.example.gogreenfyp.pojo.User;
 import com.example.gogreenfyp.wallet.Wallet;
@@ -41,7 +44,6 @@ public class AsyncTaskTransfer extends AsyncTask<String, String, String> {
 
     private static CollectionReference transactionReference = FirebaseFirestore.getInstance().collection("Transactions");
     private static CollectionReference userReference = FirebaseFirestore.getInstance().collection("Users");
-    private static FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private WeakReference<Activity> activityWeakReference;
     private Transaction transaction;
 
@@ -89,8 +91,10 @@ public class AsyncTaskTransfer extends AsyncTask<String, String, String> {
         transactionReference.add(transaction).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                if(user != null) {
-                    updatePoints(transaction.getPoints(), user.getUid(), transaction.getItem());
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
+                if(sharedPreferences.getString("userID", null) != null) {
+                    String userID = sharedPreferences.getString("userID", null);
+                    updatePoints(transaction.getPoints(), userID, transaction.getItem());
                 }
                 Toast.makeText(activity, "Transaction completed!", Toast.LENGTH_SHORT).show();
             }

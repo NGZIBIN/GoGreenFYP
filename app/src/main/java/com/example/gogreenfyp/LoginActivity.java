@@ -114,7 +114,9 @@ public class LoginActivity extends AppCompatActivity {
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString("address", walletAdd);
                                 editor.putString("username", user.getUsername());
+                                editor.putString("userID", userID);
                                 editor.apply();
+                                Log.d("Login user", userID);
                             }
                             Log.d("TAG", "SUCCESS " + userIDAuth + " Wallet address " + walletAdd);
                         }

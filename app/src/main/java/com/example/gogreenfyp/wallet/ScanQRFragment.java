@@ -81,7 +81,7 @@ public class ScanQRFragment extends Fragment {
                             String senderName = sharedPreferences.getString("username","");
                             String newName = name+","+senderName;
 
-                            points = (int) Math.round(amount / 0.0019);
+                            points = (int) Math.round(amount / 0.0019)*10;
 
                             if(reusable){
                                 points *= 2;

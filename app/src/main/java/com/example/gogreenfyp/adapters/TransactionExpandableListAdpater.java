@@ -127,7 +127,7 @@ public class TransactionExpandableListAdpater extends BaseExpandableListAdapter 
         TextView tvTransNum = view.findViewById(R.id.tvTransNum);
         TextView tvPoints = view.findViewById(R.id.tvPointsEarn);
 
-        String points = trans.getPoints()+"";
+        String points = (trans.getPoints()/2)+"";
         String transNo = trans.getTransactionNo();
 
         tvTransNum.setText(transNo);

@@ -81,6 +81,14 @@
         </LinearLayout>
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ETH"
+            android:layout_below="@+id/tv_payment_title_reciever"
+            android:textSize="20dp"
+            android:layout_marginLeft="80dp"/>
+
+        <TextView
             android:id="@+id/tv_payment_amount"
             android:layout_width="339dp"
             android:layout_height="53dp"

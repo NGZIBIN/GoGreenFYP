@@ -85,8 +85,8 @@
             android:layout_height="wrap_content"
             android:text="ETH"
             android:layout_below="@+id/tv_payment_title_reciever"
-            android:textSize="20dp"
-            android:layout_marginLeft="80dp"/>
+            android:textSize="18dp"
+            android:layout_marginLeft="70dp"/>
 
         <TextView
             android:id="@+id/tv_payment_amount"

@@ -172,10 +172,11 @@
             android:id="@+id/btnRedeem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_marginTop="10dp"
             android:background="#6CAADB"
-            android:layout_alignParentBottom="true"
-            android:text="Redeem" />
+            android:text="Redeem"
+            android:textColor="#FFFFFF" />
 
 
 

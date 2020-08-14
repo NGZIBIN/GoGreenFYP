@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:text="CONFIRM REDEMPTION?"
+            android:text="CONFIRM EXCHANGE?"
             android:textColor="#000000"
             android:textSize="20dp"
             android:textStyle="bold" />

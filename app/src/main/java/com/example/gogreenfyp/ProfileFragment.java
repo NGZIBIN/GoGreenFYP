@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import  android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,8 +69,7 @@ public class ProfileFragment extends Fragment {
     private Boolean rookie;
     private Boolean elite;
     private Boolean prestige;
-    private Uri imageUri;
-    private Bitmap compressor;
+
 
     @Nullable
     @Override
@@ -105,6 +105,8 @@ public class ProfileFragment extends Fragment {
                         progressCount = user.getBadgeProgress();
                         username = user.getUsername();
                         points = user.getPointsBalance();
+                        Log.d("User Balance" , points + "");
+
                         if (userIDAuth.equals(userID)) {
                             final String currentUser = documentSnapshot.getId();
                             tvUsername.setText(username);
@@ -139,17 +141,19 @@ public class ProfileFragment extends Fragment {
                                 nextUnlock.setText("10");
                             }
 
-                            SharedPreferences settings = getActivity().getSharedPreferences("prefs", 0);
-                            rookie = settings.getBoolean("rookieFirst", true);
-                            elite = settings.getBoolean("eliteFirst", true);
-                            prestige = settings.getBoolean("prestigeFirst", true);
 
-//                            //Badges Points
+                            SharedPreferences settings = getActivity().getSharedPreferences("prefs", 0);
+                            rookie = settings.getBoolean("rookies1", true);
+                            elite = settings.getBoolean("elites1", true);
+                            prestige = settings.getBoolean("prestiges1", true);
+
+                            //Badges Points
                             if(progressCount == 10 && rookie){
                                 SharedPreferences.Editor editor = settings.edit();
-                                editor.putBoolean("rookieFirst", false);
+                                editor.putBoolean("rookies1", false);
                                 editor.commit();
                                 int newPoints = points + 200;
+                                Log.d("New points", newPoints + "");
                                 DocumentReference badgeArray = db.collection("Users").document(currentUser);
                                 Map<String, Object> pointsNew = new HashMap<>();
                                 pointsNew.put(KEY_POINTS, newPoints);
@@ -157,7 +161,7 @@ public class ProfileFragment extends Fragment {
                             }
                             else if(progressCount == 25 && elite ){
                                 SharedPreferences.Editor editor = settings.edit();
-                                editor.putBoolean("eliteFirst", false);
+                                editor.putBoolean("elites1", false);
                                 editor.commit();
                                 int newPoints = points + 350;
                                 DocumentReference badgeArray = db.collection("Users").document(currentUser);
@@ -167,7 +171,7 @@ public class ProfileFragment extends Fragment {
                             }
                             else if(progressCount == 50 && prestige){
                                 SharedPreferences.Editor editor = settings.edit();
-                                editor.putBoolean("prestigeFirst", false);
+                                editor.putBoolean("prestiges1", false);
                                 editor.commit();
                                 int newPoints = points + 550;
                                 DocumentReference badgeArray = db.collection("Users").document(currentUser);

@@ -42,20 +42,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rewardTitle"
-                android:layout_marginLeft="22dp"
-                android:textSize="8dp"
-                android:layout_marginTop="5dp"
-                android:text="Loading.." />
+                android:layout_marginLeft="17dp"
+                android:layout_marginTop="6dp"
+                android:text="Loading.."
+                android:textColor="#000000"
+                android:textSize="10dp" />
 
             <TextView
                 android:id="@+id/tvTextPoints"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Points"
-                android:textSize="8dp"
                 android:layout_below="@id/rewardTitle"
-                android:layout_marginLeft="48dp"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginLeft="45dp"
+                android:layout_marginTop="6dp"
+                android:text="Points"
+                android:textColor="#000000"
+                android:textSize="10dp" />
         </RelativeLayout>
 
 

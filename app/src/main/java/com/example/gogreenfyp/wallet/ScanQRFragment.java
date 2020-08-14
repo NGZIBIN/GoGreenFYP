@@ -76,9 +76,16 @@ public class ScanQRFragment extends Fragment {
                             String item = qrObject.getString("item");
                             double amount = qrObject.getDouble("amount");
                             int points = qrObject.getInt("points");
+                            boolean reusable = qrObject.getBoolean("reusable");
                             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
                             String senderName = sharedPreferences.getString("username","");
                             String newName = name+","+senderName;
+
+                            points = (int) Math.round(amount / 0.0019)*10;
+
+                            if(reusable){
+                                points *= 2;
+                            }
 
                             //DIALOG_RESULT = result.getText();
                             final Transaction transaction = new Transaction(amount, newName, item, "", fromAddress, toAddress, points);
@@ -88,6 +95,7 @@ public class ScanQRFragment extends Fragment {
 
                             btn_dialog_yes = dialog.findViewById(R.id.btnYes);
                             btn_dialog_no = dialog.findViewById(R.id.btnNo);
+
 
                             btn_dialog_yes.setOnClickListener(new View.OnClickListener() {
                                 @Override

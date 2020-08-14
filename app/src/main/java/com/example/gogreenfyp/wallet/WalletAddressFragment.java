@@ -90,6 +90,7 @@ public class WalletAddressFragment extends Fragment {
                                 userObj.put("amount", 0);
                                 userObj.put("points", 0);
                                 userObj.put("item", "Peer-to-peer");
+                                userObj.put("reusable", false);
 
                             } catch (JSONException e) {
                                 // TODO Auto-generated catch block

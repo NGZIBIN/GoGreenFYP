@@ -1,11 +1,15 @@
 package com.example.gogreenfyp.wallet;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
@@ -39,6 +43,8 @@ import org.json.JSONObject;
  */
 public class ScanQRFragment extends Fragment {
 
+    private static final int REQUEST_CODE = 1;
+
     CodeScanner codeScanner;
     CodeScannerView scannerView;
     TextView walletAddress, tv_receiver, tv_amount;
@@ -57,6 +63,11 @@ public class ScanQRFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_scan_qr, container, false);
+
+
+        if (!verifyPermissions()){
+            verifyPermissions();
+        }
 
         scannerView = view.findViewById(R.id.scanner_view);
         codeScanner = new CodeScanner(getContext(), scannerView);
@@ -185,6 +196,24 @@ public class ScanQRFragment extends Fragment {
         else {
             taskTransfer.execute(address + "," + amount);
         }
+    }
+
+    private boolean verifyPermissions() {
+        String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+
+        if (ContextCompat.checkSelfPermission(getContext(), permissions[0]) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getContext(), permissions[1]) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getContext(), permissions[2]) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            ActivityCompat.requestPermissions((Activity) getContext(), permissions, 1);
+            return false;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        verifyPermissions();
     }
 }
 
